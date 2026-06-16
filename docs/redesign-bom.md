@@ -34,11 +34,17 @@ reference needs** and its decision status.
 - **R5** kept at `1kΩ` (suits the 3.3 V rail).
 - ERC is 92 (was 87): the +5 are the same import-artifact categories (`lib_symbol_issues` empty-library, `pin_to_pin` Unspecified) inherent to adding symbols to this not-yet-cleaned import; they clear when the symbol libraries/pin-types are fixed.
 
+## Applied to the PCB
+- **EP thermal vias tied to GND.** U1's footprint already had an 8-pad PTH thermal-via array (4×2, 0.3 mm, under the exposed pad) but it was assigned `<no net>` (floating). All 8 are now netted to **GND** — the EP now conducts to the ground planes. (This is why the earlier audit read "zero vias": they existed but were unconnected.)
+- **Inner GND planes** added on `In1.Cu` (GND1) and `In2.Cu` (GND2), each filling ~365 mm² (near-full-board), plus the existing top/bottom GND pours. With the EP vias this gives the 4-layer thermal spreading the redesign needs.
+- DRC after these changes: **0 unconnected, no shorting_items**; the ~202 remaining are pre-existing import artifacts — silkscreen/text overlaps (~159) and `clearance` (the 60 V Power-class 0.3 mm flagged on the *old* 0.2 mm traces, which the re-layout/widening clears).
+
 ## Remaining work (PCB)
-- **Add C5 footprint** to the PCB and net it VCC/GND (schematic-parity).
+- **Widen VM + phase traces** to the Power-class width (VM is ~0.254 mm today) and clear the 18 Power/Default clearance flags — part of the re-layout.
+- **Resize C3 (and C5) footprints** from the BD6.3 (6.3 mm) can to the Ø10 mm can (`CP_Elec_10x10`) for the C87862 part; place C5.
+- **Add C5 footprint** to the PCB (net VCC/GND) for schematic-parity — or just push it from the schematic via *Update PCB from Schematic*.
 - **P1** → `TB002-500-03BE` 3-pos terminal-block footprint.
-- **EP thermal-via array** under U1; 4-layer GND pours; widen VM/phase per the Power net class; the re-layout.
-- `C1623` (C4) LCSC number and the JLCPCB stock/tier for every line: verify at order time.
+- `C1623` (C4) LCSC number and JLCPCB stock/tier for every line: verify at order time.
 
 ## Sourcing reference (researched 2026-06-16 vs live LCSC/JLCPCB — re-verify stock at order time)
 
