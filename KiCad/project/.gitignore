@@ -1,0 +1,10 @@
+# KiCad per-user / transient files — not source
+*.kicad_prl
+*.lck
+~*.lck
+.history/
+*-backups/
+fp-info-cache
+*.bak
+*.kicad_pcb-bak
+*.kicad_sch-bak
