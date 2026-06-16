@@ -29,6 +29,27 @@ See the documentation in the [SimpleFOC documentation](https://docs.simplefoc.co
 - The docs explain how to start with the SimpleFOCMini board and how to use it with the SimpleFOC library. 
 - They also describe how you can order it directly from the JLCPCB.
 
+## Design files
+
+The board design is provided in several formats:
+
+| Path | Contents |
+| --- | --- |
+| [`Altium/`](./Altium/) | Altium schematic (`.schdoc`) and PCB (`.pcbdoc`), dated 2024-04-26 |
+| [`EasyEDA/`](./EasyEDA/) | EasyEDA Standard schematic and PCB JSON exports (editor v6.5) |
+| [`Gerber/`](./Gerber/) | Fabrication Gerbers and Excellon drill files |
+| [`KiCad/project/`](./KiCad/project/) | KiCad 10 project, imported from the EasyEDA Standard JSON files |
+| [`3D model/`](./3D%20model/) | Board 3D model (`.obj` + `.mtl`) |
+| [`BOM_simplefocmini_2024-04-26.csv`](./BOM_simplefocmini_2024-04-26.csv) | Bill of materials |
+| [`Pick and Place/`](./Pick%20and%20Place/) | Pick-and-place / centroid file |
+| [`Schematic_simplefocmini.pdf`](./Schematic_simplefocmini.pdf) | Rendered schematic |
+
+The KiCad 10 project was created by importing the EasyEDA Standard files; KiCad 10 does not import the Altium `.pcbdoc`/`.schdoc` format.
+
+### Fork: 60V / 2.5A redesign (in progress)
+
+This fork is reworking the board toward the DRV8313's full operating range. The DRV8313 is rated 8–60V / 2.5A peak per phase ([datasheet](https://www.ti.com/lit/ds/symlink/drv8313.pdf)); the v1.1 design above is specified at 8–24V. The KiCad project under [`KiCad/project/`](./KiCad/project/) is the working design for this effort.
+
 ## Release log
 
 Release | Date | Description
