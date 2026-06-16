@@ -48,7 +48,7 @@ The KiCad 10 project was created by importing the EasyEDA Standard files; KiCad 
 
 ### Fork: 60V redesign (in progress)
 
-This fork is reworking the board toward the DRV8313's full voltage range. The DRV8313 is rated 8–60V ([datasheet](https://www.ti.com/lit/ds/symlink/drv8313.pdf)); the v1.1 design above is specified at 8–24V. Finalized target: **8–60V, 1.5A continuous per phase, under 50×50 mm, 4-layer**. The KiCad project under [`KiCad/project/`](./KiCad/project/) is the working design; see [`docs/redesign-plan.html`](./docs/redesign-plan.html) for the plan and BOM/layout changes.
+This fork is reworking the board toward the DRV8313's full voltage range. The DRV8313 is rated 8–60V ([datasheet](https://www.ti.com/lit/ds/symlink/drv8313.pdf)); the v1.1 design above is specified at 8–24V. Finalized target: **8–60V, 1.5A continuous per phase, under 50×50 mm, 4-layer**. The KiCad project under [`KiCad/project/`](./KiCad/project/) is the working design; see [`docs/redesign-plan.html`](./docs/redesign-plan.html) for the plan and analysis, and [`docs/redesign-bom.md`](./docs/redesign-bom.md) for the per-part selection worklist.
 
 ## Release log
 

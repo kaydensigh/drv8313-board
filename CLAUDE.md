@@ -45,6 +45,13 @@ A project-setup pass configured the project for the 60 V target. **Board files o
 - Editing the PCB via `pcbnew` (`LoadBoard`/`SaveBoard`) **rewrites the entire `.kicad_pcb` in canonical format** — expect a large diff even for a small logical change. Content round-trips intact (verified after the layer change: 4 copper layers, 5 board zones with correct nets, thickness 1.6 mm, loads clean).
 - Run `pcbnew` scripts via **PowerShell** with the call operator and `-u` (unbuffered): `& "C:\Program Files\KiCad\10.0\bin\python.exe" -u script.py`. The Bash tool failed to exec the space-containing exe path (exit 127) and block-buffers stdout, so prints never appeared.
 
+### Schematic / BOM facts (for the redesign)
+
+- The schematic stores each part's voltage rating **only implicitly, via the chosen `Manufacturer Part` / `Supplier Part` (LCSC) fields** — there is no separate voltage field, and `Footprint` fields are all empty (footprints live only in the PCB). So a "raise to 100 V" change means **re-selecting the part**, not editing a field.
+- Component **MPN strings are shared across symbols** in the import (e.g. C1 and C2 both carry `CL10B104KB8NNNC`; `VT1V101M-CRE77`/`CL10B104KB8NNNC` appear 5×/10× across lib-cache + instances). **Do not blank/replace MPNs by global string match** — it corrupts sibling parts. Edit per-symbol in the schematic editor.
+- Each part appears twice in `project.kicad_sch`: once in the `(lib_symbols)` cache (deeper indent) and once as a placed `(symbol)` instance. The **placed instance** property is authoritative for the netlist/BOM.
+- Applied so far: C3 `Value` → `100uF 100V` and C1 `Value` → `100nF 100V` (the two hard-fail caps for 60 V). ERC still reports 87 violations (unchanged — value text doesn't affect ERC). Remaining part changes are tracked in `docs/redesign-bom.md`.
+
 ## Validation results (initial import, pre-setup-pass; from kicad-cli runs)
 
 - DRC with `--schematic-parity`: 469 violations, **0 unconnected items**, 65 schematic-parity issues. Top categories: 173 clearance, 78 silk_overlap, 61 solder_mask_bridge, 48 hole_clearance, 30 net_conflict.

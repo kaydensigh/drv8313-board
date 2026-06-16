@@ -3284,7 +3284,7 @@
 					(justify left top)
 				)
 			)
-			(property "Value" "100uF"
+			(property "Value" "100uF 100V"
 				(at 3.048 -1.4097 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -6318,7 +6318,7 @@
 				(justify left top)
 			)
 		)
-		(property "Value" "100nF"
+		(property "Value" "100nF 100V"
 			(at 95.0214 47.5869 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7067,7 +7067,7 @@
 				(justify left top)
 			)
 		)
-		(property "Value" "100uF"
+		(property "Value" "100uF 100V"
 			(at 99.568 96.6597 0)
 			(show_name no)
 			(do_not_autoplace no)
