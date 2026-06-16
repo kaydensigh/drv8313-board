@@ -46,9 +46,9 @@ The board design is provided in several formats:
 
 The KiCad 10 project was created by importing the EasyEDA Standard files; KiCad 10 does not import the Altium `.pcbdoc`/`.schdoc` format.
 
-### Fork: 60V / 2.5A redesign (in progress)
+### Fork: 60V redesign (in progress)
 
-This fork is reworking the board toward the DRV8313's full operating range. The DRV8313 is rated 8–60V / 2.5A peak per phase ([datasheet](https://www.ti.com/lit/ds/symlink/drv8313.pdf)); the v1.1 design above is specified at 8–24V. The KiCad project under [`KiCad/project/`](./KiCad/project/) is the working design for this effort.
+This fork is reworking the board toward the DRV8313's full voltage range. The DRV8313 is rated 8–60V ([datasheet](https://www.ti.com/lit/ds/symlink/drv8313.pdf)); the v1.1 design above is specified at 8–24V. Finalized target: **8–60V, 1.2A continuous per phase, under 50×50 mm, 4-layer**. The KiCad project under [`KiCad/project/`](./KiCad/project/) is the working design; see [`docs/redesign-plan.md`](./docs/redesign-plan.md) for the plan and BOM/layout changes.
 
 ## Release log
 

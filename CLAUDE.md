@@ -10,7 +10,9 @@ v1.1 board specification (from README): 8–24V supply, 2.5A per phase max, onbo
 
 ## Current goal
 
-Redesign the board to use the DRV8313's full rated range (8–60V / 2.5A per phase; the v1.1 design is 8–24V). The KiCad project under `KiCad/project/` is the working design. When cleaning up the imported project, only address what blocks redesign progress — import artifacts (clearance/silk/parity/ERC pin-types) will be redone during re-layout.
+Redesign the board for the DRV8313's full voltage range. Finalized target (see `docs/redesign-plan.md`): **8–60V, 1.2A continuous per phase, ≤50×50 mm, 4-layer (Top/GND/GND/Bottom, 1 oz)**. The v1.1 design is 8–24V. Note: the datasheet's "2.5A per phase" is a *peak* figure (no continuous rating is published); 1.2A continuous matches TI's design example and is the thermal target.
+
+The KiCad project under `KiCad/project/` is the working design. When cleaning up the imported project, only address what blocks redesign progress — import artifacts (clearance/silk/parity/ERC pin-types) will be redone during re-layout.
 
 ## Repository layout
 
