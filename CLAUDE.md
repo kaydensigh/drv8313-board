@@ -36,7 +36,16 @@ The KiCad project under `KiCad/project/` is the working design. When cleaning up
 - KiCad 10 writes zone/track/via nets as `(net "NAME")` (name inline), not the older `(net N) (net_name "...")` form.
 - The imported EasyEDA drawing frame came in as an unresolved 291×204 mm placeholder symbol (`lib_id "Unknown_0_-806"`, ref `A1`); it has been removed from the schematic.
 
-## Validation results (from kicad-cli runs)
+## Project setup for redesign (done 2026-06-16)
+
+A project-setup pass configured the project for the 60 V target. **Board files only — no copper has been re-routed yet.**
+
+- **Stackup is now 4 copper layers** (`Board.SetCopperLayerCount(4)` via `pcbnew`). Layer table: `F.Cu` (id 0, "TopLayer"), `In1.Cu` (id 4, named **GND1**), `In2.Cu` (id 6, named **GND2**), `B.Cu` (id 2, "BottomLayer"); thickness still 1.6 mm. Inner layers are renamed to encode the Top/GND/GND/Bottom intent — pour GND zones on them during layout. KiCad copper-layer IDs in v10: F.Cu=0, B.Cu=2, inner copper = even numbers (In1=4, In2=6, …). No explicit `(stackup)` block is written; KiCad applies a default 4-layer stack (set physical dielectric thicknesses in Board Setup → Physical Stackup if a specific stack is needed).
+- **A `Power` net class** was added in `project.kicad_pro`: `track_width` 0.8 mm, `clearance` 0.3 mm (for 60 V), `via_diameter`/`via_drill` 0.8/0.4 mm. Assigned via `netclass_patterns` to nets **VCC** (the VM rail) and **U1_5 / U1_8 / U1_9** (the three phase outputs). `Default` is left at 0.2 mm clearance / 0.2 mm track so fine-pitch HTSSOP escape stays routable; KiCad uses the larger of two classes' clearances for a pair, so VM↔GND already resolves to 0.3 mm. **If the phase/VM nets are renamed during re-layout, update these patterns.**
+- Editing the PCB via `pcbnew` (`LoadBoard`/`SaveBoard`) **rewrites the entire `.kicad_pcb` in canonical format** — expect a large diff even for a small logical change. Content round-trips intact (verified after the layer change: 4 copper layers, 5 board zones with correct nets, thickness 1.6 mm, loads clean).
+- Run `pcbnew` scripts via **PowerShell** with the call operator and `-u` (unbuffered): `& "C:\Program Files\KiCad\10.0\bin\python.exe" -u script.py`. The Bash tool failed to exec the space-containing exe path (exit 127) and block-buffers stdout, so prints never appeared.
+
+## Validation results (initial import, pre-setup-pass; from kicad-cli runs)
 
 - DRC with `--schematic-parity`: 469 violations, **0 unconnected items**, 65 schematic-parity issues. Top categories: 173 clearance, 78 silk_overlap, 61 solder_mask_bridge, 48 hole_clearance, 30 net_conflict.
 - ERC: 87 violations (was 88 before the frame symbol removal). Dominated by import artifacts: pin_to_pin (40), lib_symbol_issues (29), pin_not_driven, plus empty library associations.
