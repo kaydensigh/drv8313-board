@@ -37,12 +37,16 @@ reference needs** and its decision status.
 ## Applied to the PCB
 - **EP thermal vias tied to GND.** U1's footprint already had an 8-pad PTH thermal-via array (4×2, 0.3 mm, under the exposed pad) but it was assigned `<no net>` (floating). All 8 are now netted to **GND** — the EP now conducts to the ground planes. (This is why the earlier audit read "zero vias": they existed but were unconnected.)
 - **Inner GND planes** added on `In1.Cu` (GND1) and `In2.Cu` (GND2), each filling ~365 mm² (near-full-board), plus the existing top/bottom GND pours. With the EP vias this gives the 4-layer thermal spreading the redesign needs.
-- DRC after these changes: **0 unconnected, no shorting_items**; the ~202 remaining are pre-existing import artifacts — silkscreen/text overlaps (~159) and `clearance` (the 60 V Power-class 0.3 mm flagged on the *old* 0.2 mm traces, which the re-layout/widening clears).
+- **VM trace widened** 0.254 → **0.8 mm** (Power-class). No shorts; adds ~3 clearance flags on the cramped layout that the re-route clears.
+- **C5 footprint added** (clone of C3, netted VCC/GND), parked below the board outline at (152.95, 124) pending placement — it shows as 2 ratsnest/"unconnected" until routed.
+- **Phase traces left at 0.5 mm.** Widening them to 0.8 mm *shorts* `U1_8`↔`U1_9` at the 0.65 mm-pitch HTSSOP escape — they must neck down at the IC and widen away from it, which is a routing task. 0.5 mm already carries 1.5 A.
+- DRC now: **0 shorting_items, 2 unconnected** (just C5's two pads). The rest are pre-existing import artifacts (silk/text ~160, clearance 21, padstack 14).
 
-## Remaining work (PCB)
-- **Widen VM + phase traces** to the Power-class width (VM is ~0.254 mm today) and clear the 18 Power/Default clearance flags — part of the re-layout.
-- **Resize C3 (and C5) footprints** from the BD6.3 (6.3 mm) can to the Ø10 mm can (`CP_Elec_10x10`) for the C87862 part; place C5.
-- **Add C5 footprint** to the PCB (net VCC/GND) for schematic-parity — or just push it from the schematic via *Update PCB from Schematic*.
+## Remaining work (PCB, needs the re-layout)
+These need component re-placement on a larger board (they overlap or short on the current 26 mm layout), so they belong to the interactive re-layout:
+- **Route C5** to VCC/GND once it's placed.
+- **Neck/widen the phase traces** at the U1 escape during routing.
+- **Resize C3 + C5** from the BD6.3 (6.3 mm) can to the Ø10 mm can (`CP_Elec_10x10`) for the C87862 part.
 - **P1** → `TB002-500-03BE` 3-pos terminal-block footprint.
 - `C1623` (C4) LCSC number and JLCPCB stock/tier for every line: verify at order time.
 
