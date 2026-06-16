@@ -4987,7 +4987,7 @@
 				)
 			)
 		)
-		(property "Manufacturer Part" "0603WAF4701T5E"
+		(property "Manufacturer Part" "0603WAF1001T5E"
 			(at 78.74 135.89 0)
 			(hide yes)
 			(show_name no)
@@ -5009,7 +5009,7 @@
 				)
 			)
 		)
-		(property "Supplier Part" "C23162"
+		(property "Supplier Part" "C21190"
 			(at 78.74 135.89 0)
 			(hide yes)
 			(show_name no)
@@ -6076,7 +6076,7 @@
 				)
 			)
 		)
-		(property "Manufacturer Part" "CC0603ZRY5V6BB474"
+		(property "Manufacturer Part" "CL10B474KA8NNNC"
 			(at 132.08 113.03 0)
 			(hide yes)
 			(show_name no)
@@ -6087,7 +6087,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "YAGEO"
+		(property "Manufacturer" "Samsung"
 			(at 132.08 113.03 0)
 			(hide yes)
 			(show_name no)
@@ -6098,7 +6098,7 @@
 				)
 			)
 		)
-		(property "Supplier Part" "C327269"
+		(property "Supplier Part" "C1623"
 			(at 132.08 113.03 0)
 			(hide yes)
 			(show_name no)
@@ -6363,7 +6363,7 @@
 				)
 			)
 		)
-		(property "Manufacturer Part" "CL10B104KB8NNNC"
+		(property "Manufacturer Part" "CL10B103KC8NNNC"
 			(at 96.52 52.07 0)
 			(hide yes)
 			(show_name no)
@@ -6374,7 +6374,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "SAMSUNG"
+		(property "Manufacturer" "Samsung"
 			(at 96.52 52.07 0)
 			(hide yes)
 			(show_name no)
@@ -6385,7 +6385,7 @@
 				)
 			)
 		)
-		(property "Supplier Part" "C1591"
+		(property "Supplier Part" "C84709"
 			(at 96.52 52.07 0)
 			(hide yes)
 			(show_name no)
@@ -7112,7 +7112,7 @@
 				)
 			)
 		)
-		(property "Manufacturer Part" "VT1V101M-CRE77"
+		(property "Manufacturer Part" "RVT2A470M1010"
 			(at 96.52 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -7123,7 +7123,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Vertical Technology"
+		(property "Manufacturer" "Honor Elec"
 			(at 96.52 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -7134,7 +7134,7 @@
 				)
 			)
 		)
-		(property "Supplier Part" "C294520"
+		(property "Supplier Part" "C87862"
 			(at 96.52 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -7166,6 +7166,292 @@
 			(project "project"
 				(path "/03adca04-2da2-4337-bf85-1694768d6810"
 					(reference "C3")
+					(unit 0)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "VT1V101M-CRE77")
+		(at 96.52 158.75 0)
+		(unit 0)
+		(body_style 0)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "a7aaccea-8247-4563-949a-0a7377fb57b9")
+		(property "Reference" "C5"
+			(at 99.568 157.8229 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(face "Arial")
+					(size 1.6891 1.6891)
+				)
+				(justify left top)
+			)
+		)
+		(property "Value" "47uF 100V"
+			(at 99.568 160.1597 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(face "Arial")
+					(size 1.6891 1.6891)
+				)
+				(justify left top)
+			)
+		)
+		(property "Footprint" ""
+			(at 96.52 158.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 96.52 158.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 96.52 158.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer Part" "RVT2A470M1010"
+			(at 96.52 158.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Honor Elec"
+			(at 96.52 158.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier Part" "C87862"
+			(at 96.52 158.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "LCSC"
+			(at 96.52 158.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "986ab4d6-7592-4ae5-ab82-9571c2e360e8")
+		)
+		(pin "2"
+			(uuid "9a3557ae-a2a5-4af1-b982-6285d06af7fb")
+		)
+		(instances
+			(project "project"
+				(path "/03adca04-2da2-4337-bf85-1694768d6810"
+					(reference "C5")
+					(unit 0)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "VCC")
+		(at 96.52 153.67 270)
+		(mirror x)
+		(unit 0)
+		(body_style 0)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "eb36bbb1-eee3-4a6e-b7a0-b2b5ac58696c")
+		(property "Reference" "#PWR016"
+			(at 96.52 153.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "VCC"
+			(at 87.5792 154.6606 -90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(face "Times New Roman")
+					(size 2.1717 2.1717)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" ""
+			(at 96.52 153.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 96.52 153.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name 'VCC'"
+			(at 96.52 153.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "5f2a89aa-9b86-496e-93df-452b00a2fbfe")
+		)
+		(instances
+			(project "project"
+				(path "/03adca04-2da2-4337-bf85-1694768d6810"
+					(reference "#PWR016")
+					(unit 0)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "GND")
+		(at 96.52 163.83 90)
+		(unit 0)
+		(body_style 0)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "13baac83-0ea6-4bf9-956d-4db126ac99d6")
+		(property "Reference" "#PWR017"
+			(at 96.52 163.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 100.711 164.846 -90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(face "Times New Roman")
+					(size 2.1717 2.1717)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Footprint" ""
+			(at 96.52 163.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 96.52 163.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name 'GND'"
+			(at 96.52 163.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "b61923d5-82d9-4276-964c-9c16e2ef5579")
+		)
+		(instances
+			(project "project"
+				(path "/03adca04-2da2-4337-bf85-1694768d6810"
+					(reference "#PWR017")
 					(unit 0)
 				)
 			)

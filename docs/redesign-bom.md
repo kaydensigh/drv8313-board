@@ -27,15 +27,18 @@ reference needs** and its decision status.
 4. **LED1 → re-sited to 3.3 V** (done, verified).
 
 ## Already applied to the schematic
-- **C1** `Value` → `10nF 100V`; **C3** `Value` → `47uF 100V` (the chosen 100 V parts).
-- **LED1 re-sited to 3.3 V**: the power symbol `#PWR01` on the R5 branch was swapped `VCC` → `3.3V`. Verified by netlist export — `R5.1` is now on net **3.3V** (with C4.2, H1.2, R1–R3, U1.15), and **VCC still carries U1.4 / U1.11** (VM). ERC unchanged at 87 (all pre-existing import artifacts).
-- **R5** left at `1kΩ` (suits the 3.3 V rail).
+- **Values:** C1 → `10nF 100V`, C3 → `47uF 100V`.
+- **MPNs set per-symbol** (anchored edits, not global replace — the import shares part-number strings, so each was scoped to its own symbol instance): C1 → Samsung `CL10B103KC8NNNC` / `C84709`; C3 → Honor `RVT2A470M1010` / `C87862`; C4 → Samsung `CL10B474KA8NNNC` / `C1623`; R5 → UniOhm `0603WAF1001T5E` / `C21190` (the 1 kΩ of the same series; was the 4.7 kΩ part).
+- **C5 added** — second 47 µF/100 V (`C87862`) in parallel with C3, placed at (96.52, 158.75) with its own VCC/GND power symbols. Netlist-verified: `C5.1` on **VCC**, `C5.2` on **GND**.
+- **LED1 re-sited to 3.3 V**: power symbol `#PWR01` on the R5 branch swapped `VCC` → `3.3V`. Netlist-verified: `R5.1` now on net **3.3V**; **VCC still carries U1.4 / U1.11** (VM).
+- **R5** kept at `1kΩ` (suits the 3.3 V rail).
+- ERC is 92 (was 87): the +5 are the same import-artifact categories (`lib_symbol_issues` empty-library, `pin_to_pin` Unspecified) inherent to adding symbols to this not-yet-cleaned import; they clear when the symbol libraries/pin-types are fixed.
 
-## Remaining work (schematic/PCB rework, GUI)
-The EasyEDA import **shares strings across symbols** — `Manufacturer Part` / `Supplier Part` and the resistor `lib_id` are reused by multiple parts — so these must be set **per-symbol in the editor**, not by text edit:
-- **Add C5** = second 47 µF / 100 V (`C87862`) in parallel with C3.
-- Set new **MPN / Supplier Part** fields: C1 → `C84709`, C3 & C5 → `C87862`, C4 → `C1623`, R5 → a 1 kΩ 0603. (The schematic still shows the old 35 V/50 V part numbers.)
-- **P1** → `TB002-500-03BE` 3-pos terminal-block footprint (PCB-side; footprints live only in the PCB).
+## Remaining work (PCB)
+- **Add C5 footprint** to the PCB and net it VCC/GND (schematic-parity).
+- **P1** → `TB002-500-03BE` 3-pos terminal-block footprint.
+- **EP thermal-via array** under U1; 4-layer GND pours; widen VM/phase per the Power net class; the re-layout.
+- `C1623` (C4) LCSC number and the JLCPCB stock/tier for every line: verify at order time.
 
 ## Sourcing reference (researched 2026-06-16 vs live LCSC/JLCPCB — re-verify stock at order time)
 
