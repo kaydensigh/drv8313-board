@@ -17,7 +17,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -29,7 +28,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -175,7 +173,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -187,7 +184,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -333,7 +329,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -345,7 +340,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -491,7 +485,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -503,7 +496,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -649,7 +641,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -661,7 +652,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -807,7 +797,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -819,7 +808,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -1150,7 +1138,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -1162,7 +1149,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -1345,7 +1331,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -1357,7 +1342,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -1540,7 +1524,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -1552,7 +1535,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -1735,7 +1717,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -1747,7 +1728,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -2390,7 +2370,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -2402,7 +2381,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -2863,7 +2841,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -2875,7 +2852,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -3039,7 +3015,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -3051,7 +3026,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -3278,7 +3252,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -3290,7 +3263,6 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(face "Arial")
 						(size 1.6891 1.6891)
 					)
 					(justify left top)
@@ -4662,7 +4634,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify left bottom)
@@ -4730,7 +4701,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -4742,7 +4712,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -4868,7 +4837,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify left bottom)
@@ -4936,7 +4904,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -4948,7 +4915,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -5063,7 +5029,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -5075,7 +5040,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -5282,7 +5246,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify left bottom)
@@ -5361,7 +5324,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify left bottom)
@@ -5429,7 +5391,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -5441,7 +5402,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -5591,7 +5551,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify left bottom)
@@ -5671,7 +5630,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify left top)
@@ -5750,7 +5708,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify left bottom)
@@ -5830,7 +5787,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify left top)
@@ -5898,7 +5854,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -5910,7 +5865,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -6025,7 +5979,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -6037,7 +5990,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -6164,7 +6116,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify right bottom)
@@ -6244,7 +6195,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify right bottom)
@@ -6312,7 +6262,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -6324,7 +6273,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -6451,7 +6399,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify right bottom)
@@ -6530,7 +6477,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify left bottom)
@@ -6598,7 +6544,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -6610,7 +6555,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -6728,7 +6672,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -6740,7 +6683,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -6855,7 +6797,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -6867,7 +6808,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -6993,7 +6933,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify left bottom)
@@ -7061,7 +7000,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -7073,7 +7011,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -7188,7 +7125,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -7200,7 +7136,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -7327,7 +7262,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify right bottom)
@@ -7406,7 +7340,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify left bottom)
@@ -7474,7 +7407,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -7486,7 +7418,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -7601,7 +7532,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -7613,7 +7543,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -7696,7 +7625,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify left top)
@@ -7775,7 +7703,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Times New Roman")
 					(size 2.1717 2.1717)
 				)
 				(justify left bottom)
@@ -7843,7 +7770,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
@@ -7855,7 +7781,6 @@
 			(do_not_autoplace no)
 			(effects
 				(font
-					(face "Arial")
 					(size 1.6891 1.6891)
 				)
 				(justify left top)
