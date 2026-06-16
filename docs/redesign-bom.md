@@ -47,8 +47,10 @@ These need component re-placement on a larger board (they overlap or short on th
 - **Route C5** to VCC/GND once it's placed.
 - **Neck/widen the phase traces** at the U1 escape during routing.
 - **Resize C3 + C5** from the BD6.3 (6.3 mm) can to the Ø10 mm can (`CP_Elec_10x10`) for the C87862 part.
-- **P1** → `TB002-500-03BE` 3-pos terminal-block footprint.
+- **P1 → terminal block.** Use KiCad footprint `TerminalBlock_MaiXu_MX126-5.0-03P_1x03_P5.00mm` (a 5 mm 3-pos block, the TB002-500-03BE class; pads 1/2/3 = the U1_9/U1_8/U1_5 phases). *Confirmed: swapping it in place shorts/overlaps badly (9 shorting_items + courtyard overlaps) because the 5 mm block is much larger than the 2.54 mm header — place it at a board edge during re-layout, then re-route the 3 phases.*
 - `C1623` (C4) LCSC number and JLCPCB stock/tier for every line: verify at order time.
+
+> **Why these are re-layout tasks:** each was attempted by script and reverted — the 60 V redesign's bigger parts (Ø10 mm caps, 5 mm terminal block) and wider traces don't fit the original 26 × 21 mm layout without shorting/overlapping. They need component re-placement on a larger board (the plan allows ≤50 × 50 mm), which is interactive routing work. The thermal vias, inner GND planes, C5, and VM-trace widening *did* fit and are applied.
 
 ## Sourcing reference (researched 2026-06-16 vs live LCSC/JLCPCB — re-verify stock at order time)
 
