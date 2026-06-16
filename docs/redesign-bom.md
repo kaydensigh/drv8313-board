@@ -4,55 +4,48 @@ Actionable parts list for the 8–60 V / 1.5 A redesign. Rationale and thermal/v
 analysis are in [`redesign-plan.html`](./redesign-plan.html); this file tracks **which part each
 reference needs** and its decision status.
 
-**Status legend:** ✅ keep · 🔁 reselect (spec given) · ⚠️ decision needed · 🛠️ PCB/layout work
+**Status legend:** ✅ keep · ✔ decided/applied · 🛠️ rework (schematic/PCB) work remaining
 
-| Ref | Qty | Function | v1.1 part (current) | Redesign requirement | Status |
+| Ref | Qty | Function | v1.1 part (current) | Redesign part | Status |
 | --- | --- | --- | --- | --- | --- |
 | **U1** | 1 | DRV8313PWPR motor driver | DRV8313PWPR (HTSSOP-28) | None — already 8–60 V rated | ✅ |
-| **C3** | 1 | VM bulk | 100 µF **35 V** SMD Al-elec (`VT1V101M-CRE77`, BD6.3) | **100 µF ≥80 V** (target 100 V) SMD Al-elec. Larger can (~10×10 mm); reserve board area. Verify ripple-current rating at 1.5 A. | 🔁 |
-| **C1** | 1 | Charge-pump flying cap (CP1–CP2) | 100 nF **50 V** X7R 0603 (`CL10B104KB8NNNC`) | **100 V X7R**, 0603/0805. **Value: 10 nF (TI datasheet) vs 100 nF (current board) — decide.** | ⚠️🔁 |
-| **C2** | 1 | VCP→VM charge-pump reservoir | 100 nF 50 V X7R 0603 (`CL10B104KB8NNNC`) | None — only sees VCP−VM (~11 V); 50 V is fine (TI spec 16 V). After C1 is reselected these two no longer share a part. | ✅ |
-| **C4** | 1 | V3P3OUT decouple | 470 nF **10 V Y5V** 0603 | **Optional** upgrade to 470 nF **16–25 V X7R** 0603 (voltage already OK on 3.3 V; Y5V is just unstable). | 🔁 (optional) |
+| **C3 + C5** | 2 | VM bulk | 100 µF 35 V SMD Al-elec (`VT1V101M-CRE77`, BD6.3) | **2× 47 µF / 100 V** in parallel (Honor `C87862`) ≈ 94 µF at full 100 V margin; two Ø10 mm cans. C3 `Value` updated; **C5 to be added** in rework. | ✔ / 🛠️ |
+| **C1** | 1 | Charge-pump flying cap (CP1–CP2) | 100 nF 50 V X7R 0603 (`CL10B104KB8NNNC`) | **10 nF / 100 V X7R 0603** (Samsung `C84709`) — TI datasheet value. `Value` updated. | ✔ |
+| **C2** | 1 | VCP→VM charge-pump reservoir | 100 nF 50 V X7R 0603 (`CL10B104KB8NNNC`) | None — only sees VCP−VM (~11 V); 50 V is fine (TI spec 16 V). | ✅ |
+| **C4** | 1 | V3P3OUT decouple | 470 nF 10 V Y5V 0603 | Optional: **470 nF 25 V X7R 0603** (Samsung `C1623`) — moves off unstable Y5V. | 🛠️ (optional) |
 | **R1–R4** | 4 | Logic pull-ups / dividers | 10 kΩ 0603 | None | ✅ |
-| **R5** | 1 | Indicator-LED series resistor | 1 kΩ 0603 (BOM value) — **but listed MPN decodes to 4.7 kΩ** | Resolve true value against the physical board, then size for the **3.3 V** rail (LED re-sited): ~470 Ω–1 kΩ 0603. | ⚠️ |
-| **LED1** | 1 | Power indicator | 0603 LED, currently across **VM** via R5 | **Re-site to the 3.3 V (V3P3OUT) rail.** At 60 V the VM-fed 0603 R5 would dissipate 0.7–3.4 W. LED part itself unchanged. | 🛠️ (schematic topology) |
+| **R5** | 1 | Indicator-LED series resistor | 1 kΩ 0603 (Value) / MPN decodes to 4.7 kΩ | **Keep 1 kΩ** — on the 3.3 V rail that's ~1.3 mA (fine for an indicator). | ✔ |
+| **LED1** | 1 | Power indicator | 0603 LED, was across **VM** via R5 | **Re-sited to the 3.3 V rail** (done — see below). LED part unchanged. | ✔ |
 | **H1** | 1 | Control header (IN1–3, EN, GND, 3V3…) | 2×5 2.54 mm female header | None | ✅ |
-| **P1** | 1 | Motor phase output | 3-pin 2.54 mm header (`Header-Female-2.54_1x3`) | **3-position 5 mm terminal block → `TB002-500-03BE`** (3-pos sibling of TB_PWR1's `TB002-500-02BE`; same family/footprint pitch). | 🔁🛠️ |
-| **TB_PWR1** | 1 | VM / GND power input | `TB002-500-02BE` (2-pos, 5 mm terminal block) | None — already a 5 mm terminal block; confirm its current/voltage rating covers 60 V / phase current (5 mm blocks are typically ≥300 V / ≥10 A). | ✅ |
+| **P1** | 1 | Motor phase output | 3-pin 2.54 mm header (`Header-Female-2.54_1x3`) | **3-position 5 mm terminal block → `TB002-500-03BE`** (3-pos sibling of TB_PWR1's `TB002-500-02BE`). | 🛠️ (PCB footprint) |
+| **TB_PWR1** | 1 | VM / GND power input | `TB002-500-02BE` (2-pos, 5 mm terminal block) | None — already a 5 mm block; 5 mm blocks are typically ≥300 V / ≥10 A. | ✅ |
+
+## Decisions (resolved)
+1. **C1 → 10 nF / 100 V** (TI datasheet value; Samsung `C84709`).
+2. **C3 → 2× 47 µF / 100 V in parallel** (Honor `C87862`) ≈ 94 µF at full 100 V margin. Same part number twice ⇒ a **single** JLCPCB extended-part fee, and ripple current is shared across two cans. (A true 100 µF @ 100 V is not stocked at JLCPCB/LCSC.)
+3. **R5 → 1 kΩ** on the 3.3 V rail (~1.3 mA indicator current). No physical board available, so standardized on the schematic's 1 kΩ value.
+4. **LED1 → re-sited to 3.3 V** (done, verified).
 
 ## Already applied to the schematic
-- **C3** `Value` → `100uF 100V`, **C1** `Value` → `100nF 100V` (records the required rating on the symbol).
-- The schematic's `Manufacturer Part` / `Supplier Part` fields still reference the **old 35 V/50 V parts** for C1/C3 — they were left untouched because those MPN strings are shared across multiple symbols in the EasyEDA import (editing by string would corrupt C2). **Update the MPN fields when the new parts are chosen** (do it in the schematic editor, per-symbol).
+- **C1** `Value` → `10nF 100V`; **C3** `Value` → `47uF 100V` (the chosen 100 V parts).
+- **LED1 re-sited to 3.3 V**: the power symbol `#PWR01` on the R5 branch was swapped `VCC` → `3.3V`. Verified by netlist export — `R5.1` is now on net **3.3V** (with C4.2, H1.2, R1–R3, U1.15), and **VCC still carries U1.4 / U1.11** (VM). ERC unchanged at 87 (all pre-existing import artifacts).
+- **R5** left at `1kΩ` (suits the 3.3 V rail).
 
-## Sourcing shortlist (researched 2026-06-16 against live LCSC/JLCPCB — re-verify stock at order time)
+## Remaining work (schematic/PCB rework, GUI)
+The EasyEDA import **shares strings across symbols** — `Manufacturer Part` / `Supplier Part` and the resistor `lib_id` are reused by multiple parts — so these must be set **per-symbol in the editor**, not by text edit:
+- **Add C5** = second 47 µF / 100 V (`C87862`) in parallel with C3.
+- Set new **MPN / Supplier Part** fields: C1 → `C84709`, C3 & C5 → `C87862`, C4 → `C1623`, R5 → a 1 kΩ 0603. (The schematic still shows the old 35 V/50 V part numbers.)
+- **P1** → `TB002-500-03BE` 3-pos terminal-block footprint (PCB-side; footprints live only in the PCB).
 
-All 100 V parts below are JLCPCB **Extended** (there is no 100 V X7R MLCC or HV SMD electrolytic in the Basic tier), so expect the one-time extended-part load fee.
+## Sourcing reference (researched 2026-06-16 vs live LCSC/JLCPCB — re-verify stock at order time)
 
-**C1 — charge-pump flying cap (100 V X7R 0603):**
-
-| Value | MPN | LCSC | Note |
-| --- | --- | --- | --- |
-| **10 nF** (TI rec, lead choice) | Samsung **CL10B103KC8NNNC** | **C84709** | ~298k stock; exactly the datasheet value |
-| 100 nF (fallback) | Samsung **CL10B104KC8NNNC** | **C15725** | the original 50 V part with the voltage code bumped (B8→C8) |
-
-**C3 — VM bulk electrolytic (Ø10 mm SMD can; a true 100 µF @ 100 V is NOT stocked — pick one):**
-
-| Option | MPN | LCSC | Spec | Ripple | Note |
+| Ref | Part | LCSC | Spec | JLCPCB tier | ~Unit price |
 | --- | --- | --- | --- | --- | --- |
-| **A (default)** | Ymin **VKME1001K101MV** | **C487410** | 100 µF / **80 V**, 10×10 mm | **744 mA**@100 kHz | best ripple + full bulk value; 60 V on 80 V = 75 % derating (acceptable); 10000 h@105 °C |
-| B | Honor **RVT2A470M1010** | **C87862** | 47 µF / **100 V**, 10×10.2 mm | unpublished | true 100 V, full margin, half the bulk; cheap (~$0.09) |
-| C | A ∥ B in parallel | — | 147 µF total | — | same Ø10 footprint family; 100 µF/80 V for bulk + 47 µF/100 V for margin |
+| C1 | Samsung CL10B103KC8NNNC | **C84709** | 10 nF 100 V X7R 0603 | Extended | ~$0.01 |
+| C3, C5 | Honor RVT2A470M1010 | **C87862** | 47 µF 100 V, Ø10×10.2 mm | Extended | ~$0.09 |
+| C4 | Samsung CL10B474KA8NNNC | **C1623** *(verify Basic)* | 470 nF 25 V X7R 0603 | Basic? | ~$0.003 |
 
-Footprint for all C3 options: `Capacitor_SMD:CP_Elec_10x10` (or `CP_Elec_10x10.5`) — larger than the old Ø6.3 BD6.3 can, OK given the freed area.
-
-**C4 — 3.3 V decouple (optional, move off Y5V):** Samsung **CL10B474KA8NNNC** (470 nF 25 V X7R 0603), LCSC **C1623** *(verify Basic tier)*; backup Fenghua **C172758** (Extended).
-
-## Open decisions (blocking specific part orders)
-1. **C1 value** — 10 nF (TI's recommended CP flying cap, and what I've sourced as the lead) or 100 nF (what the board shipped)? Both work and both are stocked at 100 V.
-2. **C3 bulk-cap rating** — no 100 µF @ 100 V exists in stock. Choose **A** (100 µF/80 V, best ripple, 75 % derating), **B** (47 µF/100 V, full margin), or **C** (both in parallel). Default: **A**.
-3. **R5 value** — BOM says 1 kΩ, the manufacturer part number decodes to 4.7 kΩ. Confirm from the physical board before reusing; then size for the 3.3 V rail.
-4. **LED1 re-site** — confirm moving the indicator from VM to the 3.3 V rail (recommended).
-
-## Notes
-- Original parts were sourced from **LCSC** (see `Supplier Part` C-numbers in the schematic / the 2024 BOM CSV). For the new caps, pick **JLCPCB/LCSC in-stock** equivalents at the target voltage so assembly stays cheap — specific stock numbers should be taken from JLCPCB's catalogue at order time rather than hard-coded here.
+- Footprint for C3/C5: `Capacitor_SMD:CP_Elec_10x10` (or `CP_Elec_10x10.5`).
+- 100 nF 100 V fallback for C1 (if not going with 10 nF): Samsung `CL10B104KC8NNNC` (`C15725`).
+- **Cost note:** the caps are pennies; at low volume the real cost is JLCPCB's **~$3 one-time extended-part fee per unique part number** — here C1 and C3 (one fee even with 2× C87862) ⇒ ~$6 added; C4 is likely Basic (free).
 - `U1`, `TB_PWR1`, `H1`, and `R1–R4` carry over unchanged.

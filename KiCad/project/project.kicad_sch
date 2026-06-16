@@ -3284,7 +3284,7 @@
 					(justify left top)
 				)
 			)
-			(property "Value" "100uF 100V"
+			(property "Value" "47uF 100V"
 				(at 3.048 -1.4097 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -5802,7 +5802,7 @@
 		)
 	)
 	(symbol
-		(lib_id "VCC")
+		(lib_id "3.3V")
 		(at 69.85 134.62 0)
 		(mirror x)
 		(unit 0)
@@ -5824,7 +5824,7 @@
 				)
 			)
 		)
-		(property "Value" "VCC"
+		(property "Value" "3.3V"
 			(at 66.7766 131.3434 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6318,7 +6318,7 @@
 				(justify left top)
 			)
 		)
-		(property "Value" "100nF 100V"
+		(property "Value" "10nF 100V"
 			(at 95.0214 47.5869 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7067,7 +7067,7 @@
 				(justify left top)
 			)
 		)
-		(property "Value" "100uF 100V"
+		(property "Value" "47uF 100V"
 			(at 99.568 96.6597 0)
 			(show_name no)
 			(do_not_autoplace no)
