@@ -986,7 +986,7 @@
 
 (property "Value" "10kΩ" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:R0603" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1018,7 +1018,7 @@
 
 (property "Value" "1kΩ" (at 75.946 137.5029 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 78.74 135.89 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:R0603" (at 78.74 135.89 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 78.74 135.89 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1038,7 +1038,7 @@
 
 (property "Value" "DRV8313PWPR" (at 129.2098 53.4289 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 130.81 76.2 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:HTSSOP-28_L9.8-W4.5-P0.65-LS6.6-BL-EP" (at 130.81 76.2 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 130.81 76.2 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1082,7 +1082,7 @@
 
 (property "Value" "PinHeader 2x7 2.54mm" (at 190.4492 49.8983 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 193.04 66.04 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_2x07_P2.54mm_Vertical" (at 193.04 66.04 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 193.04 66.04 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1126,7 +1126,7 @@
 
 (property "Value" "10kΩ" (at 175.514 57.2643 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:R0603" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1146,7 +1146,7 @@
 
 (property "Value" "470nF" (at 130.5814 108.5469 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 132.08 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:C0603" (at 132.08 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 132.08 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1190,7 +1190,7 @@
 
 (property "Value" "10nF 100V" (at 95.0214 47.5869 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 96.52 52.07 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:C0603" (at 96.52 52.07 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 96.52 52.07 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1234,7 +1234,7 @@
 
 (property "Value" "TB002-500-05BE" (at 41.1226 70.2183 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 66.04 77.47 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "TerminalBlock:TerminalBlock_MaiXu_MX126-5.0-05P_1x05_P5.00mm" (at 66.04 77.47 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "https://datasheet.lcsc.com/szlcsc/Boom-Precision-Elec-2-54mm-1-8P-Straight-Female-header_C27438.pdf" (at 66.04 77.47 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1254,7 +1254,7 @@
 
 (property "Value" "100nF" (at 92.71 64.8843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 90.17 63.5 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:C0603" (at 90.17 63.5 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 90.17 63.5 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1274,7 +1274,7 @@
 
 (property "Value" "19-213/Y2C-CQ2R2L/3T(CY)" (at 88.4682 128.6129 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 91.44 134.62 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:LED0603-R-RD" (at 91.44 134.62 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 91.44 134.62 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1306,7 +1306,7 @@
 
 (property "Value" "47uF 100V" (at 99.568 96.6597 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 96.52 95.25 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:CAP-SMD_BD6.3-L6.6-W6.6-FD" (at 96.52 95.25 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 96.52 95.25 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1326,7 +1326,7 @@
 
 (property "Value" "47uF 100V" (at 99.568 160.1597 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 96.52 158.75 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:CAP-SMD_BD6.3-L6.6-W6.6-FD" (at 96.52 158.75 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 96.52 158.75 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1370,7 +1370,7 @@
 
 (property "Value" "10kΩ" (at 169.5958 103.2383 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 167.64 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:R0603" (at 167.64 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 167.64 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1390,7 +1390,7 @@
 
 (property "Value" "TB002-500-02BE" (at 59.2836 90.1065 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 64.516 96.266 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "TerminalBlock:TerminalBlock_MaiXu_MX126-5.0-02P_1x02_P5.00mm" (at 64.516 96.266 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 64.516 96.266 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1426,7 +1426,7 @@
 
 (property "Value" "10kΩ" (at 155.194 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 153.67 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:R0603" (at 153.67 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 153.67 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1482,7 +1482,7 @@
 
 (property "Value" "0.05" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "Resistor_SMD:R_2512_6332Metric" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1518,7 +1518,7 @@
 
 (property "Value" "43k" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:R0603" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1554,7 +1554,7 @@
 
 (property "Value" "62k" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:R0603" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1584,13 +1584,13 @@
 
 (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 21.6891 33.02 0) (effects (font (size 1.27 1.27)) (justify right) hide))) 
 
-(symbol (lib_id "0603WAF4701T5E_2") (at 195.58 124.46 0) (unit 0) (body_style 0) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no) (uuid "891b0aad-34d6-4d0f-aa6e-4bf26414c22d") 
+(symbol (lib_id "0603WAF4701T5E_2") (at 195.58 124.46 0) (unit 0) (body_style 0) (exclude_from_sim no) (in_bom no) (on_board yes) (in_pos_files yes) (dnp no) (uuid "891b0aad-34d6-4d0f-aa6e-4bf26414c22d") 
 
 (property "Reference" "SJ1" (at 185.674 100.6983 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
 (property "Value" "JMP" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1618,7 +1618,7 @@
 
 (property "Value" "1k" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:R0603" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1640,13 +1640,13 @@
 
 (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 21.6891 33.02 0) (effects (font (size 1.27 1.27)) (justify right) hide))) 
 
-(symbol (lib_id "0603WAF4701T5E_2") (at 167.64 151.13 0) (unit 0) (body_style 0) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no) (uuid "80468f42-de3e-4ab2-99f9-94bb3934a88f") 
+(symbol (lib_id "0603WAF4701T5E_2") (at 167.64 151.13 0) (unit 0) (body_style 0) (exclude_from_sim no) (in_bom no) (on_board yes) (in_pos_files yes) (dnp no) (uuid "80468f42-de3e-4ab2-99f9-94bb3934a88f") 
 
 (property "Reference" "SJ2" (at 185.674 100.6983 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
 (property "Value" "JMP" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1682,7 +1682,7 @@
 
 (property "Value" "0.47uF" (at 130.5814 108.5469 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 132.08 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:C0603" (at 132.08 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 132.08 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1718,7 +1718,7 @@
 
 (property "Value" "10k" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:R0603" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1810,7 +1810,7 @@
 
 (property "Value" "10k" (at 175.514 57.2643 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:R0603" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1910,7 +1910,7 @@
 
 (property "Value" "10k" (at 175.514 57.2643 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:R0603" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 

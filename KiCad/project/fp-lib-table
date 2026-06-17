@@ -1,0 +1,4 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "simplefocmini")(type "KiCad")(uri "${KIPRJMOD}/simplefocmini.pretty")(options "")(descr "Project-local footprints imported from EasyEDA (no canonical KiCad equivalent): C0603, R0603, LED0603-R-RD, the BD6.3 electrolytic can, and U1's HTSSOP-28 with its custom EP thermal-via array."))
+)
