@@ -23,8 +23,10 @@ Usage:
 
 Needs only kicad-cli (auto-located on Windows; override with $KICAD_CLI).
 `pcb drc`/`sch erc` are deliberately NOT run here -- this tool only *generates*.
-project.kicad_pro is snapshotted and restored, because kicad-cli rewrites it on
-load (root-sheet registration, and `pcb drc` resets the custom min-via rules).
+project.kicad_pro is snapshotted as a **defensive tripwire**: on the current
+(canonical) project file kicad-cli leaves it byte-identical, so this is a no-op
+-- but if a future KiCad version ever re-normalises it, the snapshot is restored
+and a warning printed (see CLAUDE.md "the .kicad_pro is now canonical").
 """
 import argparse
 import os
@@ -151,7 +153,9 @@ def main():
         if pro_snapshot is not None and not args.no_restore_pro:
             if PRO.read_bytes() != pro_snapshot:
                 PRO.write_bytes(pro_snapshot)
-                print("  (restored project.kicad_pro)")
+                print("  ! WARNING: kicad-cli modified project.kicad_pro -- restored it. "
+                      "A KiCad-version change may have re-normalised the file; review and "
+                      "re-commit the canonical form (see CLAUDE.md).")
     print("Done.")
 
 

@@ -15,8 +15,10 @@ artifacts (pin types, lib-symbol issues) documented in CLAUDE.md -- a regression
 *tripwire*, not a hard gate. DRC *warning*-severity items (silk/padstack/text)
 are likewise cosmetic import artifacts and not gated; only error-severity DRC is.
 
-project.kicad_pro is snapshotted and restored (kicad-cli can normalise it on
-load). KiCadRoutingTools is expected at ../KiCadRoutingTools; override with
+project.kicad_pro is snapshotted as a defensive tripwire -- on the current
+(canonical) file kicad-cli leaves it byte-identical (verified), so this never
+fires; if a future KiCad version re-normalises it, it's restored with a warning.
+KiCadRoutingTools is expected at ../KiCadRoutingTools; override with
 $KRT_DIR / $KRT_PYTHON. If it's missing, conn+clear are skipped (with a notice)
 and the gate falls back to DRC+ERC.
 
@@ -139,6 +141,8 @@ def main():
         if pro_snapshot is not None and not args.no_restore_pro:
             if PRO.read_bytes() != pro_snapshot:
                 PRO.write_bytes(pro_snapshot)
+                print("! WARNING: kicad-cli modified project.kicad_pro -- restored it "
+                      "(unexpected; a KiCad-version change may have re-normalised it).")
 
     print(f"{'CHECK':34} {'RESULT':8} DETAIL")
     print("-" * 78)

@@ -56,9 +56,10 @@ extensions) + Excellon drill, `drv8313-board-gerbers.zip` (upload-ready),
 MPN + LCSC), `drv8313-board.step`; and under [`../images/`](../images/):
 `board-3d-{top,bottom}.png`, `schematic.svg`, `pcb-{top,bottom}.svg`.
 
-It snapshots and **restores `project.kicad_pro`** (kicad-cli rewrites it on
-load — and `pcb drc` resets the custom min-via rules). It only *generates*;
-it does not run DRC/ERC. Override the toolchain with `$env:KICAD_CLI`.
+It keeps a **defensive snapshot of `project.kicad_pro`** — a no-op on the current
+canonical file (kicad-cli leaves it byte-identical; verified), restored with a
+warning only if a future KiCad version re-normalises it. It only *generates*; it
+does not run DRC/ERC. Override the toolchain with `$env:KICAD_CLI`.
 
 ## `set_silk_version.py` — bump the silkscreen version stamp
 
@@ -93,7 +94,8 @@ Runs the checks the board is validated against and prints a PASS/FAIL summary;
 
 The ERC baseline (141 = 27 err + 114 warn) and the DRC *warning*-severity items
 are EasyEDA-import cosmetic artifacts (documented in CLAUDE.md), so they are a
-**regression tripwire**, not a gate. Snapshots/restores `project.kicad_pro`.
+**regression tripwire**, not a gate. Keeps a defensive `project.kicad_pro`
+snapshot (a no-op today — kicad-cli leaves the canonical file untouched).
 Needs [KiCadRoutingTools](https://github.com/drandyhaas/KiCadRoutingTools) at
 `../KiCadRoutingTools` for the connectivity/clearance checks (override with
 `$env:KRT_DIR` / `$env:KRT_PYTHON`); if absent, those two are skipped and the
