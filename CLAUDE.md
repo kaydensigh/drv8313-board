@@ -74,6 +74,9 @@ A project-setup pass configured the project for the 60 V target. **Board files o
 - Bundled Python with working `pcbnew` API: `C:\Program Files\KiCad\10.0\bin\python.exe`.
 - The PCB (`.kicad_pcb`) can be edited programmatically via the `pcbnew` Python module. The schematic (`.kicad_sch`) has **no** scripting API — edit it as s-expression text.
 - **KiCad must be closed before editing the project files.** While open it holds `KiCad/project/~project.kicad_pro.lck` and will overwrite external edits on save. Check with `Get-Process kicad` and the `.lck` file.
+- **All text is on the default font** (commit `a9c4908`). The EasyEDA import hard-coded font faces — `Arial`/`Times New Roman` in the schematic and an **uninstalled `NotoSerifCJKsc-Medium`** on the PCB; the missing CJK face popped a modal font-substitution dialog that **stalled headless `kicad-cli`/`pcbnew` runs**. All `(face …)` overrides were stripped. Don't re-introduce named faces; if a headless run hangs, suspect a missing-font dialog.
+- `pcbnew`/`kicad-cli` first-load is slow on Windows (~30–60 s) and `pcbnew` block-buffers stdout — use `-u`. Backgrounded runs are normal; wait for them.
+- **Bash heredocs strip backslashes here** (`<<'PY'` mangled `'\\'` in Python). Write scripts to a file with the Write tool and run them, rather than piping via heredoc.
 
 ### Useful commands
 
