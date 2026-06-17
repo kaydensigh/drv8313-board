@@ -22,15 +22,15 @@ The KiCad project under `KiCad/project/` is the working design. When cleaning up
 - `KiCad/project/` — KiCad 10 project (`.kicad_pro/.kicad_sch/.kicad_pcb`); the editable working design
 - `3D model/` — board `.obj` + `.mtl`
 - `BOM_simplefocmini_2024-04-26.csv`, `Pick and Place/`, `Schematic_simplefocmini.pdf`
-- `docs/` — `redesign-plan.html` (finalized target spec), `redesign-bom.md`, and **`drv8313.pdf` (the TI DRV8313 datasheet — authoritative part reference)**
+- `docs/` — `redesign-plan.html` (finalized target spec), `redesign-bom.md`, and **`datasheets/drv8313.pdf` (the TI DRV8313 datasheet — authoritative part reference)**. Component datasheets live in `docs/datasheets/` (see _Adding a new part_ below).
 
 ## Components (from BOM + pick-and-place)
 
 13 placed parts: U1 = DRV8313PWPR (HTSSOP-28); C1, C2 = 100nF (0603); C3 = 100µF (CAP-SMD BD6.3); C4 = 470nF (0603); R1–R4 = 10kΩ (0603); R5 = 1kΩ (0603); LED1 (0603); H1 = 2×5 header; P1 = 3-pin header. (BOM lists 7 line items; H1/P1 appear in the pick-and-place file but not the BOM.)
 
-## DRV8313 pinout (datasheet: `docs/drv8313.pdf`)
+## DRV8313 pinout (datasheet: `docs/datasheets/drv8313.pdf`)
 
-Verified 2026-06-17 from the schematic netlist. **Note:** `pdftoppm` is unavailable in this environment, so the Read tool **cannot page-render the datasheet PDF** (`pcb export pdf` outputs read fine; the datasheet does not) — extract text or open `docs/drv8313.pdf` directly.
+Verified 2026-06-17 from the schematic netlist. **Note:** `pdftoppm` is unavailable in this environment, so the Read tool **cannot page-render the datasheet PDF** (`pcb export pdf` outputs read fine; the datasheet does not) — extract text or open `docs/datasheets/drv8313.pdf` directly.
 
 Net assignments below are **post-redesign** (the brushed/solenoid + comparator pass, schematic commit `d0eca99`); the pin functions are the chip's.
 
@@ -150,6 +150,23 @@ Cleared all **29 `footprint_symbol_mismatch`** parity items (the schematic Footp
 - **Remaining parity (all warnings, none blocking):** 24 `footprint_symbol_field_mismatch` (PCB footprints lack the `Manufacturer Part` field the symbols carry — the BOM is generated from the **schematic**, so this is cosmetic); 20 `lib_footprint_mismatch` (above); 8 `net_conflict` (U1 EP thermal-via pads = GND, no matching schematic pin — the classic thermal-pad quirk); 4 `extra_footprint` (MH1–4 have no schematic symbol — standard for mechanical holes).
 - **kicad-cli auto-edits `project.kicad_pro` on load** — registers the root sheet under `top_level_sheets` (+ adds a trailing newline). Benign normalization, not a design change.
 
+## Adding a new part (JLCPCB/LCSC) — process
+
+**JLCPCB parts are the LCSC catalog** (LCSC is JLC's component arm), and this board's schematic already stores each part's LCSC id in the `Supplier Part` field (e.g. U1=`C92482`, C3=`C87862`). A part has **two separable things**: the *footprint* (copper land pattern, defined by package) and the *LCSC id* (BOM/assembly metadata — which physical component JLC solders). You match them by package + a datasheet check.
+
+**1. Fetch footprint + symbol + 3D with `easyeda2kicad`** (installed — see Tooling). It pulls the exact EasyEDA/LCSC library model for an LCSC id and converts to KiCad:
+```sh
+& "C:\Program Files\KiCad\10.0\bin\python.exe" -m easyeda2kicad --full --overwrite --lcsc_id C92482 --output <dir>/lib.kicad_sym
+# writes <dir>/lib.kicad_sym, <dir>/lib.pretty/<name>.kicad_mod, <dir>/lib.3dshapes/<name>.{step,wrl}
+```
+This is the canonical way for **vendor-specific / non-standard** parts (odd connectors, specific IC packages). For **generic passives** prefer the canonical KiCad std footprint (`Resistor_SMD:R_0603_1608Metric`, etc.) — IPC-compliant, already resolvable via the global fp-lib-table — and just record the LCSC id in a field.
+
+**2. Fetch the datasheet to verify the land pattern.** Save the manufacturer/TI or the LCSC datasheet (`https://www.lcsc.com/datasheet/…_<LCSCID>.pdf`) into **`docs/datasheets/`**. Compare the footprint's pad pitch/size/courtyard against the datasheet's recommended land pattern **before trusting it** — especially thermal-pad ICs (this is exactly why U1's HTSSOP lives in the project lib with its verified EP via array, not a generic footprint). `pdftoppm` is unavailable so the Read tool can't page-render PDFs — extract text or open the PDF directly.
+
+**3. Place it.** Standard footprint → reference `StdLib:Name` (resolves globally). Vendor footprint with no canonical match → copy the `.kicad_mod` into **`KiCad/project/simplefocmini.pretty/`**, ensure `simplefocmini` is in `KiCad/project/fp-lib-table`, then set the schematic symbol's `Footprint` = `simplefocmini:Name` (kicad-skip) and the PCB FPID to match (`pcbnew` `f.SetFPID(LIB_ID(nick,name))`), or do a GUI *Update PCB from Schematic*. Verify with `kicad-cli pcb drc --schematic-parity` (0 `footprint_symbol_mismatch`) + `sch erc` (0 `footprint_link_issues`).
+
+**Verified 2026-06-18 against our 5 project-lib parts** (could we have *downloaded* instead of exporting from the board?): **yes — they're the same models.** easyeda2kicad fetches of `C0603`/`R0603`/`HTSSOP-28` reproduced our board footprints to sub-micron rounding (same names, same pads, **same EP via array on U1**) — they came from these LCSC parts via the original EasyEDA import. Our board copies additionally carry the silk cleanup + the `SetLocalSolderPasteMargin(0)` fix; notably the **pristine download has paste-margin unset (`None`), i.e. it does *not* carry the −100 mm bug** — that defect was introduced by the original EasyEDA→KiCad *import*, not by the part. Two real discrepancies the fetch surfaced: (a) the LED (`C72038`) returns `LED0603-RD-YELLOW`, a near-identical 0603 land (~0.05 mm pitch diff, different name) — a different LED part than the board's `LED0603-R-RD`; (b) **C3/C5's BOM part `C87862` (RVT2A470M1010) is a Ø10 mm can (`CAP-SMD_BD10.0…`), but the board footprint is Ø6.3 mm (`CAP-SMD_BD6.3…`)** — the part does **not** fit the footprint. This is the deferred "Ø10 mm cap resize" (see the redesign notes); still open. easyeda2kicad also yields STEP+WRL **3D models**, which the imported board currently lacks — available if 3D enrichment is wanted.
+
 ## Tooling (Windows)
 
 - `kicad-cli`: `C:\Program Files\KiCad\10.0\bin\kicad-cli.exe` (version 10.0.3). **CLI reference:** https://docs.kicad.org/10.0/en/cli/cli.html (full command list).
@@ -169,6 +186,7 @@ Cleared all **29 `footprint_symbol_mismatch`** parity items (the schematic Footp
   - **⚠ `(unit 0)` import quirk:** the EasyEDA-imported symbols carry `(unit 0)` (KiCad normally uses 1), so kicad-skip's *named* access `sch.symbol.U1` raises `AttributeError: Unknown element U1` (it keys them `U1_N/A`). **Workaround: iterate `sch.symbol` and match `.property.Reference.value`** rather than `sch.symbol.<REF>`.
   - Use `pcbnew` for PCB work (kicad-skip reads `.kicad_pcb` only partially).
 - **KiCadRoutingTools** (Rust-accelerated A* autorouter, https://github.com/drandyhaas/KiCadRoutingTools) is cloned at **`../KiCadRoutingTools`** (sibling of this repo; v0.15.12). **Not** pip-installable. Setup (2026-06-17): isolated venv at **`../KiCadRoutingTools/.venv`** (Python 3.11 + `numpy`/`scipy`/`shapely`) plus the prebuilt Windows Rust binary (`build_router.py` → `rust_router/grid_router.pyd`). Run as `& "..\KiCadRoutingTools\.venv\Scripts\python.exe" -X utf8 <tool>.py <board> [out] ...`. It uses its **own** `.kicad_pcb` parser (no `pcbnew`) and round-trips our 4-layer board intact (GND1/GND2 inner-layer names preserved — verified). Tools: `place_optimize.py` (routability *polish* of an existing placement — **not** a from-scratch placer; the authors found hand placement beats auto ~500×, so place by hand first), `route.py` (signals + power nets with neck-down), `route_planes.py` (plane zones + GND via stitching; pass the net once per `--plane-layers` entry, e.g. `--nets GND GND --plane-layers In1.Cu In2.Cu`), `check_connected.py`/`check_drc.py`. `place_route_loop.py` crashes on our board (`unhashable type: 'dict'`).
+- **`easyeda2kicad` is installed** (v1.0.1; pip, into the bundled Python's user site at `…\KiCad\10.0\3rdparty\Python311` — the `easyeda2kicad.exe` script is on the un-PATH'd `…\Scripts`, so run it as `& "C:\Program Files\KiCad\10.0\bin\python.exe" -m easyeda2kicad …`). Fetches symbol/footprint/3D for any LCSC id over the network (internet works in this env). Flags: `--full`/`--footprint`/`--symbol`/`--3d`, `--lcsc_id ID [ID …]` (multiple ok), `--output file.kicad_sym` (creates sibling `.pretty`/`.3dshapes`), `--overwrite`, `--use-cache`. See _Adding a new part_ for the workflow.
 - **KiCad must be closed before editing the project files.** While open it holds `KiCad/project/~project.kicad_pro.lck` and will overwrite external edits on save. Check with `Get-Process kicad` and the `.lck` file.
 - **All text is on the default font** (commit `a9c4908`). The EasyEDA import hard-coded font faces — `Arial`/`Times New Roman` in the schematic and an **uninstalled `NotoSerifCJKsc-Medium`** on the PCB; the missing CJK face popped a modal font-substitution dialog that **stalled headless `kicad-cli`/`pcbnew` runs**. All `(face …)` overrides were stripped. Don't re-introduce named faces; if a headless run hangs, suspect a missing-font dialog.
 - `pcbnew`/`kicad-cli` first-load is slow on Windows (~30–60 s) and `pcbnew` block-buffers stdout — use `-u`. Backgrounded runs are normal; wait for them.
