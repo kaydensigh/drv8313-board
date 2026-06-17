@@ -1306,7 +1306,7 @@
 
 (property "Value" "47uF 100V" (at 99.568 96.6597 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "simplefocmini:CAP-SMD_BD6.3-L6.6-W6.6-FD" (at 96.52 95.25 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0" (at 96.52 95.25 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 96.52 95.25 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1326,7 +1326,7 @@
 
 (property "Value" "47uF 100V" (at 99.568 160.1597 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Footprint" "simplefocmini:CAP-SMD_BD6.3-L6.6-W6.6-FD" (at 96.52 158.75 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Footprint" "simplefocmini:CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0" (at 96.52 158.75 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 96.52 158.75 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
