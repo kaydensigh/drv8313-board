@@ -1,62 +1,80 @@
-# SimpleFOCMini v1.1
+# DRV8313 Board
 
-<img height="200px" src="./images/side.png"  /><img height="200px" src="./images/top.png" /><img height="200px" src="./images/bottom.png"  />
+An open-hardware **3-phase motor driver module** built around the Texas Instruments
+[**DRV8313**](https://www.ti.com/lit/ds/symlink/drv8313.pdf) (three half-bridges, 8–60 V).
+It drives BLDC/PMSM motors (3-PWM / FOC, e.g. with [SimpleFOC](https://simplefoc.com)),
+and — because the three half-bridges and their enables are broken out independently —
+also brushed-DC motors, solenoids, and 6-step/trapezoidal loads.
 
-<img height="350px" src="./images/schema.png" align="right"/>
+<img src="images/board-3d-top.png" height="300"/> <img src="images/board-3d-bottom.png" height="300"/>
 
+> Derived from the [SimpleFOCMini](https://github.com/simplefoc/SimpleFOCMini) board
+> ([EasyEDA source](https://easyeda.com/the.skuric/simplefocmini)) and re-engineered for
+> the DRV8313's full voltage range. It has since diverged substantially from the original
+> (higher voltage, larger 4-layer board, on-board current limit, independent half-bridge
+> enables), hence the separate project.
 
-## Features
-- DRV8313 based - [datasheet](https://www.ti.com/lit/ds/symlink/drv8313.pdf?ts=1650461862269&ref_url=https%253A%252F%252Fwww.google.com%252F)
-  - Power supply: 8-24V
-  - Max current: 2.5A per phase
-  - Onboard 3.3V LDO
-- Small size 26x21 mm
-- Fully compatible with the *Simple**FOC**library*
-- Fully open-source: [EasyEDA link](https://easyeda.com/the.skuric/simplefocmini)
-- Low-cost: JLCPCB production cost ~3-5€
-- Available in the [shop](https://www.simplefoc.com/shop) 10-15€ 
+## Specifications
 
-## New features in v1.1
-- Aligned motor output header with the input header so that it can be stacked in the protoboard
-- Input header updated to be easier to use with arduino UNO, nucleos, but also with qtpy...
-  - Changed the order of the IN1,IN2,IN3 and EN: 
-  - Added an additional GND pin 
-- First batch of the SimpleFOCMini V1.1 will be available in the [shop](https://www.simplefoc.com/shop) soon: Price: 10-15€ 
+| | |
+| --- | --- |
+| Driver | DRV8313PWPR (HTSSOP-28, exposed thermal pad) |
+| Supply voltage | **8–60 V** |
+| Continuous current | **~1.5 A / phase** (1 oz copper, Tj ≤ 125 °C; ~2 A with airflow). The datasheet's 2.5 A/phase is a *peak* rating. |
+| Logic level | 3.3 V (DRV8313 on-chip `V3P3OUT` regulator; no separate LDO) |
+| Board | **50 × 45 mm**, 4-layer (Top / GND / GND / Bottom, 1 oz) |
+| Control | 3× IN (PWM) + 3× independent EN; nRESET / nSLEEP / nFAULT |
+| Current limit | On-board comparator, cycle-by-cycle (50 mΩ shunt + reference divider) |
+| Connectors | 2×7 control header, 5-pos motor/VM terminal block, 2-pos power terminal block |
 
-## Getting started with SimpleFOCMini
+### Features beyond the original SimpleFOCMini
 
-See the documentation in the [SimpleFOC documentation](https://docs.simplefoc.com/simplefocmini) page. 
-- The docs explain how to start with the SimpleFOCMini board and how to use it with the SimpleFOC library. 
-- They also describe how you can order it directly from the JLCPCB.
+- **8–60 V** input (vs. 8–24 V) on a 4-layer board with inner ground planes.
+- **On-board over-current limit** using the DRV8313's internal comparator (`COMPP`/`COMPN`):
+  a 50 mΩ low-side shunt and a 3.3 V reference divider, with two solder jumpers to set the
+  trip point — both intact ≈ 2.5 A, cut `SJ1` ≈ 1.5 A, cut `SJ2` disables the limit. The
+  comparator output (`nCOMPO`) is brought out on the header.
+- **Independent half-bridge enables** (`EN1`/`EN2`/`EN3` on their own series resistors) so the
+  board can run brushed-DC / solenoid / 6-step loads. Tie them together at the header to get
+  the original ganged 3-PWM/FOC enable.
 
-## Design files
+## Renders
 
-The board design is provided in several formats:
+| Schematic | PCB (top) | PCB (bottom) |
+| --- | --- | --- |
+| <img src="images/schematic.svg" width="260"/> | <img src="images/pcb-top.svg" width="220"/> | <img src="images/pcb-bottom.svg" width="220"/> |
+
+## Repository layout
 
 | Path | Contents |
 | --- | --- |
-| [`Altium/`](./Altium/) | Altium schematic (`.schdoc`) and PCB (`.pcbdoc`), dated 2024-04-26 |
-| [`EasyEDA/`](./EasyEDA/) | EasyEDA Standard schematic and PCB JSON exports (editor v6.5) |
-| [`Gerber/`](./Gerber/) | Fabrication Gerbers and Excellon drill files |
-| [`KiCad/project/`](./KiCad/project/) | KiCad 10 project, imported from the EasyEDA Standard JSON files |
-| [`3D model/`](./3D%20model/) | Board 3D model (`.obj` + `.mtl`) |
-| [`BOM_simplefocmini_2024-04-26.csv`](./BOM_simplefocmini_2024-04-26.csv) | Bill of materials |
-| [`Pick and Place/`](./Pick%20and%20Place/) | Pick-and-place / centroid file |
-| [`Schematic_simplefocmini.pdf`](./Schematic_simplefocmini.pdf) | Rendered schematic |
+| [`KiCad/project/`](./KiCad/project/) | KiCad 10 source — schematic, PCB, project, and the `simplefocmini.pretty` footprint library |
+| [`manufacturing/`](./manufacturing/) | Fabrication outputs: [`gerbers/`](./manufacturing/gerbers/) (Gerber + Excellon drill), [BOM](./manufacturing/drv8313-board-BOM.csv), [pick-and-place CPL](./manufacturing/drv8313-board-CPL.csv), and a [STEP](./manufacturing/drv8313-board.step) 3D model |
+| [`docs/`](./docs/) | [`redesign-plan.html`](./docs/redesign-plan.html) (target spec + analysis), [`redesign-bom.md`](./docs/redesign-bom.md) (part-selection worklist), [`datasheets/`](./docs/datasheets/) (DRV8313 datasheet) |
+| [`images/`](./images/) | Renders used above |
 
-The KiCad 10 project was created by importing the EasyEDA Standard files. The Altium files weren't usable as the source: there is no Altium-schematic importer (GUI or CLI), and while `kicad-cli pcb import` does support Altium PCBs, this repo's `.pcbdoc` is the older Protel ASCII format that no KiCad importer plugin reads.
+The design is maintained **only** in KiCad now; the original Altium / EasyEDA / PDF exports
+have been removed. The manufacturing files are regenerated from the KiCad project with
+`kicad-cli`.
 
-### Fork: 60V redesign (in progress)
+## Ordering
 
-This fork is reworking the board toward the DRV8313's full voltage range. The DRV8313 is rated 8–60V ([datasheet](https://www.ti.com/lit/ds/symlink/drv8313.pdf)); the v1.1 design above is specified at 8–24V. Finalized target: **8–60V, 1.5A continuous per phase, under 50×50 mm, 4-layer**. The KiCad project under [`KiCad/project/`](./KiCad/project/) is the working design; see [`docs/redesign-plan.html`](./docs/redesign-plan.html) for the plan and analysis, and [`docs/redesign-bom.md`](./docs/redesign-bom.md) for the per-part selection worklist.
+The board is designed to be fabricated and assembled at [JLCPCB](https://jlcpcb.com):
 
-## Release log
+1. Upload `manufacturing/gerbers/` (zipped) for fabrication — 4-layer, 1 oz.
+2. Use `manufacturing/drv8313-board-BOM.csv` and `manufacturing/drv8313-board-CPL.csv`
+   for SMT assembly. BOM rows carry LCSC part numbers where selected; remaining parts still
+   need sourcing — see [`docs/redesign-bom.md`](./docs/redesign-bom.md).
 
-Release | Date | Description
---- | --- | ---
-v1.1 | 2024-04 | A quick iteration with a few changes: <p> 1. Aligned motor output header with the input header so that it can be stacked in the protoboard<br>2. Input header updated to be easier to use with arduino UNO, nucleos, but also with qtpy...<br> - Changed the order of the IN1,IN2,IN3 and EN: <br>    - Added an additional GND pin <br>
-v1.0 | 2022-04 | Initial release
+> **Status:** functional design — schematic and PCB are complete and pass DRC/ERC
+> (0 errors, fully routed). Not yet fabricated/validated in hardware. Review before ordering.
 
-## Size comparison
+## License
 
-<img  src="https://user-images.githubusercontent.com/36178713/164240473-5abd7453-9d38-4f25-9195-378c39180054.jpg" />
+See [`LICENSE`](./LICENSE). This project inherits from the open-source SimpleFOCMini; please
+also credit the original authors.
+
+## Credits
+
+Based on [**SimpleFOCMini**](https://github.com/simplefoc/SimpleFOCMini) by the
+[SimpleFOC](https://simplefoc.com) project (Antun Skuric et al.).
