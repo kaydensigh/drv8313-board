@@ -75,6 +75,8 @@ The board is designed to be fabricated and assembled at [JLCPCB](https://jlcpcb.
 
 > **Status:** functional design — schematic and PCB are complete and pass DRC/ERC
 > (0 errors, fully routed). Not yet fabricated/validated in hardware. Review before ordering.
+> Re-verify any time with [`tools/check_design.py`](./tools/check_design.py) (DRC + connectivity
+> + ERC) and [`tools/check_bom.py`](./tools/check_bom.py) (live JLCPCB part stock).
 
 ## License
 

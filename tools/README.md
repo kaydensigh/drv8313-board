@@ -72,3 +72,48 @@ Rewrites the `vN.M` token wherever it appears on a silk layer (preserving a
 surrounding label like `Board `) plus the `MM/YY` date stamp. Silk **text only**
 — copper/geometry untouched; does not edit README/docs version references.
 After bumping, regenerate the board images with `build_manufacturing.py`.
+
+---
+
+## `check_design.py` — verify DRC / connectivity / ERC
+
+Runs the checks the board is validated against and prints a PASS/FAIL summary;
+**exits nonzero if any hard check fails** (drop into CI or a pre-commit hook).
+
+```powershell
+& $PY tools\check_design.py
+```
+
+| Check | Tool | Gate |
+| --- | --- | --- |
+| DRC (error severity) | `kicad-cli pcb drc --severity-error --refill-zones` | **hard** — must be 0 |
+| Connectivity (all nets) | KiCadRoutingTools `check_connected.py` | **hard** — all connected |
+| Clearance / shorts | KiCadRoutingTools `check_drc.py` | **hard** — 0 violations |
+| ERC | `kicad-cli sch erc` | tripwire — flagged if `!= 141` |
+
+The ERC baseline (141 = 27 err + 114 warn) and the DRC *warning*-severity items
+are EasyEDA-import cosmetic artifacts (documented in CLAUDE.md), so they are a
+**regression tripwire**, not a gate. Snapshots/restores `project.kicad_pro`.
+Needs [KiCadRoutingTools](https://github.com/drandyhaas/KiCadRoutingTools) at
+`../KiCadRoutingTools` for the connectivity/clearance checks (override with
+`$env:KRT_DIR` / `$env:KRT_PYTHON`); if absent, those two are skipped and the
+gate falls back to DRC + ERC.
+
+## `check_bom.py` — verify BOM stock + fee status (live)
+
+Looks up every LCSC part in `manufacturing/drv8313-board-BOM.csv` on JLCPCB and
+reports stock, Basic/Preferred/Extended (fee status) and price; **flags
+out-of-stock / discontinued parts and exits nonzero** if any part is out of
+stock — the exact failures that bit this BOM (LED1 went out of stock; the 10 kΩ
+Basic part periodically reads 0). Run it before ordering.
+
+```powershell
+& $PY tools\check_bom.py                  # fails on any 0-stock part
+& $PY tools\check_bom.py --min-stock 100  # also fail on low stock
+& $PY tools\check_bom.py --bom other.csv
+```
+
+Reuses `jlc_search.py`. Also tallies the unique Extended parts (= one JLCPCB
+setup fee each). *(As of this writing it reports the 10 kΩ `C25804` out of stock
+— a transient JLC condition on its most-used Basic resistor; re-run before
+ordering.)*
