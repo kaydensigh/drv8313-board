@@ -18,7 +18,7 @@ reference needs** and its decision status.
 | **LED1** | 1 | Power indicator | 0603 LED, was across **VM** via R5 | **Re-sited to the 3.3 V rail** (done — see below). LED part unchanged. | ✔ |
 | **H1** | 1 | Control header (IN1–3, EN, GND, 3V3…) | 2×5 2.54 mm female header | None | ✅ |
 | **P1** | 1 | Motor phase output | 3-pin 2.54 mm header (`Header-Female-2.54_1x3`) | **3-position 5 mm terminal block → `TB002-500-03BE`** (3-pos sibling of TB_PWR1's `TB002-500-02BE`). | 🛠️ (PCB footprint) |
-| **TB_PWR1** | 1 | VM / GND power input | `TB002-500-02BE` (2-pos, 5 mm terminal block) | None — already a 5 mm block; 5 mm blocks are typically ≥300 V / ≥10 A. | ✅ |
+| **TB_PWR1** | 1 | VM / GND power input | `TB002-500-02BE` (2-pos, 5 mm terminal block) | Part unchanged (5 mm blocks are ≥300 V / ≥10 A). **But the import never created a PCB footprint for it** — added 2026-06-17 as `TerminalBlock_MaiXu_MX126-5.0-02P_1x02_P5.00mm` (pad 1→GND, pad 2→VCC), parked off-board pending placement. | ✔ / 🛠️ (place) |
 
 ## Decisions (resolved)
 1. **C1 → 10 nF / 100 V** (TI datasheet value; Samsung `C84709`).
@@ -40,16 +40,20 @@ reference needs** and its decision status.
 - **VM trace widened** 0.254 → **0.8 mm** (Power-class). No shorts; adds ~3 clearance flags on the cramped layout that the re-route clears.
 - **C5 footprint added** (clone of C3, netted VCC/GND), parked below the board outline at (152.95, 124) pending placement — it shows as 2 ratsnest/"unconnected" until routed.
 - **Phase traces left at 0.5 mm.** Widening them to 0.8 mm *shorts* `U1_8`↔`U1_9` at the 0.65 mm-pitch HTSSOP escape — they must neck down at the IC and widen away from it, which is a routing task. 0.5 mm already carries 1.5 A.
-- DRC now: **0 shorting_items, 2 unconnected** (just C5's two pads). The rest are pre-existing import artifacts (silk/text ~160, clearance 21, padstack 14).
+- **Outline enlarged to 40×40 mm with 3 mm rounded corners** (2026-06-17, step 1). Parts/routing untouched (cluster in the upper-left; right/bottom is empty canvas).
+- **4× M3 mounting holes (3.2 mm NPTH, MH1–MH4)** at the new corners, symmetric 32×32 mm pattern (inset 4 mm). No net assigned — switch to the `_Pad` + GND variant in the GUI if chassis grounding is wanted (the original corner holes were GND). MH1 (top-left) overlaps H1 / the old corner pad until H1 is moved.
+- **TB_PWR1 footprint added** — it was in the schematic but the import never laid it out. Now `TerminalBlock_MaiXu_MX126-5.0-02P` (pad 1→GND, pad 2→VCC), parked off-board pending placement (2 ratsnest).
+- **Orphan `Pad_gge*` pads identified (7).** 4× Ø2 mm GND through-holes at the old corners = the original mounting holes (now mid-board, **superseded by MH1–MH4**); 3× small VCC/GND wire-solder pads near the right edge = the original power-input pads (**superseded by TB_PWR1**). Candidates to delete in the GUI (they hold GND/VCC tracks, so script-deleting would strand routing).
+- DRC now: **0 shorting_items, 4 unconnected** (C5 ×2 + TB_PWR1 ×2). Of 228 total, ~216 are pre-existing import artifacts (silk/text ~172, clearance 21, padstack 14, annular 4, mask-bridge 5) and 12 are the MH1-vs-H1 transient (clears on placement).
 
 ## Remaining work (PCB, needs the re-layout)
 These need component re-placement on a larger board (they overlap or short on the current 26 mm layout), so they belong to the interactive re-layout.
 
 **Recommended approach — enlarge the board first, then improve the layout incrementally.** The items below aren't impossible; they only fail because they're packed into the original 26×21 mm outline. The plan allows ≤50×50 mm, so:
-1. **Enlarge the `Edge.Cuts` outline** (e.g. ~40×40 mm) to create room.
-2. **Spread the parts out** — move the Ø10 mm caps and the 5 mm terminal block toward the board edges with clearance around them.
+1. ✅ **Enlarge the `Edge.Cuts` outline** — **DONE 2026-06-17.** Outline is now a clean ~40×40 mm rectangle (x[134,174] y[90,130]); parts/routing untouched (cluster in the upper-left, empty canvas to the right/bottom). DRC after: 207 violations, 0 shorting_items, 2 unconnected (C5) — all 207 pre-existing import artifacts.
+2. **Spread the parts out** — move the Ø10 mm caps and the 5 mm terminal block toward the board edges with clearance around them. *Do this in the GUI:* dragging a footprint in pcbnew leaves its tracks/vias behind (strands them), so interactive placement (ratsnest follows the part) is the right tool.
 3. **Then apply each blocked change** (resize cans, swap P1, place + route C5, neck/widen the phase traces). Each is a small, DRC-checkable step, so the layout gets better one increment at a time instead of in a single big re-route.
-4. **Re-pour the GND zones** to the new outline and re-run DRC.
+4. **Re-pour the GND zones** to the new outline and re-run DRC. The fills were re-poured after the outline change, but the zone *boundary* polygons still cover only the original ~26 mm area — redraw them to the new outline here so the planes fill the full board.
 
 The individual blocked items:
 - **Route C5** to VCC/GND once it's placed.
