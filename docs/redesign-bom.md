@@ -6,7 +6,7 @@ reference needs** and its decision status.
 
 **Status legend:** ✅ keep · ✔ decided/applied · 🛠️ rework (schematic/PCB) work remaining
 
-> ## ⚑ Current status (2026-06-17) — read this first
+> ## ⚑ Current status (2026-06-18) — read this first
 >
 > The brushed/solenoid + comparator redesign is **implemented and committed** (branch `kicad-import`); the
 > sections further down were written *during* the design and describe earlier intermediate states — **trust
@@ -14,10 +14,13 @@ reference needs** and its decision status.
 >
 > - **Schematic: done** (commit `d0eca99`) — comparator current-sense network, P1 → 5-pos, H1 → 2×7 with
 >   independent EN1/EN2/EN3. Netlist-verified (92 nodes).
-> - **PCB: fully routed** (commits `4f38a5c`…`2f0a3e7`) — all 92 connections, 0 unconnected. Board **enlarged
->   to 40×45 mm** (the 5-pos block didn't fit 40×40 between the corner M3 holes). Both inner layers are GND
->   planes; EP + GND pads stitched. **Remaining: 3 shorting_items in the comparator-divider SJ cluster** (needs
->   a spread/re-oriented sub-layout) + cosmetics. See CLAUDE.md "Brushed/solenoid PCB rework" for detail.
+> - **PCB: routed and electrically clean** (commits `4f38a5c`…`455a958`) — all 92 connections, 0 unconnected,
+>   **0 error-severity DRC (0 shorts / 0 clearance / 0 courtyard)**. Board **enlarged to 40×45 mm** (the 5-pos
+>   block didn't fit 40×40 between the corner M3 holes). Both inner layers are GND planes; EP + GND pads
+>   stitched. The 3 divider shorts, the U1 HTSSOP fine-pitch clearances, and the C3/R4 overlap were all
+>   cleared 2026-06-18. **Remaining: cosmetic only** — ~248 silk/text/HTSSOP-padstack import warnings, and
+>   schematic footprint fields still empty (29 footprint-parity items). See CLAUDE.md "Divider + fine-pitch +
+>   C3/R4 cleanup" for detail.
 > - **Actual reference designators** (this doc's placeholders → as-built): R_SENSE = **R8** (50 mΩ 2512);
 >   reference divider R_top/R_x/R_bot = **R9 (43 k) / R10 (62 k) / R11 (1 k)**; C_ref = **C6** (0.47 µF on
 >   COMPN/VREF); R_pull = **R12** (10 k on nCOMPO); **SJ1/SJ2** as named.
@@ -68,6 +71,8 @@ reference needs** and its decision status.
 - DRC now: **0 shorting_items, 4 unconnected** (C5 ×2 + TB_PWR1 ×2). Of 228 total, ~216 are pre-existing import artifacts (silk/text ~172, clearance 21, padstack 14, annular 4, mask-bridge 5) and 12 are the MH1-vs-H1 transient (clears on placement).
 
 ## Remaining work (PCB, needs the re-layout)
+> **⚠ Superseded (historical).** This section predates the 40×45 re-layout + routing. Most of it is now **done**: the board was enlarged, parts spread, P1 swapped to the 5-pos terminal block, all 92 nets routed, and the board is electrically clean (0 error-severity DRC). Trust the top banner + CLAUDE.md. The only genuinely-open items are the **order-time** ones (LCSC numbers/stock; optional Ø10 mm can resize for C3/C5 — the board kept the BD6.3 cans) and the **cosmetic** silk/text pass.
+
 These need component re-placement on a larger board (they overlap or short on the current 26 mm layout), so they belong to the interactive re-layout.
 
 **Recommended approach — enlarge the board first, then improve the layout incrementally.** The items below aren't impossible; they only fail because they're packed into the original 26×21 mm outline. The plan allows ≤50×50 mm, so:
