@@ -10753,10 +10753,10 @@
 			)
 		)
 	)
-	(gr_text "Mini"
-		(at 155.3 117 0)
+	(gr_text "DRV8313"
+		(at 157 115.3 0)
 		(layer "F.SilkS")
-		(uuid "56d6ca5f-70cd-44b0-94b7-6b6c30e56cf7")
+		(uuid "8703b173-b577-44c1-a995-a33055e56579")
 		(effects
 			(font
 				(size 0.8 0.8)
@@ -10765,10 +10765,10 @@
 			(justify top)
 		)
 	)
-	(gr_text "SimpleFOC"
-		(at 157 115.3 0)
+	(gr_text "v2.0"
+		(at 157 117 0)
 		(layer "F.SilkS")
-		(uuid "8703b173-b577-44c1-a995-a33055e56579")
+		(uuid "fff05d8e-c40f-47f5-8e56-8b46905fbb72")
 		(effects
 			(font
 				(size 0.8 0.8)
@@ -10781,18 +10781,6 @@
 		(at 157 118.7 0)
 		(layer "F.SilkS")
 		(uuid "95011390-98a5-470c-88a9-0aab872059ce")
-		(effects
-			(font
-				(size 0.8 0.8)
-				(thickness 0.13)
-			)
-			(justify top)
-		)
-	)
-	(gr_text "v2.0"
-		(at 158.6 117 0)
-		(layer "F.SilkS")
-		(uuid "fff05d8e-c40f-47f5-8e56-8b46905fbb72")
 		(effects
 			(font
 				(size 0.8 0.8)
@@ -10845,7 +10833,7 @@
 			)
 		)
 	)
-	(gr_text "docs.simplefoc.com"
+	(gr_text "github.com/kaydensigh/drv8313-board"
 		(at 149 131 0)
 		(layer "B.SilkS")
 		(uuid "b0d933e7-bd60-4bfc-a965-b2c5babdf8cf")
@@ -10857,7 +10845,7 @@
 			(justify top mirror)
 		)
 	)
-	(gr_text "SimpleFOC"
+	(gr_text "DRV8313"
 		(at 140 118.5 0)
 		(layer "B.SilkS")
 		(uuid "ca5ba8b9-3c89-49b5-87a1-1f9d79a3c4ad")
@@ -10869,7 +10857,7 @@
 			(justify top mirror)
 		)
 	)
-	(gr_text "Mini v2.0"
+	(gr_text "Board v2.0"
 		(at 140 120.3 0)
 		(layer "B.SilkS")
 		(uuid "e91dd0d5-eb7d-4bf8-bd89-a88cb1e9b8b5")
@@ -10881,7 +10869,7 @@
 			(justify top mirror)
 		)
 	)
-	(gr_text "04/24"
+	(gr_text "06/26"
 		(at 140 122.1 0)
 		(layer "B.SilkS")
 		(uuid "fce5cd29-1cf9-47bc-8ddc-b6e9d7828da1")
