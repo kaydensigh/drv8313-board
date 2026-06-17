@@ -1,6 +1,6 @@
 # KiCadRoutingTools scratch + render artifacts
-_scratch_*.py
-_scratch_*.kicad_pcb
+_scratch_*
+loop_round0*
 placement.pdf
 placement_opt.pdf
 routing.pdf
