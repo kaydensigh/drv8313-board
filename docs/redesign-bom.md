@@ -75,4 +75,70 @@ The individual blocked items:
 - Footprint for C3/C5: `Capacitor_SMD:CP_Elec_10x10` (or `CP_Elec_10x10.5`).
 - 100 nF 100 V fallback for C1 (if not going with 10 nF): Samsung `CL10B104KC8NNNC` (`C15725`).
 - **Cost note:** the caps are pennies; at low volume the real cost is JLCPCB's **~$3 one-time extended-part fee per unique part number** — here C1 and C3 (one fee even with 2× C87862) ⇒ ~$6 added; C4 is likely Basic (free).
-- `U1`, `TB_PWR1`, `H1`, and `R1–R4` carry over unchanged.
+- `U1`, `TB_PWR1`, and `R1–R3` carry over unchanged. **(H1, P1, and R4 change — see the next section.)**
+
+## Brushed-DC / solenoid support + comparator current limit (designed 2026-06-17, implementation pending)
+
+Extends the board beyond 3-phase BLDC to also drive **brushed-DC motors and solenoids**, and adds a
+**user-configurable hardware current limit** built on the DRV8313's uncommitted comparator. All of this is
+explicitly supported by the datasheet: §8.2.3 "Brushed-DC and Solenoid Load" (Fig. 16), §8.2.4 "Three
+Solenoid Loads" (Fig. 17, Tables 8–12), and §7.3.1 (separate PGND pins for a low-side sense resistor).
+
+### H1 → 2×7 header (break out all three EN pins + expose the comparator)
+
+Today EN1/EN2/EN3 (U1 26/24/22) are **ganged** onto one `EN` net through a single series R4, brought out on
+one header pin. New design breaks them into three independent nets, **each with its own series 10 k** (keep
+R4 for EN1, **add R6 → EN2, R7 → EN3**), and exposes the comparator. Single GND (down from two). Pinout:
+
+```
+ 1 GND     2 3V3        9 nRES   10 nSLP
+ 3 IN1     4 EN1       11 nFLT   12 nCOMPO
+ 5 IN2     6 EN2       13 COMPP  14 COMPN
+ 7 IN3     8 EN3
+```
+
+Connector part: female 2×7 2.54 mm (replaces the 2×5 `C30419`); footprint `…2x07…`. User ties the EN pins
+together at the header to restore ganged enable, or drives them independently.
+
+### Comparator current-limit network (TI Fig. 12 topology)
+
+- **Sense:** tie **PGND1/2/3 together → one shunt R_SENSE (50 mΩ) → GND** (§7.3.1 explicitly blesses a single
+  combined low-side shunt). **Constraint:** PGND voltage must stay **≤ ±500 mV**, so R_SENSE ≤ 100 mΩ even at
+  the chip's ~5 A internal OCP; 50 mΩ → ≤250 mV at 5 A, ~0.3 W at 2.5 A (use a 1 W 2512). COMPP taps the shunt.
+- **Reference (COMPN):** divider off 3V3 with two cut-jumpers for selectable threshold —
+  **default 2.5 A; cut SJ1 → 1.5 A; cut SJ2 → no limit** (COMPN pulls to 3V3, never trips). Starting values
+  R_top 43 k, R_x 62 k (in series with SJ1, parallel to R_top), R_bot 1 k (in series with SJ2 to GND), plus a
+  0.47 µF filter cap on COMPN. COMPN is also on the header, so firmware can set an arbitrary threshold.
+- **Output:** nCOMPO is open-drain → **10 k pull-up to 3V3** → header pin 12 (MCU reads; low = over-current).
+  Optional jumper to route nCOMPO → nRESET for autonomous hardware shutdown.
+- **Bonus:** COMPP on the header is a free **analog current monitor** (I = V_COMPP / R_SENSE) for the MCU ADC.
+- **Caveat:** the comparator is an **instantaneous peak** trip, not an RMS/thermal limit. 2.5 A default sits
+  above the ~2.1 A peak of 1.5 A-RMS sinusoidal BLDC (no nuisance trips) and below the chip's fixed ~5 A OCP;
+  a BLDC user raises it, a DC-load user can drop it to 1.5 A.
+
+### P1 → 5-position output terminal block `[GND M1 M2 M3 VM]`
+
+Both supply references at the output so the user picks per the datasheet load tables:
+- **Sensed load → wire to VM** (low-side load, Table 12; energize INx **low**): current returns through the
+  low-side FET → shunt → **sensed** by the current limit.
+- **Simple/safe load → wire to GND** (high-side load, Tables 9/11; energize INx **high**): **not** sensed.
+- **Brushed motor on M1+M2** (H-bridge) is sensed either way (its current always crosses one low-side FET).
+- M1/M2/M3 = OUT1/OUT2/OUT3. 5-pos 5 mm block (`TB002-500-05BE` class). Exposes VM (≤60 V) at the terminal —
+  same rail already on TB_PWR1.
+
+### New / changed parts summary
+
+| Ref | Change |
+| --- | --- |
+| **H1** | 2×5 → **2×7** female header |
+| **P1** | 3-pin header → **5-pos 5 mm terminal block** `[GND M1 M2 M3 VM]` |
+| **R4** | repurposed: series R on **EN1** only (was the single ganged-EN series R) |
+| **R6, R7** | **new** 10 k series resistors for EN2, EN3 |
+| **R_SENSE** | **new** 50 mΩ ≥1 W shunt (PGND1/2/3 → GND) |
+| **R_top / R_x / R_bot** | **new** reference divider (43 k / 62 k / 1 k) |
+| **C_ref** | **new** 0.47 µF on COMPN |
+| **R_pull** | **new** 10 k pull-up on nCOMPO |
+| **SJ1, SJ2** | **new** solder jumpers (threshold select / disable) |
+
+PGND1/2/3 are no longer tied directly to GND — they go through R_SENSE, which re-works the low-side ground
+near U1 (the EP/thermal-pad area). EP (29) stays on GND.
