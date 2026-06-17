@@ -6,6 +6,27 @@ reference needs** and its decision status.
 
 **Status legend:** ✅ keep · ✔ decided/applied · 🛠️ rework (schematic/PCB) work remaining
 
+> ## ⚑ Current status (2026-06-17) — read this first
+>
+> The brushed/solenoid + comparator redesign is **implemented and committed** (branch `kicad-import`); the
+> sections further down were written *during* the design and describe earlier intermediate states — **trust
+> this banner and CLAUDE.md over them.**
+>
+> - **Schematic: done** (commit `d0eca99`) — comparator current-sense network, P1 → 5-pos, H1 → 2×7 with
+>   independent EN1/EN2/EN3. Netlist-verified (92 nodes).
+> - **PCB: fully routed** (commits `4f38a5c`…`2f0a3e7`) — all 92 connections, 0 unconnected. Board **enlarged
+>   to 40×45 mm** (the 5-pos block didn't fit 40×40 between the corner M3 holes). Both inner layers are GND
+>   planes; EP + GND pads stitched. **Remaining: 3 shorting_items in the comparator-divider SJ cluster** (needs
+>   a spread/re-oriented sub-layout) + cosmetics. See CLAUDE.md "Brushed/solenoid PCB rework" for detail.
+> - **Actual reference designators** (this doc's placeholders → as-built): R_SENSE = **R8** (50 mΩ 2512);
+>   reference divider R_top/R_x/R_bot = **R9 (43 k) / R10 (62 k) / R11 (1 k)**; C_ref = **C6** (0.47 µF on
+>   COMPN/VREF); R_pull = **R12** (10 k on nCOMPO); **SJ1/SJ2** as named.
+> - **Divider verified:** with R8 = 50 mΩ — SJ1+SJ2 intact → 0.125 V → **2.5 A**; cut SJ1 → 0.075 V → **1.5 A**;
+>   cut SJ2 → VREF floats → **disabled**. Topology follows datasheet **Fig. 12** (COMPP=pin12=sense,
+>   COMPN=pin13=reference) — the §8.2.2.2.1 prose contradicts its own Fig. 12; don't swap COMPP/COMPN.
+> - **Still open (BOM/order time):** set MPNs/LCSC + footprints for the 10 new parts (clones carry blank MPNs);
+>   the Ø10 mm can resize for C3/C5 (`CP_Elec_10x10`) was deferred — the board currently keeps the BD6.3 cans.
+
 | Ref | Qty | Function | v1.1 part (current) | Redesign part | Status |
 | --- | --- | --- | --- | --- | --- |
 | **U1** | 1 | DRV8313PWPR motor driver | DRV8313PWPR (HTSSOP-28) | None — already 8–60 V rated | ✅ |
@@ -17,7 +38,7 @@ reference needs** and its decision status.
 | **R5** | 1 | Indicator-LED series resistor | 1 kΩ 0603 (Value) / MPN decodes to 4.7 kΩ | **Keep 1 kΩ** — on the 3.3 V rail that's ~1.3 mA (fine for an indicator). | ✔ |
 | **LED1** | 1 | Power indicator | 0603 LED, was across **VM** via R5 | **Re-sited to the 3.3 V rail** (done — see below). LED part unchanged. | ✔ |
 | **H1** | 1 | Control header (IN1–3, EN, GND, 3V3…) | 2×5 2.54 mm female header | None | ✅ |
-| **P1** | 1 | Motor phase output | 3-pin 2.54 mm header (`Header-Female-2.54_1x3`) | **3-position 5 mm terminal block → `TB002-500-03BE`** (3-pos sibling of TB_PWR1's `TB002-500-02BE`). | 🛠️ (PCB footprint) |
+| **P1** | 1 | Motor / load output | 3-pin 2.54 mm header (`Header-Female-2.54_1x3`) | **5-position 5 mm terminal block `[GND M1 M2 M3 VM]` → `TB002-500-05BE`** (`TerminalBlock_MaiXu_MX126-5.0-05P`) — see the brushed/solenoid section. *(Superseded the earlier 3-pos plan.)* Swapped on the PCB. | ✔ |
 | **TB_PWR1** | 1 | VM / GND power input | `TB002-500-02BE` (2-pos, 5 mm terminal block) | Part unchanged (5 mm blocks are ≥300 V / ≥10 A). **But the import never created a PCB footprint for it** — added 2026-06-17 as `TerminalBlock_MaiXu_MX126-5.0-02P_1x02_P5.00mm` (pad 1→GND, pad 2→VCC), parked off-board pending placement. | ✔ / 🛠️ (place) |
 
 ## Decisions (resolved)
@@ -77,7 +98,7 @@ The individual blocked items:
 - **Cost note:** the caps are pennies; at low volume the real cost is JLCPCB's **~$3 one-time extended-part fee per unique part number** — here C1 and C3 (one fee even with 2× C87862) ⇒ ~$6 added; C4 is likely Basic (free).
 - `U1`, `TB_PWR1`, and `R1–R3` carry over unchanged. **(H1, P1, and R4 change — see the next section.)**
 
-## Brushed-DC / solenoid support + comparator current limit (designed 2026-06-17, implementation pending)
+## Brushed-DC / solenoid support + comparator current limit (designed + implemented 2026-06-17 — see status banner for as-built refs)
 
 Extends the board beyond 3-phase BLDC to also drive **brushed-DC motors and solenoids**, and adds a
 **user-configurable hardware current limit** built on the DRV8313's uncommitted comparator. All of this is
