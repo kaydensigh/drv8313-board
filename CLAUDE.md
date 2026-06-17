@@ -22,10 +22,19 @@ The KiCad project under `KiCad/project/` is the working design. When cleaning up
 - `KiCad/project/` — KiCad 10 project (`.kicad_pro/.kicad_sch/.kicad_pcb`); the editable working design
 - `3D model/` — board `.obj` + `.mtl`
 - `BOM_simplefocmini_2024-04-26.csv`, `Pick and Place/`, `Schematic_simplefocmini.pdf`
+- `docs/` — `redesign-plan.html` (finalized target spec), `redesign-bom.md`, and **`drv8313.pdf` (the TI DRV8313 datasheet — authoritative part reference)**
 
 ## Components (from BOM + pick-and-place)
 
 13 placed parts: U1 = DRV8313PWPR (HTSSOP-28); C1, C2 = 100nF (0603); C3 = 100µF (CAP-SMD BD6.3); C4 = 470nF (0603); R1–R4 = 10kΩ (0603); R5 = 1kΩ (0603); LED1 (0603); H1 = 2×5 header; P1 = 3-pin header. (BOM lists 7 line items; H1/P1 appear in the pick-and-place file but not the BOM.)
+
+## DRV8313 pinout (datasheet: `docs/drv8313.pdf`)
+
+Verified 2026-06-17 from the schematic netlist. **Note:** `pdftoppm` is unavailable in this environment, so the Read tool **cannot page-render the datasheet PDF** (`pcb export pdf` outputs read fine; the datasheet does not) — extract text or open `docs/drv8313.pdf` directly.
+
+- **Power row (HTSSOP pins 1–14):** 1 CP1, 2 CP2, 3 VCP (charge pump → C4/C1/C2); **4 & 11 = VM** (net `VCC`); **5/8/9 = OUT1/OUT2/OUT3** phase outputs; 6/7/10/12/13/14 = PGND/COMP/GND; EP (29) = GND thermal pad.
+- **Logic row (pins 15–28):** **15 = V3P3OUT** — the chip's *internal* 3.3 V regulator; this **is** the board's "onboard 3.3V LDO" (net `3.3V`). 16/17/18 = nRESET/nSLEEP/nFAULT; 20 = GND; **22/24/26 = EN3/EN2/EN1**; **23/25/27 = IN3/IN2/IN1**; 19 = COMPO# and 21 = NC (both correctly unconnected); 28 = a GND pin (see parity note below).
+- **The three EN pins are tied together** to one `EN` net (via R4) = the standard SimpleFOC 3-PWM/FOC config (one master enable; all phases always driven, commutation on IN1/2/3). Independent enables would only matter for trapezoidal/6-step or sensorless BEMF (float one phase) — not this board, so keep them tied.
 
 ## KiCad project facts
 
@@ -75,6 +84,16 @@ A project-setup pass configured the project for the 60 V target. **Board files o
 - DRC with `--schematic-parity`: 469 violations, **0 unconnected items**, 65 schematic-parity issues. Top categories: 173 clearance, 78 silk_overlap, 61 solder_mask_bridge, 48 hole_clearance, 30 net_conflict.
 - ERC: 87 violations (was 88 before the frame symbol removal). Dominated by import artifacts: pin_to_pin (40), lib_symbol_issues (29), pin_not_driven, plus empty library associations.
 
+## Tool-driven re-layout + routing (2026-06-17, branch `kicad-import`)
+
+A full clear → re-place → route pass using **KiCadRoutingTools** (see Tooling). The fine-pitch HTSSOP escape is the one hard spot — exactly as predicted from the start.
+
+- **Cleared** (commit `79c6220`): removed all 112 tracks + 42 vias, the 7 `Pad_gge` import orphans (old corner mounting holes + old power-input pads, superseded by MH1–4 / TB_PWR1), all stale zones, and the `Dwgs.User` import graphics. Kept all real parts + MH1–4 + the 40×40 Edge.Cuts.
+- **Macro placement** (commit `d9c2c45`, hand-placed via `pcbnew`; `place_optimize` polish in `eb4ef99`): power-in TB_PWR1 **left edge**, motor-out P1 **right edge** (opposite edges, per user), control header H1 **top** (faces U1 logic row), U1 central, bulk VM cans in the open bottom area, CP/bypass caps under the power row, logic pulls between H1 and U1, LED by the 3.3 V pin. Polish: airwire 195→180 mm, crossings 39→19. **place_optimize keeps connectors/U1/holes locked but can slide unlocked caps into mounting-hole courtyards — re-check + nudge after.**
+- **Routing** (commit `f3557cf`): `route.py` on F.Cu/B.Cu only (inner layers are GND planes), **0.6 mm** power nets (VCC + the 3 phases) with neck-down. **All signals + all 3 phase outputs routed.** Key trick: **route VCC first** so it claims its escape corridor before the phases. `route_planes` → solid GND planes on In1/In2 (24/24 GND pads stitched, 0.96 mΩ / 13 A). **DRC: 0 shorts, 0 clearance.**
+- **Remaining = U1's VM-pin escape** (pin 11 + 2 short stubs) at the 0.65 mm power row — genuine fine-pitch escape, left for GUI push-and-shove. That row has 6 non-GND escapes (VM×2, OUT×3, VCP) competing and it is **zero-sum**: VCC-first connects the VM pins but starves a phase, and vice-versa. Used 0.6 mm (≈2 A in 1 oz, fine for 1.5 A) because the netclass's 0.8 mm can't escape the 0.65 mm pitch even with neck-down.
+- **Schematic↔PCB parity** (full connectivity diff, all 66 pads): only **two** real mismatches. (1) **R5.1 was stale on `VCC`** but the schematic has the LED on `3.3V` (V3P3OUT, pin 15) — the LED-resiting edit was never synced to the PCB; **fixed** R5.1→3.3V in `f3557cf`. The PCB nets are import-era, so do a GUI "Update PCB from Schematic" if more schematic edits land. (2) **U1 pin 28 (a GND pin)**: PCB ties it to GND (correct), schematic leaves it floating — **recommend adding the pin-28→GND tie in the schematic** so a future update doesn't drop it.
+
 ## Tooling (Windows)
 
 - `kicad-cli`: `C:\Program Files\KiCad\10.0\bin\kicad-cli.exe` (version 10.0.3). **CLI reference:** https://docs.kicad.org/10.0/en/cli/cli.html (full command list).
@@ -85,6 +104,7 @@ A project-setup pass configured the project for the 60 V target. **Board files o
   - **No content editing.** There is no CLI command to move parts, route, change the board size, edit a netclass, or add a footprint. Those go through the `pcbnew` Python API (PCB) or s-expression text edits (schematic) — the CLI only validates/exports the result.
 - The PCB (`.kicad_pcb`) can be edited programmatically via the `pcbnew` Python module. The schematic (`.kicad_sch`) has **no** scripting API and **no** CLI editor — edit it as s-expression text, or use **kicad-skip** (below).
 - **`kicad-skip` is installed** (v0.2.5; pure-Python s-expr editor, dep `sexpdata`; **no running KiCad needed**). Installed into the bundled Python's *user* site-packages (Program Files is read-only), so it imports from `& "C:\Program Files\KiCad\10.0\bin\python.exe"` as `import skip`. Use it for **schematic edits** instead of anchored-regex s-expr hacking: it gives a structured per-instance API (`Schematic("…kicad_sch").symbol`, search by reference/value/connection), which sidesteps the shared-MPN-string trap by editing the specific symbol object rather than a global string. It can also read `.kicad_pcb` (partial), but use `pcbnew` for PCB work. Verified 2026-06-17: loads `project.kicad_sch` (32 symbols) and reads properties.
+- **KiCadRoutingTools** (Rust-accelerated A* autorouter, https://github.com/drandyhaas/KiCadRoutingTools) is cloned at **`../KiCadRoutingTools`** (sibling of this repo; v0.15.12). **Not** pip-installable. Setup (2026-06-17): isolated venv at **`../KiCadRoutingTools/.venv`** (Python 3.11 + `numpy`/`scipy`/`shapely`) plus the prebuilt Windows Rust binary (`build_router.py` → `rust_router/grid_router.pyd`). Run as `& "..\KiCadRoutingTools\.venv\Scripts\python.exe" -X utf8 <tool>.py <board> [out] ...`. It uses its **own** `.kicad_pcb` parser (no `pcbnew`) and round-trips our 4-layer board intact (GND1/GND2 inner-layer names preserved — verified). Tools: `place_optimize.py` (routability *polish* of an existing placement — **not** a from-scratch placer; the authors found hand placement beats auto ~500×, so place by hand first), `route.py` (signals + power nets with neck-down), `route_planes.py` (plane zones + GND via stitching; pass the net once per `--plane-layers` entry, e.g. `--nets GND GND --plane-layers In1.Cu In2.Cu`), `check_connected.py`/`check_drc.py`. `place_route_loop.py` crashes on our board (`unhashable type: 'dict'`).
 - **KiCad must be closed before editing the project files.** While open it holds `KiCad/project/~project.kicad_pro.lck` and will overwrite external edits on save. Check with `Get-Process kicad` and the `.lck` file.
 - **All text is on the default font** (commit `a9c4908`). The EasyEDA import hard-coded font faces — `Arial`/`Times New Roman` in the schematic and an **uninstalled `NotoSerifCJKsc-Medium`** on the PCB; the missing CJK face popped a modal font-substitution dialog that **stalled headless `kicad-cli`/`pcbnew` runs**. All `(face …)` overrides were stripped. Don't re-introduce named faces; if a headless run hangs, suspect a missing-font dialog.
 - `pcbnew`/`kicad-cli` first-load is slow on Windows (~30–60 s) and `pcbnew` block-buffers stdout — use `-u`. Backgrounded runs are normal; wait for them.
