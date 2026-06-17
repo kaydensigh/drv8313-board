@@ -10765,7 +10765,7 @@
 			(justify top)
 		)
 	)
-	(gr_text "v2.0"
+	(gr_text "v1.0"
 		(at 157 117 0)
 		(layer "F.SilkS")
 		(uuid "fff05d8e-c40f-47f5-8e56-8b46905fbb72")
@@ -10857,7 +10857,7 @@
 			(justify top mirror)
 		)
 	)
-	(gr_text "Board v2.0"
+	(gr_text "Board v1.0"
 		(at 140 120.3 0)
 		(layer "B.SilkS")
 		(uuid "e91dd0d5-eb7d-4bf8-bd89-a88cb1e9b8b5")
