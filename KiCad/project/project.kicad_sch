@@ -992,11 +992,11 @@
 
 (property "Description" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "0603WAF4701T5E" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "0603WAF1002T5E" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "UniOhm" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "C23162" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C25804" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Supplier" "LCSC" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "2cb4cec7-62af-4e99-8964-44738593a2cd")) (pin "2" (uuid "016bcf5c-1db1-482a-bcc0-ef0fa44be7b2")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R1") (unit 0))))) 
 
@@ -1088,13 +1088,13 @@
 
 (property "Description" "" (at 193.04 66.04 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "" (at 193.04 66.04 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "2.54-2*7P Female" (at 193.04 66.04 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "" (at 193.04 66.04 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "" (at 193.04 66.04 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C38844" (at 193.04 66.04 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier" "" (at 193.04 66.04 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "409f8262-f012-40b5-83a6-9b7a9caf6424")) (pin "2" (uuid "cb85280d-8034-48f4-80e1-a33bd5db2fcf")) (pin "3" (uuid "604f866f-41dd-43ce-86ee-78841ce1d8dc")) (pin "4" (uuid "a948a65a-dde4-45eb-943d-76b993f1ba4f")) (pin "5" (uuid "9563540f-a373-4de9-97f5-58d73433c9dc")) (pin "6" (uuid "f680f3e8-5f14-4560-a0d7-b37a3374f9b0")) (pin "7" (uuid "2343b61d-7b0a-40f9-9968-a8ce9739c77d")) (pin "8" (uuid "6a64c5ed-a395-4f23-b36a-a9b14afdbd3d")) (pin "10" (uuid "86807c19-de88-46f9-97f4-fc11df2584d6")) (pin "9" (uuid "4bf17e20-6532-4345-a944-ab4a876c976d")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "H1") (unit 0)))) (pin "11" (uuid "902ac8b2-c2e4-4f70-a912-d069ea32222a")) (pin "12" (uuid "0b82d10c-f22b-4636-893e-dc325563aafe")) (pin "13" (uuid "08088039-d553-4ccc-be38-6b5acebebae2")) (pin "14" (uuid "6ee316bf-672d-49e9-81de-db4df6bac27b"))) 
+(property "Supplier" "LCSC" (at 193.04 66.04 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "409f8262-f012-40b5-83a6-9b7a9caf6424")) (pin "2" (uuid "cb85280d-8034-48f4-80e1-a33bd5db2fcf")) (pin "3" (uuid "604f866f-41dd-43ce-86ee-78841ce1d8dc")) (pin "4" (uuid "a948a65a-dde4-45eb-943d-76b993f1ba4f")) (pin "5" (uuid "9563540f-a373-4de9-97f5-58d73433c9dc")) (pin "6" (uuid "f680f3e8-5f14-4560-a0d7-b37a3374f9b0")) (pin "7" (uuid "2343b61d-7b0a-40f9-9968-a8ce9739c77d")) (pin "8" (uuid "6a64c5ed-a395-4f23-b36a-a9b14afdbd3d")) (pin "10" (uuid "86807c19-de88-46f9-97f4-fc11df2584d6")) (pin "9" (uuid "4bf17e20-6532-4345-a944-ab4a876c976d")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "H1") (unit 0)))) (pin "11" (uuid "902ac8b2-c2e4-4f70-a912-d069ea32222a")) (pin "12" (uuid "0b82d10c-f22b-4636-893e-dc325563aafe")) (pin "13" (uuid "08088039-d553-4ccc-be38-6b5acebebae2")) (pin "14" (uuid "6ee316bf-672d-49e9-81de-db4df6bac27b"))) 
 
 (symbol (lib_id "3.3V") (at 200.66 59.69 0) (mirror x) (unit 0) (body_style 0) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no) (uuid "5a9d2ca4-a943-4794-aacd-b64308d4b759") 
 
@@ -1132,11 +1132,11 @@
 
 (property "Description" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "0603WAF4701T5E" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "0603WAF1002T5E" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "UniOhm" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "C23162" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C25804" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Supplier" "LCSC" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "1b819042-398f-4e03-8458-69953e143986")) (pin "2" (uuid "1461d3d8-0590-43de-90cd-f6602d764b35")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R4") (unit 0))))) 
 
@@ -1232,7 +1232,7 @@
 
 (property "Reference" "P1" (at 64.8716 67.6021 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Value" "TB002-500-05BE" (at 41.1226 70.2183 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
+(property "Value" "TerminalBlock 5P 5.0mm" (at 41.1226 70.2183 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
 (property "Footprint" "TerminalBlock:TerminalBlock_MaiXu_MX126-5.0-05P_1x05_P5.00mm" (at 66.04 77.47 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1240,11 +1240,11 @@
 
 (property "Description" "" (at 66.04 77.47 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "Header-Female-2.54_1x3" (at 66.04 77.47 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "DB126V-5.0-5P-GN-P" (at 66.04 77.47 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "Boom Precision Elec" (at 66.04 77.47 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "C146243" (at 66.04 77.47 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C2835160" (at 66.04 77.47 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Supplier" "LCSC" (at 66.04 77.47 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "d577436a-db48-4695-96a7-9112b916a376")) (pin "3" (uuid "2ffebf89-fbe2-4731-a0b6-bbeca0572532")) (pin "2" (uuid "d0373795-7e71-4d14-8ce0-cf85f39d7561")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "P1") (unit 0)))) (pin "4" (uuid "85011ac3-2a86-46b5-b23f-b5e12a738420")) (pin "5" (uuid "473a10ad-ce0e-4b8e-8371-20a1c279658d"))) 
 
@@ -1376,11 +1376,11 @@
 
 (property "Description" "" (at 167.64 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "0603WAF4701T5E" (at 167.64 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "0603WAF1002T5E" (at 167.64 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "UniOhm" (at 167.64 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "C23162" (at 167.64 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C25804" (at 167.64 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Supplier" "LCSC" (at 167.64 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "4ef81b96-fc20-4b48-8f2b-ddf46dfe4f6b")) (pin "2" (uuid "fed94c00-72a2-454c-b8a9-04d2ef4349ee")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R2") (unit 0))))) 
 
@@ -1388,13 +1388,19 @@
 
 (property "Reference" "TB_PWR1" (at 59.5122 87.8459 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Value" "TB002-500-02BE" (at 59.2836 90.1065 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
+(property "Value" "TerminalBlock 2P 5.0mm" (at 59.2836 90.1065 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
 (property "Footprint" "TerminalBlock:TerminalBlock_MaiXu_MX126-5.0-02P_1x02_P5.00mm" (at 64.516 96.266 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Datasheet" "" (at 64.516 96.266 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Description" "" (at 64.516 96.266 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "2d44a6db-1ea7-4d7c-956f-6a5280cb9827")) (pin "2" (uuid "039c337e-42c9-4952-a24e-89dfa6af02c9")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "TB_PWR1") (unit 0))))) 
+(property "Description" "" (at 64.516 96.266 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "2d44a6db-1ea7-4d7c-956f-6a5280cb9827")) (pin "2" (uuid "039c337e-42c9-4952-a24e-89dfa6af02c9")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "TB_PWR1") (unit 0)))) 
+
+(property "Manufacturer Part" "DB126V-5.0-2P-GN-P" (at 64.516 96.266 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+
+(property "Supplier Part" "C395849" (at 64.516 96.266 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+
+(property "Supplier" "LCSC" (at 64.516 96.266 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))) 
 
 (symbol (lib_id "3.3V") (at 143.51 113.03 0) (mirror x) (unit 0) (body_style 0) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no) (uuid "db060eda-25f3-43ed-ad40-929cf2ce2149") 
 
@@ -1432,11 +1438,11 @@
 
 (property "Description" "" (at 153.67 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "0603WAF4701T5E" (at 153.67 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "0603WAF1002T5E" (at 153.67 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "UniOhm" (at 153.67 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "C23162" (at 153.67 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C25804" (at 153.67 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Supplier" "LCSC" (at 153.67 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "c4260394-1fb8-4954-bbc8-862f5c364e75")) (pin "2" (uuid "304a9f59-c3e5-4d14-8657-fbc683806a80")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R3") (unit 0))))) (sheet_instances (path "/" (page "1"))) (embedded_fonts no) 
 
@@ -1480,7 +1486,7 @@
 
 (property "Reference" "R8" (at 185.674 100.6983 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Value" "0.05" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
+(property "Value" "50mΩ" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
 (property "Footprint" "Resistor_SMD:R_2512_6332Metric" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1488,13 +1494,13 @@
 
 (property "Description" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "HoJLR2512-3W-50mR-1%" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C2903475" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "746096af-c91a-4e2b-9dec-2c2e8dfacce8")) (pin "2" (uuid "faca68fe-1101-4cd8-afd6-4386fe227fc0")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R8") (unit 0))))) 
+(property "Supplier" "LCSC" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "746096af-c91a-4e2b-9dec-2c2e8dfacce8")) (pin "2" (uuid "faca68fe-1101-4cd8-afd6-4386fe227fc0")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R8") (unit 0))))) 
 
 (global_label "PGND" (shape input) (at 153.67 129.54 0) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid ba124553-6511-4252-a254-5894b6e1b104) 
 
@@ -1516,7 +1522,7 @@
 
 (property "Reference" "R9" (at 185.674 100.6983 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Value" "43k" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
+(property "Value" "43kΩ" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
 (property "Footprint" "simplefocmini:R0603" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1524,13 +1530,13 @@
 
 (property "Description" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "0603WAF4302T5E" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C23172" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "e172f0d5-3f6b-4fc9-a949-ea392c6a536e")) (pin "2" (uuid "e4b8c6b5-d4a1-42c2-bc3f-a4e2e8b5f380")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R9") (unit 0))))) 
+(property "Supplier" "LCSC" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "e172f0d5-3f6b-4fc9-a949-ea392c6a536e")) (pin "2" (uuid "e4b8c6b5-d4a1-42c2-bc3f-a4e2e8b5f380")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R9") (unit 0))))) 
 
 (symbol (lib_id "3.3V") (at 167.64 129.54 0) (mirror x) (unit 0) (body_style 0) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no) (uuid "59bfa4a0-f9fd-473e-a6c7-d77af51707fc") 
 
@@ -1552,7 +1558,7 @@
 
 (property "Reference" "R10" (at 185.674 100.6983 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Value" "62k" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
+(property "Value" "62kΩ" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
 (property "Footprint" "simplefocmini:R0603" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1560,13 +1566,13 @@
 
 (property "Description" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "0603WAF6202T5E" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C23221" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "3b092b54-3b7a-43fb-948d-da78dcbecba1")) (pin "2" (uuid "6b6d1e2d-4d82-4710-99f6-d71606b79920")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R10") (unit 0))))) 
+(property "Supplier" "LCSC" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "3b092b54-3b7a-43fb-948d-da78dcbecba1")) (pin "2" (uuid "6b6d1e2d-4d82-4710-99f6-d71606b79920")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R10") (unit 0))))) 
 
 (symbol (lib_id "3.3V") (at 181.61 129.54 0) (mirror x) (unit 0) (body_style 0) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no) (uuid "c4b272ee-959f-4c8e-a9b7-3dd3504dee70") 
 
@@ -1616,7 +1622,7 @@
 
 (property "Reference" "R11" (at 185.674 100.6983 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Value" "1k" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
+(property "Value" "1kΩ" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
 (property "Footprint" "simplefocmini:R0603" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1624,13 +1630,13 @@
 
 (property "Description" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "0603WAF1001T5E" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C21190" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "2cd4eb00-291b-4e25-90e9-8c74b6ac05a3")) (pin "2" (uuid "c128dcdc-5d36-4f32-8132-819d8db90769")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R11") (unit 0))))) 
+(property "Supplier" "LCSC" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "2cd4eb00-291b-4e25-90e9-8c74b6ac05a3")) (pin "2" (uuid "c128dcdc-5d36-4f32-8132-819d8db90769")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R11") (unit 0))))) 
 
 (global_label "VREF" (shape input) (at 167.64 143.51 0) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid dbd98658-7657-4125-8557-ce5267ab6bef) 
 
@@ -1680,7 +1686,7 @@
 
 (property "Reference" "C6" (at 130.5814 106.2101 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Value" "0.47uF" (at 130.5814 108.5469 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
+(property "Value" "470nF" (at 130.5814 108.5469 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
 (property "Footprint" "simplefocmini:C0603" (at 132.08 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1688,13 +1694,13 @@
 
 (property "Description" "" (at 132.08 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "" (at 132.08 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "CL10B474KA8NNNC" (at 132.08 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "" (at 132.08 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "" (at 132.08 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C1623" (at 132.08 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier" "" (at 132.08 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "879efcca-4669-43ef-b8d3-9d3ed2b76eba")) (pin "2" (uuid "0009e981-5151-4e98-a1ad-b14c236fe430")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "C6") (unit 0))))) 
+(property "Supplier" "LCSC" (at 132.08 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "879efcca-4669-43ef-b8d3-9d3ed2b76eba")) (pin "2" (uuid "0009e981-5151-4e98-a1ad-b14c236fe430")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "C6") (unit 0))))) 
 
 (global_label "VREF" (shape input) (at 148.59 138.43 0) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid 6ac42873-978c-46d7-94dc-d67d31923dca) 
 
@@ -1716,7 +1722,7 @@
 
 (property "Reference" "R12" (at 185.674 100.6983 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Value" "10k" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
+(property "Value" "10kΩ" (at 185.674 102.9843 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
 (property "Footprint" "simplefocmini:R0603" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1724,13 +1730,13 @@
 
 (property "Description" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "0603WAF1002T5E" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C25804" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier" "" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "daa71301-35f3-48a5-b0e6-62a282d59df9")) (pin "2" (uuid "326a04e7-6906-4d8a-8501-14ab1c3f17b2")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R12") (unit 0))))) 
+(property "Supplier" "LCSC" (at 184.15 101.6 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "daa71301-35f3-48a5-b0e6-62a282d59df9")) (pin "2" (uuid "326a04e7-6906-4d8a-8501-14ab1c3f17b2")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R12") (unit 0))))) 
 
 (global_label "nCOMPO" (shape input) (at 181.61 143.51 0) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid ab2b1f9d-972b-4cbb-a71d-94cd4be5ee67) 
 
@@ -1808,7 +1814,7 @@
 
 (property "Reference" "R6" (at 175.514 55.0291 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Value" "10k" (at 175.514 57.2643 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
+(property "Value" "10kΩ" (at 175.514 57.2643 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
 (property "Footprint" "simplefocmini:R0603" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1816,13 +1822,13 @@
 
 (property "Description" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "0603WAF1002T5E" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C25804" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "49f98b00-f36b-4732-8af6-183875904def")) (pin "2" (uuid "3bc90609-8f64-46b0-a522-4d9d8442e2f9")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R6") (unit 0))))) 
+(property "Supplier" "LCSC" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "49f98b00-f36b-4732-8af6-183875904def")) (pin "2" (uuid "3bc90609-8f64-46b0-a522-4d9d8442e2f9")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R6") (unit 0))))) 
 
 (global_label "EN2" (shape input) (at 205.74 115.57 0) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid c77844a9-4e30-4aef-b10f-c8912cc05e26) 
 
@@ -1908,7 +1914,7 @@
 
 (property "Reference" "R7" (at 175.514 55.0291 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Value" "10k" (at 175.514 57.2643 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
+(property "Value" "10kΩ" (at 175.514 57.2643 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
 (property "Footprint" "simplefocmini:R0603" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1916,13 +1922,13 @@
 
 (property "Description" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "0603WAF1002T5E" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C25804" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier" "" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "446bd314-fe52-42fc-ae72-63b330d0ad7c")) (pin "2" (uuid "1bd8ed43-99a8-4c90-a78a-7154c4348d32")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R7") (unit 0))))) 
+(property "Supplier" "LCSC" (at 173.99 55.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "446bd314-fe52-42fc-ae72-63b330d0ad7c")) (pin "2" (uuid "1bd8ed43-99a8-4c90-a78a-7154c4348d32")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "R7") (unit 0))))) 
 
 (global_label "EN3" (shape input) (at 205.74 135.89 0) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid 6989806d-3832-42ab-a8da-e57a7dd5ef1a) 
 

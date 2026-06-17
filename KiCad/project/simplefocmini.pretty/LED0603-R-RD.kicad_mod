@@ -389,7 +389,7 @@
 		)
 	)
 	(embedded_fonts no)
-	(model "${KIPRJMOD}/EASYEDA_MODELS/LED0603_L1.6-W0.8-H0.6.step"
+	(model "${KIPRJMOD}/EASYEDA_MODELS/LED0603-RD-YELLOW.wrl"
 		(offset
 			(xyz -0 0 0)
 		)

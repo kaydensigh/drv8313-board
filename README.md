@@ -63,8 +63,11 @@ The board is designed to be fabricated and assembled at [JLCPCB](https://jlcpcb.
 
 1. Upload `manufacturing/gerbers/` (zipped) for fabrication — 4-layer, 1 oz.
 2. Use `manufacturing/drv8313-board-BOM.csv` and `manufacturing/drv8313-board-CPL.csv`
-   for SMT assembly. BOM rows carry LCSC part numbers where selected; remaining parts still
-   need sourcing — see [`docs/redesign-bom.md`](./docs/redesign-bom.md).
+   for assembly. Every line carries an LCSC part number; the passives are JLCPCB **Basic**
+   parts where one exists (the 43 k/62 k divider resistors, the 50 mΩ shunt and the
+   connectors are Extended). The three connectors — `H1` (2×7 header), `P1` and `TB_PWR1`
+   (5 mm screw terminal blocks) — are **through-hole**: order them via JLCPCB's through-hole
+   assembly add-on or solder them by hand. Re-verify live stock before ordering.
 
 > **Status:** functional design — schematic and PCB are complete and pass DRC/ERC
 > (0 errors, fully routed). Not yet fabricated/validated in hardware. Review before ordering.

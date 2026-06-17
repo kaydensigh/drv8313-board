@@ -214,7 +214,7 @@
 				(justify left top)
 			)
 		)
-		(property "Value" "0.47uF"
+		(property "Value" "470nF"
 			(at 4.0792 -3.0963 270)
 			(layer "F.SilkS")
 			(hide yes)
@@ -513,7 +513,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/C0603_L1.6-W0.8-H0.8.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/C0603_L1.6-W0.8-H0.8.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -858,7 +858,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603_L1.6-W0.8-H0.8.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603.wrl"
 			(offset
 				(xyz 0 -0 0)
 			)
@@ -1185,7 +1185,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/C0603_L1.6-W0.8-H0.8.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/C0603_L1.6-W0.8-H0.8.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -1213,7 +1213,7 @@
 				(justify left top)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10kΩ"
 			(at 2.4511 -4.3383 180)
 			(layer "F.SilkS")
 			(hide yes)
@@ -1530,7 +1530,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603_L1.6-W0.8-H0.8.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -1668,7 +1668,7 @@
 				)
 			)
 		)
-		(property "Value" "TB002-500-02BE"
+		(property "Value" "TerminalBlock 2P 5.0mm"
 			(at 2.25 4.92 90)
 			(layer "F.Fab")
 			(uuid "2ee122b1-5403-4637-8cd2-f0f92a8cec89")
@@ -2051,15 +2051,15 @@
 			(uuid "2506f05f-f716-44cb-8aba-82ad2b2203d7")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/TerminalBlock.3dshapes/TerminalBlock_MaiXu_MX126-5.0-02P_1x02_P5.00mm.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/CONN-TH_DB5.00-LI-2P-126.wrl"
 			(offset
-				(xyz 0 0 0)
+				(xyz 2.5 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz 0 0 0)
+				(xyz 0 0 180)
 			)
 		)
 	)
@@ -2079,7 +2079,7 @@
 				(justify left top)
 			)
 		)
-		(property "Value" "43k"
+		(property "Value" "43kΩ"
 			(at 2.4511 -4.3383 270)
 			(layer "F.SilkS")
 			(hide yes)
@@ -2396,7 +2396,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603_L1.6-W0.8-H0.8.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -2701,7 +2701,7 @@
 				)
 			)
 		)
-		(property "Value" "TB002-500-05BE"
+		(property "Value" "TerminalBlock 5P 5.0mm"
 			(at 9.75 4.92 90)
 			(layer "F.Fab")
 			(uuid "87fcda99-eec4-4ef5-b5eb-4e117a75b3b5")
@@ -3294,15 +3294,15 @@
 			(uuid "b054bcbc-9b12-4769-b483-a8c711ef3662")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/TerminalBlock.3dshapes/TerminalBlock_MaiXu_MX126-5.0-05P_1x05_P5.00mm.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/CONN-TH_5P-P5.00-L8.0-W25.0.wrl"
 			(offset
-				(xyz 0 0 0)
+				(xyz 10.0 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz 0 0 0)
+				(xyz 0 0 180)
 			)
 		)
 	)
@@ -5530,7 +5530,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/HTSSOP-28_L9.7-W4.4-H1.2-LS6.4-P0.65.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/HTSSOP-28_L9.7-W4.4-H1.2-LS6.4-P0.65.wrl"
 			(offset
 				(xyz -0 0.0001 0)
 			)
@@ -5753,7 +5753,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/C0603_L1.6-W0.8-H0.8.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/C0603_L1.6-W0.8-H0.8.wrl"
 			(offset
 				(xyz 0 -0 0)
 			)
@@ -6098,7 +6098,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603_L1.6-W0.8-H0.8.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -6234,7 +6234,7 @@
 				(justify left top)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10kΩ"
 			(at 2.4511 -4.3383 270)
 			(layer "F.SilkS")
 			(hide yes)
@@ -6551,7 +6551,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603_L1.6-W0.8-H0.8.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -6580,7 +6580,7 @@
 				)
 			)
 		)
-		(property "Value" "0.05"
+		(property "Value" "50mΩ"
 			(at 0 2.63 180)
 			(layer "F.Fab")
 			(uuid "7c69b305-90cd-47ee-8d7c-40e055f539ac")
@@ -6725,7 +6725,7 @@
 				(justify left top)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10kΩ"
 			(at 2.4511 -4.3383 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -7042,7 +7042,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603_L1.6-W0.8-H0.8.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -7692,7 +7692,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603_L1.6-W0.8-H0.8.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -7853,7 +7853,7 @@
 			(uuid "aff38890-7fd5-4b22-b3dd-c1c6a15e2f61")
 		)
 		(embedded_fonts no)
-		(model "_scratch_ee/sfm.3dshapes/CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0.wrl"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -8198,7 +8198,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603_L1.6-W0.8-H0.8.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -8226,7 +8226,7 @@
 				(justify left top)
 			)
 		)
-		(property "Value" "62k"
+		(property "Value" "62kΩ"
 			(at 2.4511 -4.3383 180)
 			(layer "F.SilkS")
 			(hide yes)
@@ -8543,7 +8543,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603_L1.6-W0.8-H0.8.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -8679,7 +8679,7 @@
 				(justify left top)
 			)
 		)
-		(property "Value" "1k"
+		(property "Value" "1kΩ"
 			(at 2.4511 -4.3383 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -8996,7 +8996,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603_L1.6-W0.8-H0.8.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -9281,7 +9281,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603_L1.6-W0.8-H0.8.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/R0603.wrl"
 			(offset
 				(xyz -0 0 0)
 			)
@@ -9960,7 +9960,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/LED0603_L1.6-W0.8-H0.6.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/LED0603-RD-YELLOW.wrl"
 			(offset
 				(xyz -0 0 0)
 			)
@@ -10287,7 +10287,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KIPRJMOD}/EASYEDA_MODELS/C0603_L1.6-W0.8-H0.8.step"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/C0603_L1.6-W0.8-H0.8.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -10448,7 +10448,7 @@
 			(uuid "6ccd3e22-32d8-4255-89e5-f54ac37b6fee")
 		)
 		(embedded_fonts no)
-		(model "_scratch_ee/sfm.3dshapes/CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0.wrl"
+		(model "${KIPRJMOD}/EASYEDA_MODELS/CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0.wrl"
 			(offset
 				(xyz 0 0 0)
 			)

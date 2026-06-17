@@ -330,7 +330,7 @@
 		)
 	)
 	(embedded_fonts no)
-	(model "${KIPRJMOD}/EASYEDA_MODELS/R0603_L1.6-W0.8-H0.8.step"
+	(model "${KIPRJMOD}/EASYEDA_MODELS/R0603.wrl"
 		(offset
 			(xyz 0 0 0)
 		)

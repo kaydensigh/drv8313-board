@@ -27,8 +27,12 @@ reference needs** and its decision status.
 > - **Divider verified:** with R8 = 50 mΩ — SJ1+SJ2 intact → 0.125 V → **2.5 A**; cut SJ1 → 0.075 V → **1.5 A**;
 >   cut SJ2 → VREF floats → **disabled**. Topology follows datasheet **Fig. 12** (COMPP=pin12=sense,
 >   COMPN=pin13=reference) — the §8.2.2.2.1 prose contradicts its own Fig. 12; don't swap COMPP/COMPN.
-> - **Still open (BOM/order time):** set MPNs/LCSC + footprints for the 10 new parts (clones carry blank MPNs);
->   the Ø10 mm can resize for C3/C5 (`CP_Elec_10x10`) was deferred — the board currently keeps the BD6.3 cans.
+> - **BOM: COMPLETE (2026-06-18).** Every line now carries an MPN + LCSC id (JLCPCB Basic-preferred). The 10
+>   new parts were sourced; **R1–R4 were corrected** (the import left them on the 4.7 k part `C23162` despite a
+>   10 kΩ value → now `C25804`); **P1 was corrected** (its LCSC `C146243` was actually a 3-pin *header*, a v1.1
+>   leftover → now the 5-pos block `DB126V-5.0-5P-GN-P`/`C2835160`). See the as-built table in `../README.md`
+>   and CLAUDE.md "BOM finalization + 3D enrichment". The Ø10 mm can resize for C3/C5 is also **done** (board
+>   now uses the BD10.0 cans, matching part `C87862`).
 
 | Ref | Qty | Function | v1.1 part (current) | Redesign part | Status |
 | --- | --- | --- | --- | --- | --- |

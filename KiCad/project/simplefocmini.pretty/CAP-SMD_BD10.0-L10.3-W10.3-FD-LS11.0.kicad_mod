@@ -31,7 +31,7 @@
 	(fp_poly (pts (xy -4.377538 1.338885) (xy -4.377538 3.398876) (xy -4.068521 3.398876) (xy -4.068521 1.338885) (xy -4.377538 1.338885)) (stroke (width 0) (type solid)) (fill solid) (layer "F.SilkS"))
 	(fp_poly (pts (xy -4.841037 2.214372) (xy -4.841037 2.523363) (xy -3.605022 2.523363) (xy -3.605022 2.214372) (xy -4.841037 2.214372)) (stroke (width 0) (type solid)) (fill solid) (layer "F.SilkS"))
 	(fp_poly (pts (xy 4.840986 2.214372) (xy 4.840986 2.523363) (xy 3.604971 2.523363) (xy 3.604971 2.214372) (xy 4.840986 2.214372)) (stroke (width 0) (type solid)) (fill solid) (layer "F.SilkS"))
-	(model "_scratch_ee/sfm.3dshapes/CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0.wrl"
+	(model "${KIPRJMOD}/EASYEDA_MODELS/CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0.wrl"
 		(offset (xyz 0.000 0.000 0.000))
 		(scale (xyz 1 1 1))
 		(rotate (xyz 0 0 180))
