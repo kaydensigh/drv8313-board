@@ -51,11 +51,12 @@ also brushed-DC motors, solenoids, and 6-step/trapezoidal loads.
 | [`KiCad/project/`](./KiCad/project/) | KiCad 10 source — schematic, PCB, project, and the `simplefocmini.pretty` footprint library |
 | [`manufacturing/`](./manufacturing/) | Fabrication outputs: [`gerbers/`](./manufacturing/gerbers/) (Gerber + Excellon drill), [BOM](./manufacturing/drv8313-board-BOM.csv), [pick-and-place CPL](./manufacturing/drv8313-board-CPL.csv), and a [STEP](./manufacturing/drv8313-board.step) 3D model |
 | [`docs/`](./docs/) | [`redesign-plan.html`](./docs/redesign-plan.html) (target spec + analysis), [`redesign-bom.md`](./docs/redesign-bom.md) (part-selection worklist), [`datasheets/`](./docs/datasheets/) (DRV8313 datasheet) |
+| [`tools/`](./tools/) | Headless helper scripts — JLCPCB part search, manufacturing-file regeneration, silk version bump ([`tools/README.md`](./tools/README.md)) |
 | [`images/`](./images/) | Renders used above |
 
 The design is maintained **only** in KiCad now; the original Altium / EasyEDA / PDF exports
 have been removed. The manufacturing files are regenerated from the KiCad project with
-`kicad-cli`.
+[`tools/build_manufacturing.py`](./tools/build_manufacturing.py) (a `kicad-cli` wrapper).
 
 ## Ordering
 
@@ -63,11 +64,14 @@ The board is designed to be fabricated and assembled at [JLCPCB](https://jlcpcb.
 
 1. Upload `manufacturing/gerbers/` (zipped) for fabrication — 4-layer, 1 oz.
 2. Use `manufacturing/drv8313-board-BOM.csv` and `manufacturing/drv8313-board-CPL.csv`
-   for assembly. Every line carries an LCSC part number; the passives are JLCPCB **Basic**
-   parts where one exists (the 43 k/62 k divider resistors, the 50 mΩ shunt and the
-   connectors are Extended). The three connectors — `H1` (2×7 header), `P1` and `TB_PWR1`
-   (5 mm screw terminal blocks) — are **through-hole**: order them via JLCPCB's through-hole
-   assembly add-on or solder them by hand. Re-verify live stock before ordering.
+   for assembly. Every line carries an LCSC part number. Most parts are **fee-free** on
+   JLCPCB — Basic or Preferred, no per-part setup fee — including the 43 k/62 k divider
+   resistors (Preferred). The unavoidable **Extended** parts are the DRV8313 itself, the
+   10 nF/100 V and 47 µF/100 V capacitors, the 50 mΩ current-sense shunt, and the three
+   connectors. The connectors — `H1` (2×7 header), `P1` and `TB_PWR1` (5 mm screw terminal
+   blocks) — are **through-hole**: order them via JLCPCB's through-hole assembly add-on or
+   solder them by hand. Re-verify live stock before ordering — `tools/jlc_search.py` checks
+   live stock/price (note: the 10 kΩ Basic resistor occasionally reads out of stock).
 
 > **Status:** functional design — schematic and PCB are complete and pass DRC/ERC
 > (0 errors, fully routed). Not yet fabricated/validated in hardware. Review before ordering.

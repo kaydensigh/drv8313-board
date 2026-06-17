@@ -33,17 +33,25 @@ reference needs** and its decision status.
 >   leftover → now the 5-pos block `DB126V-5.0-5P-GN-P`/`C2835160`). See the as-built table in `../README.md`
 >   and CLAUDE.md "BOM finalization + 3D enrichment". The Ø10 mm can resize for C3/C5 is also **done** (board
 >   now uses the BD10.0 cans, matching part `C87862`).
+> - **BOM cost/availability pass (2026-06-18, `tools/jlc_search.py`).** Re-checked every line for *fee-free*
+>   (Basic **or** Preferred — JLCPCB charges no per-part fee for either) + cheapest in-stock. Two upgrades:
+>   **C2** 100 nF `C1591` (Extended) → **`C14663`** (YAGEO, Basic, 50 V — like-for-like, drops a fee);
+>   **LED1** `C72038` (yellow, was **out of stock**) → **`C89811`** (NationStar, yellow, Preferred, in stock).
+>   Confirmed the **43 k/62 k** divider resistors are **Preferred (fee-free)**, not Extended as earlier notes
+>   said. The remaining Extended parts (U1, C1 10 nF/100 V, C3/C5 47 µF/100 V, R8 shunt, the 3 connectors)
+>   have no fee-free equivalent. The 10 kΩ Basic `C25804` is canonical but **occasionally reads stock 0** at
+>   JLC — re-verify at order time.
 
 | Ref | Qty | Function | v1.1 part (current) | Redesign part | Status |
 | --- | --- | --- | --- | --- | --- |
 | **U1** | 1 | DRV8313PWPR motor driver | DRV8313PWPR (HTSSOP-28) | None — already 8–60 V rated | ✅ |
 | **C3 + C5** | 2 | VM bulk | 100 µF 35 V SMD Al-elec (`VT1V101M-CRE77`, BD6.3) | **2× 47 µF / 100 V** in parallel (Honor `C87862`) ≈ 94 µF at full 100 V margin; two Ø10 mm cans. C3 `Value` updated; **C5 to be added** in rework. | ✔ / 🛠️ |
 | **C1** | 1 | Charge-pump flying cap (CP1–CP2) | 100 nF 50 V X7R 0603 (`CL10B104KB8NNNC`) | **10 nF / 100 V X7R 0603** (Samsung `C84709`) — TI datasheet value. `Value` updated. | ✔ |
-| **C2** | 1 | VCP→VM charge-pump reservoir | 100 nF 50 V X7R 0603 (`CL10B104KB8NNNC`) | None — only sees VCP−VM (~11 V); 50 V is fine (TI spec 16 V). | ✅ |
+| **C2** | 1 | VCP→VM charge-pump reservoir | 100 nF 50 V X7R 0603 (`CL10B104KB8NNNC`) | Value/rating unchanged — only sees VCP−VM (~11 V); 50 V is fine (TI spec 16 V). **Re-sourced to Basic** YAGEO `CC0603KRX7R9BB104`/`C14663` (was Extended `C1591`) to drop a per-part fee. | ✔ |
 | **C4** | 1 | V3P3OUT decouple | 470 nF 10 V Y5V 0603 | Optional: **470 nF 25 V X7R 0603** (Samsung `C1623`) — moves off unstable Y5V. | 🛠️ (optional) |
 | **R1–R4** | 4 | Logic pull-ups / dividers | 10 kΩ 0603 | None | ✅ |
 | **R5** | 1 | Indicator-LED series resistor | 1 kΩ 0603 (Value) / MPN decodes to 4.7 kΩ | **Keep 1 kΩ** — on the 3.3 V rail that's ~1.3 mA (fine for an indicator). | ✔ |
-| **LED1** | 1 | Power indicator | 0603 LED, was across **VM** via R5 | **Re-sited to the 3.3 V rail** (done — see below). LED part unchanged. | ✔ |
+| **LED1** | 1 | Power indicator | 0603 LED, was across **VM** via R5 | **Re-sited to the 3.3 V rail** (done — see below). **Re-sourced** to NationStar `NCD0603Y2`/`C89811` (yellow, Preferred, in stock) — the prior `C72038` went out of stock. | ✔ |
 | **H1** | 1 | Control header (IN1–3, EN, GND, 3V3…) | 2×5 2.54 mm female header | None | ✅ |
 | **P1** | 1 | Motor / load output | 3-pin 2.54 mm header (`Header-Female-2.54_1x3`) | **5-position 5 mm terminal block `[GND M1 M2 M3 VM]` → `TB002-500-05BE`** (`TerminalBlock_MaiXu_MX126-5.0-05P`) — see the brushed/solenoid section. *(Superseded the earlier 3-pos plan.)* Swapped on the PCB. | ✔ |
 | **TB_PWR1** | 1 | VM / GND power input | `TB002-500-02BE` (2-pos, 5 mm terminal block) | Part unchanged (5 mm blocks are ≥300 V / ≥10 A). **But the import never created a PCB footprint for it** — added 2026-06-17 as `TerminalBlock_MaiXu_MX126-5.0-02P_1x02_P5.00mm` (pad 1→GND, pad 2→VCC), parked off-board pending placement. | ✔ / 🛠️ (place) |

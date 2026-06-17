@@ -6,3 +6,10 @@ placement_opt.pdf
 routing.pdf
 gnd.pdf
 drc_*.txt
+
+# Regenerable fab build artifact (tools/build_manufacturing.py)
+drv8313-board-gerbers.zip
+
+# Python bytecode
+__pycache__/
+*.pyc

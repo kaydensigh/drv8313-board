@@ -3296,7 +3296,7 @@
 		(embedded_fonts no)
 		(model "${KIPRJMOD}/EASYEDA_MODELS/CONN-TH_5P-P5.00-L8.0-W25.0.wrl"
 			(offset
-				(xyz 10.0 0 0)
+				(xyz 10 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
@@ -9584,7 +9584,7 @@
 				(justify left top)
 			)
 		)
-		(property "Value" "19-213/Y2C-CQ2R2L/3T(CY)"
+		(property "Value" "Yellow"
 			(at 24.6075 -3.1674 0)
 			(layer "F.SilkS")
 			(hide yes)

@@ -1260,11 +1260,11 @@
 
 (property "Description" "" (at 90.17 63.5 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "CL10B104KB8NNNC" (at 90.17 63.5 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "CC0603KRX7R9BB104" (at 90.17 63.5 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "SAMSUNG" (at 90.17 63.5 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "C1591" (at 90.17 63.5 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C14663" (at 90.17 63.5 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Supplier" "LCSC" (at 90.17 63.5 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "2" (uuid "8d09a058-7a67-49bf-b57d-a163fb606d4d")) (pin "1" (uuid "899d84af-3612-4ae1-9813-b36881d293c0")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "C2") (unit 0))))) 
 
@@ -1272,7 +1272,7 @@
 
 (property "Reference" "LED1" (at 88.4682 126.3269 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
-(property "Value" "19-213/Y2C-CQ2R2L/3T(CY)" (at 88.4682 128.6129 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
+(property "Value" "Yellow" (at 88.4682 128.6129 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.6891 1.6891)) (justify left top))) 
 
 (property "Footprint" "simplefocmini:LED0603-R-RD" (at 91.44 134.62 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
@@ -1280,11 +1280,11 @@
 
 (property "Description" "" (at 91.44 134.62 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Manufacturer Part" "19-213/Y2C-CQ2R2L/3T(CY)" (at 91.44 134.62 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Manufacturer Part" "NCD0603Y2" (at 91.44 134.62 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Manufacturer" "EVERLIGHT" (at 91.44 134.62 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
-(property "Supplier Part" "C72038" (at 91.44 134.62 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
+(property "Supplier Part" "C89811" (at 91.44 134.62 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) 
 
 (property "Supplier" "LCSC" (at 91.44 134.62 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)))) (pin "1" (uuid "7c57de08-f321-45f2-b6ed-ae052780b597")) (pin "2" (uuid "287c2456-4dd3-4904-abf0-9adcb976480e")) (instances (project "project" (path "/03adca04-2da2-4337-bf85-1694768d6810" (reference "LED1") (unit 0))))) 
 
