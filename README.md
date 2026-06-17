@@ -44,7 +44,7 @@ The board design is provided in several formats:
 | [`Pick and Place/`](./Pick%20and%20Place/) | Pick-and-place / centroid file |
 | [`Schematic_simplefocmini.pdf`](./Schematic_simplefocmini.pdf) | Rendered schematic |
 
-The KiCad 10 project was created by importing the EasyEDA Standard files; KiCad 10 does not import the Altium `.pcbdoc`/`.schdoc` format.
+The KiCad 10 project was created by importing the EasyEDA Standard files. The Altium files weren't usable as the source: there is no Altium-schematic importer (GUI or CLI), and while `kicad-cli pcb import` does support Altium PCBs, this repo's `.pcbdoc` is the older Protel ASCII format that no KiCad importer plugin reads.
 
 ### Fork: 60V redesign (in progress)
 

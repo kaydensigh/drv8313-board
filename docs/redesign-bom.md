@@ -43,14 +43,22 @@ reference needs** and its decision status.
 - DRC now: **0 shorting_items, 2 unconnected** (just C5's two pads). The rest are pre-existing import artifacts (silk/text ~160, clearance 21, padstack 14).
 
 ## Remaining work (PCB, needs the re-layout)
-These need component re-placement on a larger board (they overlap or short on the current 26 mm layout), so they belong to the interactive re-layout:
+These need component re-placement on a larger board (they overlap or short on the current 26 mm layout), so they belong to the interactive re-layout.
+
+**Recommended approach — enlarge the board first, then improve the layout incrementally.** The items below aren't impossible; they only fail because they're packed into the original 26×21 mm outline. The plan allows ≤50×50 mm, so:
+1. **Enlarge the `Edge.Cuts` outline** (e.g. ~40×40 mm) to create room.
+2. **Spread the parts out** — move the Ø10 mm caps and the 5 mm terminal block toward the board edges with clearance around them.
+3. **Then apply each blocked change** (resize cans, swap P1, place + route C5, neck/widen the phase traces). Each is a small, DRC-checkable step, so the layout gets better one increment at a time instead of in a single big re-route.
+4. **Re-pour the GND zones** to the new outline and re-run DRC.
+
+The individual blocked items:
 - **Route C5** to VCC/GND once it's placed.
 - **Neck/widen the phase traces** at the U1 escape during routing.
 - **Resize C3 + C5** from the BD6.3 (6.3 mm) can to the Ø10 mm can (`CP_Elec_10x10`) for the C87862 part.
 - **P1 → terminal block.** Use KiCad footprint `TerminalBlock_MaiXu_MX126-5.0-03P_1x03_P5.00mm` (a 5 mm 3-pos block, the TB002-500-03BE class; pads 1/2/3 = the U1_9/U1_8/U1_5 phases). *Confirmed: swapping it in place shorts/overlaps badly (9 shorting_items + courtyard overlaps) because the 5 mm block is much larger than the 2.54 mm header — place it at a board edge during re-layout, then re-route the 3 phases.*
 - `C1623` (C4) LCSC number and JLCPCB stock/tier for every line: verify at order time.
 
-> **Why these are re-layout tasks:** each was attempted by script and reverted — the 60 V redesign's bigger parts (Ø10 mm caps, 5 mm terminal block) and wider traces don't fit the original 26 × 21 mm layout without shorting/overlapping. They need component re-placement on a larger board (the plan allows ≤50 × 50 mm), which is interactive routing work. The thermal vias, inner GND planes, C5, and VM-trace widening *did* fit and are applied.
+> **Why these are re-layout tasks:** each was attempted by script and reverted — the 60 V redesign's bigger parts (Ø10 mm caps, 5 mm terminal block) and wider traces don't fit the original 26 × 21 mm layout without shorting/overlapping. They need component re-placement on a larger board (the plan allows ≤50 × 50 mm), which is interactive routing work. **The fix is to enlarge the outline first and then iterate** (see "Recommended approach" above) — once the parts have room, these changes stop conflicting and can be made and DRC-checked one at a time. The thermal vias, inner GND planes, C5, and VM-trace widening *did* fit and are applied.
 
 ## Sourcing reference (researched 2026-06-16 vs live LCSC/JLCPCB — re-verify stock at order time)
 
