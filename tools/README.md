@@ -93,9 +93,9 @@ Runs the checks the board is validated against and prints a PASS/FAIL summary;
 | DRC (error severity) | `kicad-cli pcb drc --severity-error --refill-zones` | **hard** — must be 0 |
 | Connectivity (all nets) | KiCadRoutingTools `check_connected.py` | **hard** — all connected |
 | Clearance / shorts | KiCadRoutingTools `check_drc.py` | **hard** — 0 violations |
-| ERC | `kicad-cli sch erc` | tripwire — flagged if `!= 141` |
+| ERC | `kicad-cli sch erc` | tripwire — flagged if `!= 101` |
 
-The ERC baseline (141 = 27 err + 114 warn) and the DRC *warning*-severity items
+The ERC baseline (101 = 10 err + 91 warn) and the DRC *warning*-severity items
 are EasyEDA-import cosmetic artifacts (documented in CLAUDE.md), so they are a
 **regression tripwire**, not a gate. Keeps a defensive `project.kicad_pro`
 snapshot (a no-op today — kicad-cli leaves the canonical file untouched).

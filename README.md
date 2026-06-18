@@ -50,7 +50,7 @@ also brushed-DC motors, solenoids, and 6-step/trapezoidal loads.
 | --- | --- |
 | [`KiCad/project/`](./KiCad/project/) | KiCad 10 source — schematic, PCB, project, and the `simplefocmini.pretty` footprint library |
 | [`manufacturing/`](./manufacturing/) | Fabrication outputs: [`gerbers/`](./manufacturing/gerbers/) (Gerber + Excellon drill), [BOM](./manufacturing/drv8313-board-BOM.csv), [pick-and-place CPL](./manufacturing/drv8313-board-CPL.csv), and a [STEP](./manufacturing/drv8313-board.step) 3D model |
-| [`docs/`](./docs/) | [`redesign-plan.html`](./docs/redesign-plan.html) (target spec + analysis), [`redesign-bom.md`](./docs/redesign-bom.md) (part-selection worklist), [`datasheets/`](./docs/datasheets/) (DRV8313 datasheet) |
+| [`docs/`](./docs/) | [`datasheets/`](./docs/datasheets/) — the DRV8313 datasheet (authoritative part reference) |
 | [`tools/`](./tools/) | Headless helper scripts — JLCPCB part search, manufacturing-file regeneration, silk version bump ([`tools/README.md`](./tools/README.md)) |
 | [`images/`](./images/) | Renders used above |
 
@@ -108,10 +108,12 @@ The board is designed to be fabricated and assembled at [JLCPCB](https://jlcpcb.
    solder them by hand. Re-verify live stock before ordering — `tools/jlc_search.py` checks
    live stock/price (note: the 10 kΩ Basic resistor occasionally reads out of stock).
 
-> **Status:** functional design — schematic and PCB are complete and pass DRC/ERC
-> (0 errors, fully routed). Not yet fabricated/validated in hardware. Review before ordering.
-> Re-verify any time with [`tools/check_design.py`](./tools/check_design.py) (DRC + connectivity
-> + ERC) and [`tools/check_bom.py`](./tools/check_bom.py) (live JLCPCB part stock).
+> **Status:** functional design — schematic and PCB are complete, fully routed, and
+> **DRC-clean (0 error-severity violations)**. ERC's remaining items are all EasyEDA-import
+> artifacts (unspecified pin types / empty library fields), not real errors. Not yet
+> fabricated/validated in hardware. Review before ordering. Re-verify any time with
+> [`tools/check_design.py`](./tools/check_design.py) (DRC + connectivity + ERC) and
+> [`tools/check_bom.py`](./tools/check_bom.py) (live JLCPCB part stock).
 
 ## License
 

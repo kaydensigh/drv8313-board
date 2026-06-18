@@ -10,7 +10,7 @@ into CI or a pre-commit hook.
   clear  KiCadRoutingTools check_drc.py                      hard: 0 clearance/short violations
   ERC    kicad-cli sch erc                                   tripwire: flagged if != baseline
 
-The ERC baseline (141 = 27 error + 114 warning) is entirely EasyEDA-import
+The ERC baseline (101 = 10 error + 91 warning) is entirely EasyEDA-import
 artifacts (pin types, lib-symbol issues) documented in CLAUDE.md -- a regression
 *tripwire*, not a hard gate. DRC *warning*-severity items (silk/padstack/text)
 are likewise cosmetic import artifacts and not gated; only error-severity DRC is.
@@ -23,7 +23,7 @@ $KRT_DIR / $KRT_PYTHON. If it's missing, conn+clear are skipped (with a notice)
 and the gate falls back to DRC+ERC.
 
     & "C:\\Program Files\\KiCad\\10.0\\bin\\python.exe" tools/check_design.py
-    python tools/check_design.py --erc-baseline 141
+    python tools/check_design.py --erc-baseline 101
 """
 import argparse
 import os
@@ -39,7 +39,7 @@ PROJ = ROOT / "KiCad" / "project"
 PCB = PROJ / "project.kicad_pcb"
 SCH = PROJ / "project.kicad_sch"
 PRO = PROJ / "project.kicad_pro"
-ERC_BASELINE = 141
+ERC_BASELINE = 101
 
 
 def locate_cli():
