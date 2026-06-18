@@ -11,9 +11,9 @@ change never leaves stale outputs behind:
     drv8313-board-BOM.csv          grouped BOM with MPN + LCSC columns
     drv8313-board.step             STEP 3D model (3D models substituted in)
   images/:
-    board-3d-{top,bottom}.png      raytraced 3D renders
+    board-3d-{top,bottom}.png      raytraced 3D renders (straight top-down / bottom-up)
     schematic.svg                  schematic
-    pcb-{top,bottom}.svg           2D board plots
+    pcb-{top,bottom}.svg           2D copper+silk plots on a dark background
 
 Usage:
     python tools/build_manufacturing.py            # everything
@@ -30,6 +30,7 @@ and a warning printed (see CLAUDE.md "the .kicad_pro is now canonical").
 """
 import argparse
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -53,8 +54,28 @@ BOM_ARGS = [
     "--group-by", "Value,Footprint,Manufacturer Part,Supplier Part",
     "--ref-range-delimiter", "-", "--sort-field", "Reference",
 ]
-RENDER_ARGS = ["--quality", "high", "--perspective", "--floor",
-               "--width", "1568", "--height", "1176"]
+# Straight top-down / bottom-up: orthogonal projection (no --perspective), no
+# --floor, so the whole flat board is shown square-on. 50x45 mm board -> 10:9.
+RENDER_ARGS = ["--quality", "high", "--background", "opaque",
+               "--width", "1600", "--height", "1440"]
+# 2D plots: colored copper + white silk + edge outline on a dark background so
+# both the copper and the (white) silk are legible. KiCad's SVG export never
+# paints a background (always transparent -> white silk vanishes on a white
+# page), so we inject a solid background rect after export.
+SVG_BG = "#14161b"
+
+
+def inject_bg(svg_path, color=SVG_BG):
+    """Insert a full-canvas background rect as the first child of <svg>."""
+    t = svg_path.read_text(encoding="utf-8")
+    m = re.search(r'viewBox="([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)"', t)
+    if not m:
+        print(f"    ! no viewBox in {svg_path.name}; background not injected")
+        return
+    x, y, w, h = m.groups()
+    rect = f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{color}" />'
+    idx = t.index(">", t.index("<svg")) + 1
+    svg_path.write_text(t[:idx] + "\n" + rect + t[idx:], encoding="utf-8")
 
 
 def locate_cli():
@@ -123,12 +144,15 @@ def build_images():
 
     run(["pcb", "export", "svg", "--output", IMG / "pcb-top.svg",
          "--mode-single", "--page-size-mode", "2", "--exclude-drawing-sheet",
-         "--black-and-white", "--layers", "F.Cu,F.SilkS,F.Mask,Edge.Cuts", PCB],
-        "PCB top SVG")
+         "--layers", "F.Cu,F.SilkS,Edge.Cuts", PCB], "PCB top SVG")
+    inject_bg(IMG / "pcb-top.svg")
+    # NO --mirror: plot the bottom in board coordinates (look-through / "from the
+    # front"), so it lines up feature-for-feature with the top plot for easy
+    # comparison. (Trade-off: back silk reads mirrored, inherent to that view.)
     run(["pcb", "export", "svg", "--output", IMG / "pcb-bottom.svg",
          "--mode-single", "--page-size-mode", "2", "--exclude-drawing-sheet",
-         "--black-and-white", "--mirror",
-         "--layers", "B.Cu,B.SilkS,B.Mask,Edge.Cuts", PCB], "PCB bottom SVG")
+         "--layers", "B.Cu,B.SilkS,Edge.Cuts", PCB], "PCB bottom SVG")
+    inject_bg(IMG / "pcb-bottom.svg")
 
 
 def main():
