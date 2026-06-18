@@ -58,6 +58,35 @@ The design is maintained **only** in KiCad now; the original Altium / EasyEDA / 
 have been removed. The manufacturing files are regenerated from the KiCad project with
 [`tools/build_manufacturing.py`](./tools/build_manufacturing.py) (a `kicad-cli` wrapper).
 
+## Bill of materials
+
+The full BOM (with footprints) is [`manufacturing/drv8313-board-BOM.csv`](./manufacturing/drv8313-board-BOM.csv).
+Each MPN below links to its LCSC product page; **Library** is the JLCPCB part class —
+**Basic** and **Preferred** are fee-free, **Extended** parts each add a one-time setup fee.
+
+| Designator | Value | Qty | MPN | Unit price | Library |
+| --- | --- | --- | --- | --- | --- |
+| C1 | 10nF 100V | 1 | [CL10B103KC8NNNC](https://www.lcsc.com/product-detail/multilayer-ceramic-capacitors-mlcc-smd-smt_samsung-electro-mechanics-cl10b103kc8nnnc_C84709.html) | $0.0096 | Extended |
+| C2 | 100nF | 1 | [CC0603KRX7R9BB104](https://www.lcsc.com/product-detail/multilayer-ceramic-capacitors-mlcc-smd-smt_yageo-cc0603krx7r9bb104_C14663.html) | $0.0170 | Basic |
+| C3,C5 | 47uF 100V | 2 | [RVT2A470M1010](https://www.lcsc.com/product-detail/aluminum-electrolytic-capacitors-smd_honor-elec-rvt2a470m1010_C87862.html) | $0.1047 | Extended |
+| C4,C6 | 470nF | 2 | [CL10B474KA8NNNC](https://www.lcsc.com/product-detail/multilayer-ceramic-capacitors-mlcc-smd-smt_samsung-electro-mechanics-cl10b474ka8nnnc_C1623.html) | $0.0089 | Basic |
+| H1 | PinHeader 2x7 2.54mm | 1 | [2.54-2\*7P Female](https://www.lcsc.com/product-detail/female-headers_boomele-boom-precision-elec-2-54-2-7p_C38844.html) | $0.1102 | Extended |
+| LED1 | Yellow | 1 | [NCD0603Y2](https://www.lcsc.com/product-detail/led-indication-discrete_foshan-nationstar-optoelectronics-ncd0603y2_C89811.html) | $0.0194 | Preferred |
+| P1 | TerminalBlock 5P 5.0mm | 1 | [DB126V-5.0-5P-GN-P](https://www.lcsc.com/product-detail/screw-terminal-blocks_dorabo-db126v-5-0-5p-gn-p_C2835160.html) | $0.2410 | Extended |
+| R1-R4,R6,R7,R12 | 10kΩ | 7 | [0603WAF1002T5E](https://www.lcsc.com/product-detail/chip-resistor-surface-mount_uni-royal-uniroyal-elec-0603waf1002t5e_C25804.html) | $0.0012 | Basic |
+| R5,R11 | 1kΩ | 2 | [0603WAF1001T5E](https://www.lcsc.com/product-detail/chip-resistor-surface-mount_uni-royal-uniroyal-elec-0603waf1001t5e_C21190.html) | $0.0017 | Basic |
+| R8 | 50mΩ | 1 | [HoJLR2512-3W-50mR-1%](https://www.lcsc.com/product-detail/current-sense-resistors-shunt-resistors_milliohm-hojlr2512-3w-50mr-1_C2903475.html) | $0.0639 | Extended |
+| R9 | 43kΩ | 1 | [0603WAF4302T5E](https://www.lcsc.com/product-detail/chip-resistor-surface-mount_uni-royal-uniroyal-elec-0603waf4302t5e_C23172.html) | $0.0020 | Preferred |
+| R10 | 62kΩ | 1 | [0603WAF6202T5E](https://www.lcsc.com/product-detail/chip-resistor-surface-mount_uni-royal-uniroyal-elec-0603waf6202t5e_C23221.html) | $0.0015 | Preferred |
+| TB_PWR1 | TerminalBlock 2P 5.0mm | 1 | [DB126V-5.0-2P-GN-P](https://www.lcsc.com/product-detail/screw-terminal-blocks_dorabo-db126v-5-0-2p-gn-p_C395849.html) | $0.0878 | Extended |
+| U1 | DRV8313PWPR | 1 | [DRV8313PWPR](https://www.lcsc.com/product-detail/brushless-dc-bldc-motor-driver_texas-instruments-drv8313pwpr_C92482.html) | $1.4680 | Extended |
+
+**Estimated component cost ≈ $2.26 per board** (unit prices at JLCPCB's 100-piece tier, 2026-06-18;
+U1 alone is ~$1.47). 7 **Extended** parts each incur a one-time JLCPCB setup fee; the rest are
+fee-free. Excludes PCB fabrication and assembly. Regenerate with
+[`tools/gen_readme_bom.py`](./tools/gen_readme_bom.py); verify live stock with
+[`tools/check_bom.py`](./tools/check_bom.py).
+
 ## Ordering
 
 The board is designed to be fabricated and assembled at [JLCPCB](https://jlcpcb.com):

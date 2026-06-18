@@ -54,7 +54,10 @@ Produces, under [`../manufacturing/`](../manufacturing/): `gerbers/` (Protel
 extensions) + Excellon drill, `drv8313-board-gerbers.zip` (upload-ready),
 `drv8313-board-CPL.csv` (pick-and-place), `drv8313-board-BOM.csv` (grouped, with
 MPN + LCSC), `drv8313-board.step`; and under [`../images/`](../images/):
-`board-3d-{top,bottom}.png`, `schematic.svg`, `pcb-{top,bottom}.svg`.
+`board-3d-{top,bottom}.png` (straight top-down / bottom-up 3D renders),
+`schematic.svg`, and `pcb-{top,bottom}.svg` (2D copper + silk plots on a dark
+background — KiCad's SVG export is always transparent, so a background rect is
+injected for legibility).
 
 It keeps a **defensive snapshot of `project.kicad_pro`** — a no-op on the current
 canonical file (kicad-cli leaves it byte-identical; verified), restored with a
@@ -119,3 +122,17 @@ Reuses `jlc_search.py`. Also tallies the unique Extended parts (= one JLCPCB
 setup fee each). *(As of this writing it reports the 10 kΩ `C25804` out of stock
 — a transient JLC condition on its most-used Basic resistor; re-run before
 ordering.)*
+
+## `gen_readme_bom.py` — Markdown BOM table for the README
+
+Emits the README's Bill-of-materials table from the BOM CSV plus **live** JLCPCB
+prices: `Designator | Value | Qty | MPN | Unit price | Library`, each MPN linked
+to its LCSC page, followed by an estimated per-board component-cost total.
+
+```powershell
+& $PY tools\gen_readme_bom.py                  # paste output into README.md
+& $PY tools\gen_readme_bom.py --price-qty 10   # quote a different price tier
+```
+
+Prices are live, so the table is a dated snapshot — re-run to refresh. Reuses
+`jlc_search.py`.
