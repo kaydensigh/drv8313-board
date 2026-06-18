@@ -81,10 +81,16 @@ Each MPN below links to its LCSC product page; **Library** is the JLCPCB part cl
 | TB_PWR1 | TerminalBlock 2P 5.0mm | 1 | [DB126V-5.0-2P-GN-P](https://www.lcsc.com/product-detail/screw-terminal-blocks_dorabo-db126v-5-0-2p-gn-p_C395849.html) | $0.0878 | Extended |
 | U1 | DRV8313PWPR | 1 | [DRV8313PWPR](https://www.lcsc.com/product-detail/brushless-dc-bldc-motor-driver_texas-instruments-drv8313pwpr_C92482.html) | $1.4680 | Extended |
 
-**Estimated component cost ≈ $2.26 per board** (unit prices at JLCPCB's 100-piece tier, 2026-06-18;
-U1 alone is ~$1.47). 7 **Extended** parts each incur a one-time JLCPCB setup fee; the rest are
-fee-free. Excludes PCB fabrication and assembly. Regenerate with
-[`tools/gen_readme_bom.py`](./tools/gen_readme_bom.py); verify live stock with
+**Component cost ≈ $2.26/board in volume** (unit prices at JLCPCB's 100-piece tier, 2026-06-18;
+U1 dominates). 7 parts are **Extended** (one-time setup fee each); the rest are fee-free.
+
+**A small batch of 10 boards ≈ $49 in parts (~$4.93/board)**: ~$28 of components (with JLCPCB's
+per-part assembly minimums and attrition applied, each priced at its purchased-quantity tier) plus
+**7 × $3 = $21 in Extended-part setup fees**. Those fixed fees dominate at low volume and amortise
+over larger runs. Excludes PCB fabrication, assembly labour and shipping.
+
+Regenerate these from live prices with [`tools/gen_readme_bom.py`](./tools/gen_readme_bom.py)
+(`--batch N` for a different run size); verify live stock with
 [`tools/check_bom.py`](./tools/check_bom.py).
 
 ## Ordering
