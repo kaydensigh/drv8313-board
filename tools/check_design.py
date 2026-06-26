@@ -6,11 +6,22 @@ summary. Exit code is nonzero if any *hard* check fails, so it drops straight
 into CI or a pre-commit hook.
 
   DRC    kicad-cli pcb drc --severity-error --refill-zones   hard: must be 0
-  conn   KiCadRoutingTools check_connected.py                hard: all nets connected
-  clear  KiCadRoutingTools check_drc.py                      hard: 0 clearance/short violations
+  conn   KiCadRoutingTools check_connected.py                advisory cross-check
+  clear  KiCadRoutingTools check_drc.py                      advisory cross-check
   ERC    kicad-cli sch erc                                   tripwire: flagged if != baseline
 
-The ERC baseline (101 = 10 error + 91 warning) is entirely EasyEDA-import
+kicad-cli's error-severity DRC is the AUTHORITATIVE connectivity + clearance +
+short gate: it counts unconnected pads (KiCad's own ratsnest, which understands
+zone fills, through-pad junctions, and a track endpoint that lands inside pad
+copper but off the anchor) and different-net clearance/shorts. The two KRT checks
+are kept as ADVISORY cross-checks only -- they model connectivity as an
+endpoint-graph and so emit false positives on perfectly-connected boards (a track
+ending inside a pad but not at its anchor, or several tracks meeting *through* a
+large pad rather than end-to-end read as "disconnected"; same-net segment
+overlaps read as "crossings"). They print but never fail the build; trust
+kicad-cli for the hard verdict.
+
+The ERC baseline (98 = 10 error + 88 warning) is entirely EasyEDA-import
 artifacts (pin types, lib-symbol issues) documented in CLAUDE.md -- a regression
 *tripwire*, not a hard gate. DRC *warning*-severity items (silk/padstack/text)
 are likewise cosmetic import artifacts and not gated; only error-severity DRC is.
@@ -39,7 +50,7 @@ PROJ = ROOT / "KiCad" / "project"
 PCB = PROJ / "project.kicad_pcb"
 SCH = PROJ / "project.kicad_sch"
 PRO = PROJ / "project.kicad_pro"
-ERC_BASELINE = 101
+ERC_BASELINE = 98
 
 
 def locate_cli():
@@ -115,7 +126,10 @@ def run_krt(script, label, results):
     last = [l for l in (r.stdout or "").splitlines() if l.strip()
             and "=" * 5 not in l]
     summary = last[-1] if last else "(no output)"
-    results.append((label, r.returncode == 0, summary, True))
+    # Advisory only: kicad-cli DRC is the authoritative connectivity/clearance
+    # gate. KRT's endpoint-graph model false-positives on through-pad / off-anchor
+    # routing, so it must not fail the build (see module docstring).
+    results.append((label, r.returncode == 0, summary, False))
 
 
 def main():
@@ -148,7 +162,14 @@ def main():
     print("-" * 78)
     hard_fail = False
     for label, ok, note, hard in results:
-        tag = "SKIP" if ok is None else ("PASS" if ok else "FAIL")
+        if ok is None:
+            tag = "SKIP"
+        elif ok:
+            tag = "PASS"
+        elif hard:
+            tag = "FAIL"
+        else:
+            tag = "ADVISORY"
         print(f"{label:34} {tag:8} {note}")
         if hard and ok is False:
             hard_fail = True

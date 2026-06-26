@@ -90,15 +90,21 @@ Runs the checks the board is validated against and prints a PASS/FAIL summary;
 
 | Check | Tool | Gate |
 | --- | --- | --- |
-| DRC (error severity) | `kicad-cli pcb drc --severity-error --refill-zones` | **hard** — must be 0 |
-| Connectivity (all nets) | KiCadRoutingTools `check_connected.py` | **hard** — all connected |
-| Clearance / shorts | KiCadRoutingTools `check_drc.py` | **hard** — 0 violations |
-| ERC | `kicad-cli sch erc` | tripwire — flagged if `!= 101` |
+| DRC (error severity) | `kicad-cli pcb drc --severity-error --refill-zones` | **hard** — must be 0 (authoritative: incl. unconnected, clearance, shorts) |
+| Connectivity (all nets) | KiCadRoutingTools `check_connected.py` | advisory cross-check |
+| Clearance / shorts | KiCadRoutingTools `check_drc.py` | advisory cross-check |
+| ERC | `kicad-cli sch erc` | tripwire — flagged if `!= 98` |
 
-The ERC baseline (101 = 10 err + 91 warn) and the DRC *warning*-severity items
-are EasyEDA-import cosmetic artifacts (documented in CLAUDE.md), so they are a
-**regression tripwire**, not a gate. Keeps a defensive `project.kicad_pro`
-snapshot (a no-op today — kicad-cli leaves the canonical file untouched).
+kicad-cli's error-severity DRC is the authoritative connectivity/clearance/short
+gate (its ratsnest understands zone fills + through-pad + off-anchor pad entries).
+The two KRT checks are **advisory** only — their endpoint-graph model emits false
+positives on perfectly-connected manual routing (a track ending inside a pad but
+not at its anchor, or tracks meeting *through* a large pad), so they print but
+never fail the build. The ERC baseline (98 = 10 err + 88 warn) and the DRC
+*warning*-severity items are EasyEDA-import cosmetic artifacts (documented in
+CLAUDE.md), so ERC is a **regression tripwire**, not a gate. Keeps a defensive
+`project.kicad_pro` snapshot (a no-op today — kicad-cli leaves the canonical file
+untouched).
 Needs [KiCadRoutingTools](https://github.com/drandyhaas/KiCadRoutingTools) at
 `../KiCadRoutingTools` for the connectivity/clearance checks (override with
 `$env:KRT_DIR` / `$env:KRT_PYTHON`); if absent, those two are skipped and the
