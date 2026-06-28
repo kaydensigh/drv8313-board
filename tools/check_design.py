@@ -21,16 +21,14 @@ large pad rather than end-to-end read as "disconnected"; same-net segment
 overlaps read as "crossings"). They print but never fail the build; trust
 kicad-cli for the hard verdict.
 
-The ERC baseline (8 = 0 error + 8 warning) is entirely EasyEDA-import artifacts:
-3 lib_symbol_issues on the kept U1/LED1/TB_PWR1 symbols (no KiCad-standard
-equivalent; empty library) + 5 endpoint_off_grid (degenerate ~0.01 mm wires at
-TB_PWR1/VCC). It's a regression *tripwire*, not a hard gate. The former 10
-errors were cleared by swapping the simple passives to KiCad Device symbols
-(passive pins) + PWR_FLAGs on VCC/GND + a no-connect on U1.21; the warning count
-fell 98->53->8 by also relinking GND/VCC/3.3V to the KiCad `power` lib and typing
-U1's pins (power_in/power_out/output/open_collector/passive). DRC
-*warning*-severity items (silk/padstack/text) are likewise cosmetic import
-artifacts and not gated; only error-severity DRC is.
+ERC is now fully clean: baseline 0 (0 error + 0 warning). The 2026-06-28 symbol
+cleanup took it 98 -> 0: swapped the simple passives to KiCad Device symbols
+(passive pins), relinked GND/VCC/3.3V to the `power` lib, typed U1's pins, put
+U1/LED1 in a project symbol lib (KiCad/project/simplefocmini.kicad_sym +
+sym-lib-table), swapped TB_PWR1 to Connector_Generic:Conn_01x02, added PWR_FLAGs
+on VCC/GND + a no-connect on U1.21. Because it's 0, the tripwire now catches ANY
+new ERC item. DRC *warning*-severity items (silk/padstack/text) are cosmetic
+import artifacts and not gated; only error-severity DRC is.
 
 project.kicad_pro is snapshotted as a defensive tripwire -- on the current
 (canonical) file kicad-cli leaves it byte-identical (verified), so this never
@@ -56,7 +54,7 @@ PROJ = ROOT / "KiCad" / "project"
 PCB = PROJ / "project.kicad_pcb"
 SCH = PROJ / "project.kicad_sch"
 PRO = PROJ / "project.kicad_pro"
-ERC_BASELINE = 8
+ERC_BASELINE = 0
 
 
 def locate_cli():

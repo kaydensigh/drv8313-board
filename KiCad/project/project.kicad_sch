@@ -5,7 +5,7 @@
 	(uuid "03adca04-2da2-4337-bf85-1694768d6810")
 	(paper "User" 292.1 205.105)
 	(lib_symbols
-		(symbol "19-213/Y2C-CQ2R2L/3T(CY)"
+		(symbol "simplefocmini:19-213/Y2C-CQ2R2L/3T(CY)"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -973,7 +973,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "DRV8313PWPR"
+		(symbol "simplefocmini:DRV8313PWPR"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1616,118 +1616,6 @@
 						)
 					)
 					(number "29"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "TB002-500-02BE"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "TB_PWR1"
-				(at -5.0038 8.4201 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.6891 1.6891)
-					)
-					(justify left top)
-				)
-			)
-			(property "Value" "TB002-500-02BE"
-				(at -5.2324 6.1595 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.6891 1.6891)
-					)
-					(justify left top)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "TB002-500-02BE_0_0"
-				(rectangle
-					(start -6.0452 3.048)
-					(end -0.9652 -3.5306)
-					(stroke
-						(width 0.127)
-						(type solid)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(pin passive line
-					(at 6.604 -1.524 180)
-					(length 7.62)
-					(name "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 6.604 1.27 180)
-					(length 7.62)
-					(name "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2907,6 +2795,164 @@
 				)
 				(embedded_fonts no)
 			)
+		(symbol "Connector_Generic:Conn_01x02"
+				(pin_names
+					(offset 1.016)
+					(hide yes)
+				)
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "J"
+					(at 0 2.54 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "Conn_01x02"
+					(at 0 -5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "connector"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_fp_filters" "Connector*:*_1x??_*"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "Conn_01x02_1_1"
+					(rectangle
+						(start -1.27 1.27)
+						(end 1.27 -3.81)
+						(stroke
+							(width 0.254)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+					(rectangle
+						(start -1.27 0.127)
+						(end 0 -0.127)
+						(stroke
+							(width 0.1524)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(rectangle
+						(start -1.27 -2.413)
+						(end 0 -2.667)
+						(stroke
+							(width 0.1524)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(pin passive line
+						(at -5.08 0 0)
+						(length 3.81)
+						(name "Pin_1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -5.08 -2.54 0)
+						(length 3.81)
+						(name "Pin_2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 )
 	(junction
 		(at 116.84 123.19)
@@ -3578,16 +3624,6 @@
 	)
 	(wire
 		(pts
-			(xy 36.576 71.12) (xy 35.814 71.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "828b703c-6bd2-447e-a737-ca61fc6311e4")
-	)
-	(wire
-		(pts
 			(xy 170.18 60.96) (xy 181.61 60.96)
 		)
 		(stroke
@@ -3615,16 +3651,6 @@
 			(type default)
 		)
 		(uuid "88a0fd5d-beee-434a-8c99-5bdd18ea8b81")
-	)
-	(wire
-		(pts
-			(xy 35.814 68.326) (xy 36.83 68.326)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8ab6037a-12e2-4bac-b8fb-29bf5b3045fd")
 	)
 	(wire
 		(pts
@@ -3815,16 +3841,6 @@
 			(type default)
 		)
 		(uuid "b2e19e09-8e6f-4237-b7cb-707ce16fc82a")
-	)
-	(wire
-		(pts
-			(xy 36.83 68.326) (xy 36.83 67.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b9c9eb09-f9b1-478c-a8c5-d01a07bb3764")
 	)
 	(wire
 		(pts
@@ -5546,7 +5562,7 @@
 		)
 	)
 	(symbol
-		(lib_id "DRV8313PWPR")
+		(lib_id "simplefocmini:DRV8313PWPR")
 		(at 152.4 73.66 0)
 		(unit 0)
 		(body_style 0)
@@ -6732,7 +6748,7 @@
 	)
 	(symbol
 		(lib_id "power:VCC")
-		(at 36.576 71.12 90)
+		(at 27.94 73.66 180)
 		(unit 0)
 		(body_style 0)
 		(exclude_from_sim no)
@@ -7605,7 +7621,7 @@
 		)
 	)
 	(symbol
-		(lib_id "19-213/Y2C-CQ2R2L/3T(CY)")
+		(lib_id "simplefocmini:19-213/Y2C-CQ2R2L/3T(CY)")
 		(at 153.67 121.92 270)
 		(unit 0)
 		(body_style 0)
@@ -8970,11 +8986,10 @@
 		)
 	)
 	(symbol
-		(lib_id "TB002-500-02BE")
-		(at 29.21 69.85 0)
-		(mirror x)
-		(unit 0)
-		(body_style 0)
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 33.02 71.12 0)
+		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -9079,7 +9094,7 @@
 			(project "project"
 				(path "/03adca04-2da2-4337-bf85-1694768d6810"
 					(reference "TB_PWR1")
-					(unit 0)
+					(unit 1)
 				)
 			)
 		)
@@ -9165,8 +9180,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 36.83 67.31 0)
-		(mirror x)
+		(at 27.94 71.12 0)
 		(unit 0)
 		(body_style 0)
 		(exclude_from_sim no)
