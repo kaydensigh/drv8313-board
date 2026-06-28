@@ -93,14 +93,14 @@ Runs the checks the board is validated against and prints a PASS/FAIL summary;
 | DRC (error severity) | `kicad-cli pcb drc --severity-error --refill-zones` | **hard** — must be 0 (authoritative: incl. unconnected, clearance, shorts) |
 | Connectivity (all nets) | KiCadRoutingTools `check_connected.py` | advisory cross-check |
 | Clearance / shorts | KiCadRoutingTools `check_drc.py` | advisory cross-check |
-| ERC | `kicad-cli sch erc` | tripwire — flagged if `!= 53` |
+| ERC | `kicad-cli sch erc` | tripwire — flagged if `!= 8` |
 
 kicad-cli's error-severity DRC is the authoritative connectivity/clearance/short
 gate (its ratsnest understands zone fills + through-pad + off-anchor pad entries).
 The two KRT checks are **advisory** only — their endpoint-graph model emits false
 positives on perfectly-connected manual routing (a track ending inside a pad but
 not at its anchor, or tracks meeting *through* a large pad), so they print but
-never fail the build. The ERC baseline (53 = 0 err + 53 warn) and the DRC
+never fail the build. The ERC baseline (8 = 0 err + 8 warn) and the DRC
 *warning*-severity items are EasyEDA-import cosmetic artifacts (documented in
 CLAUDE.md), so ERC is a **regression tripwire**, not a gate. Keeps a defensive
 `project.kicad_pro` snapshot (a no-op today — kicad-cli leaves the canonical file
