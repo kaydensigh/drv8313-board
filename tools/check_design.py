@@ -21,10 +21,14 @@ large pad rather than end-to-end read as "disconnected"; same-net segment
 overlaps read as "crossings"). They print but never fail the build; trust
 kicad-cli for the hard verdict.
 
-The ERC baseline (98 = 10 error + 88 warning) is entirely EasyEDA-import
-artifacts (pin types, lib-symbol issues) documented in CLAUDE.md -- a regression
-*tripwire*, not a hard gate. DRC *warning*-severity items (silk/padstack/text)
-are likewise cosmetic import artifacts and not gated; only error-severity DRC is.
+The ERC baseline (53 = 0 error + 53 warning) is entirely EasyEDA-import
+artifacts (lib-symbol issues on the kept LCSC/power symbols, pin_to_pin on U1's
+unspecified pins, off-grid endpoints) documented in CLAUDE.md -- a regression
+*tripwire*, not a hard gate. The former 10 errors were cleared by swapping the
+simple passives to KiCad Device symbols (passive pins) plus PWR_FLAGs on
+VCC/GND/3.3V and a no-connect on U1.21. DRC *warning*-severity items
+(silk/padstack/text) are likewise cosmetic import artifacts and not gated; only
+error-severity DRC is.
 
 project.kicad_pro is snapshotted as a defensive tripwire -- on the current
 (canonical) file kicad-cli leaves it byte-identical (verified), so this never
@@ -50,7 +54,7 @@ PROJ = ROOT / "KiCad" / "project"
 PCB = PROJ / "project.kicad_pcb"
 SCH = PROJ / "project.kicad_sch"
 PRO = PROJ / "project.kicad_pro"
-ERC_BASELINE = 98
+ERC_BASELINE = 53
 
 
 def locate_cli():
