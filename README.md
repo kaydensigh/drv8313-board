@@ -22,7 +22,7 @@ also brushed-DC motors, solenoids, and 6-step/trapezoidal loads.
 | Supply voltage | **8–60 V** |
 | Continuous current | **~1.5 A / phase** (1 oz copper, Tj ≤ 125 °C; ~2 A with airflow). The datasheet's 2.5 A/phase is a *peak* rating. |
 | Logic level | 3.3 V (DRV8313 on-chip `V3P3OUT` regulator; no separate LDO) |
-| Board | **50 × 45 mm**, 4-layer (Top / GND / GND / Bottom, 1 oz) |
+| Board | **50 × 50 mm**, 4-layer (Top / GND / GND / Bottom, 1 oz) |
 | Control | 3× IN (PWM) + 3× independent EN; nRESET / nSLEEP / nFAULT |
 | Current limit | On-board comparator, cycle-by-cycle (50 mΩ shunt + reference divider) |
 | Connectors | 2×7 control header, 5-pos motor/VM terminal block, 2-pos power terminal block |

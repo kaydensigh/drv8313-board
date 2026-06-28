@@ -55,9 +55,9 @@ BOM_ARGS = [
     "--ref-range-delimiter", "-", "--sort-field", "Reference",
 ]
 # Straight top-down / bottom-up: orthogonal projection (no --perspective), no
-# --floor, so the whole flat board is shown square-on. 50x45 mm board -> 10:9.
+# --floor, so the whole flat board is shown square-on. 50x50 mm board -> 1:1.
 RENDER_ARGS = ["--quality", "high", "--background", "opaque",
-               "--width", "1600", "--height", "1440"]
+               "--width", "1600", "--height", "1600"]
 # 2D plots: colored copper + white silk + edge outline on a dark background so
 # both the copper and the (white) silk are legible. KiCad's SVG export never
 # paints a background (always transparent -> white silk vanishes on a white
