@@ -5,7 +5,7 @@
 	(uuid "03adca04-2da2-4337-bf85-1694768d6810")
 	(paper "User" 292.1 205.105)
 	(lib_symbols
-		(symbol "simplefocmini:19-213/Y2C-CQ2R2L/3T(CY)"
+		(symbol "drv8313-board:19-213/Y2C-CQ2R2L/3T(CY)"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -973,7 +973,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "simplefocmini:DRV8313PWPR"
+		(symbol "drv8313-board:DRV8313PWPR"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -5140,7 +5140,7 @@
 				(justify left top)
 			)
 		)
-		(property "Footprint" "simplefocmini:R0603"
+		(property "Footprint" "drv8313-board:R0603"
 			(at 205.74 93.98 0)
 			(hide yes)
 			(show_name no)
@@ -5344,7 +5344,7 @@
 				(justify right top)
 			)
 		)
-		(property "Footprint" "simplefocmini:R0603"
+		(property "Footprint" "drv8313-board:R0603"
 			(at 152.4 111.76 0)
 			(hide yes)
 			(show_name no)
@@ -5469,7 +5469,7 @@
 				(justify left top)
 			)
 		)
-		(property "Footprint" "simplefocmini:C0603"
+		(property "Footprint" "drv8313-board:C0603"
 			(at 69.85 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -5562,7 +5562,7 @@
 		)
 	)
 	(symbol
-		(lib_id "simplefocmini:DRV8313PWPR")
+		(lib_id "drv8313-board:DRV8313PWPR")
 		(at 152.4 73.66 0)
 		(unit 0)
 		(body_style 0)
@@ -5594,7 +5594,7 @@
 				(justify left top)
 			)
 		)
-		(property "Footprint" "simplefocmini:HTSSOP-28_L9.8-W4.5-P0.65-LS6.6-BL-EP"
+		(property "Footprint" "drv8313-board:HTSSOP-28_L9.8-W4.5-P0.65-LS6.6-BL-EP"
 			(at 152.4 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -6199,7 +6199,7 @@
 				(justify right top)
 			)
 		)
-		(property "Footprint" "simplefocmini:R0603"
+		(property "Footprint" "drv8313-board:R0603"
 			(at 208.28 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -6325,7 +6325,7 @@
 				(justify right top)
 			)
 		)
-		(property "Footprint" "simplefocmini:R0603"
+		(property "Footprint" "drv8313-board:R0603"
 			(at 143.51 33.02 0)
 			(hide yes)
 			(show_name no)
@@ -6450,7 +6450,7 @@
 				(justify right top)
 			)
 		)
-		(property "Footprint" "simplefocmini:C0603"
+		(property "Footprint" "drv8313-board:C0603"
 			(at 162.56 119.38 0)
 			(hide yes)
 			(show_name no)
@@ -6654,7 +6654,7 @@
 				(justify left top)
 			)
 		)
-		(property "Footprint" "simplefocmini:C0603"
+		(property "Footprint" "drv8313-board:C0603"
 			(at 127 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -7324,7 +7324,7 @@
 				(justify right top)
 			)
 		)
-		(property "Footprint" "simplefocmini:R0603"
+		(property "Footprint" "drv8313-board:R0603"
 			(at 109.22 106.68 0)
 			(hide yes)
 			(show_name no)
@@ -7528,7 +7528,7 @@
 				(justify right top)
 			)
 		)
-		(property "Footprint" "simplefocmini:C0603"
+		(property "Footprint" "drv8313-board:C0603"
 			(at 116.84 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -7621,7 +7621,7 @@
 		)
 	)
 	(symbol
-		(lib_id "simplefocmini:19-213/Y2C-CQ2R2L/3T(CY)")
+		(lib_id "drv8313-board:19-213/Y2C-CQ2R2L/3T(CY)")
 		(at 153.67 121.92 270)
 		(unit 0)
 		(body_style 0)
@@ -7653,7 +7653,7 @@
 				(justify right top)
 			)
 		)
-		(property "Footprint" "simplefocmini:LED0603-R-RD"
+		(property "Footprint" "drv8313-board:LED0603-R-RD"
 			(at 153.67 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -7858,7 +7858,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "simplefocmini:R0603"
+		(property "Footprint" "drv8313-board:R0603"
 			(at 227.33 130.81 0)
 			(hide yes)
 			(show_name no)
@@ -7983,7 +7983,7 @@
 				(justify left top)
 			)
 		)
-		(property "Footprint" "simplefocmini:CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0"
+		(property "Footprint" "drv8313-board:CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0"
 			(at 71.12 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -8109,7 +8109,7 @@
 				(justify right top)
 			)
 		)
-		(property "Footprint" "simplefocmini:R0603"
+		(property "Footprint" "drv8313-board:R0603"
 			(at 123.19 40.64 0)
 			(hide yes)
 			(show_name no)
@@ -8235,7 +8235,7 @@
 				(justify right top)
 			)
 		)
-		(property "Footprint" "simplefocmini:R0603"
+		(property "Footprint" "drv8313-board:R0603"
 			(at 74.93 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -8438,7 +8438,7 @@
 				(justify left top)
 			)
 		)
-		(property "Footprint" "simplefocmini:CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0"
+		(property "Footprint" "drv8313-board:CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0"
 			(at 77.47 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -8563,7 +8563,7 @@
 				(justify right top)
 			)
 		)
-		(property "Footprint" "simplefocmini:C0603"
+		(property "Footprint" "drv8313-board:C0603"
 			(at 129.54 148.59 0)
 			(hide yes)
 			(show_name no)
@@ -8688,7 +8688,7 @@
 				(justify left top)
 			)
 		)
-		(property "Footprint" "simplefocmini:C0603"
+		(property "Footprint" "drv8313-board:C0603"
 			(at 63.5 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -8893,7 +8893,7 @@
 				(justify left top)
 			)
 		)
-		(property "Footprint" "simplefocmini:R0603"
+		(property "Footprint" "drv8313-board:R0603"
 			(at 189.23 93.98 0)
 			(hide yes)
 			(show_name no)
@@ -9494,7 +9494,7 @@
 				(justify left top)
 			)
 		)
-		(property "Footprint" "simplefocmini:R0603"
+		(property "Footprint" "drv8313-board:R0603"
 			(at 175.26 93.98 0)
 			(hide yes)
 			(show_name no)
@@ -9620,7 +9620,7 @@
 				(justify right top)
 			)
 		)
-		(property "Footprint" "simplefocmini:R0603"
+		(property "Footprint" "drv8313-board:R0603"
 			(at 104.14 139.7 0)
 			(hide yes)
 			(show_name no)

@@ -48,7 +48,7 @@ also brushed-DC motors, solenoids, and 6-step/trapezoidal loads.
 
 | Path | Contents |
 | --- | --- |
-| [`KiCad/project/`](./KiCad/project/) | KiCad 10 source — schematic, PCB, project, and the `simplefocmini.pretty` footprint library |
+| [`KiCad/project/`](./KiCad/project/) | KiCad 10 source — schematic, PCB, project, and the `drv8313-board.pretty` footprint library |
 | [`manufacturing/`](./manufacturing/) | Fabrication outputs: [`gerbers/`](./manufacturing/gerbers/) (Gerber + Excellon drill), [BOM](./manufacturing/drv8313-board-BOM.csv), [pick-and-place CPL](./manufacturing/drv8313-board-CPL.csv), and a [STEP](./manufacturing/drv8313-board.step) 3D model |
 | [`docs/`](./docs/) | [`datasheets/`](./docs/datasheets/) — the DRV8313 datasheet (authoritative part reference) |
 | [`tools/`](./tools/) | Headless helper scripts — JLCPCB part search, manufacturing-file regeneration, silk version bump ([`tools/README.md`](./tools/README.md)) |

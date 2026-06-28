@@ -90,7 +90,7 @@
 			(outputdirectory "")
 		)
 	)
-	(footprint "simplefocmini:C0603"
+	(footprint "drv8313-board:C0603"
 		(layer "F.Cu")
 		(uuid "0e119004-f302-4335-bdb7-2db34abfa794")
 		(at 164.8 110 180)
@@ -377,7 +377,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:R0603"
+	(footprint "drv8313-board:R0603"
 		(layer "F.Cu")
 		(uuid "112974ea-5c64-4fa5-a113-ccd5b9140469")
 		(at 165 94.5)
@@ -728,7 +728,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "simplefocmini:C0603"
+	(footprint "drv8313-board:C0603"
 		(layer "F.Cu")
 		(uuid "1b14c712-2e51-4d2f-8458-c6d979e74d34")
 		(at 154.8 112.5 180)
@@ -1123,7 +1123,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "simplefocmini:R0603"
+	(footprint "drv8313-board:R0603"
 		(layer "F.Cu")
 		(uuid "25000ed3-8984-480b-9173-7c89f4adcb3a")
 		(at 155.045 98.7534 -90)
@@ -1927,7 +1927,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:R0603"
+	(footprint "drv8313-board:R0603"
 		(layer "F.Cu")
 		(uuid "4a6d9f92-f6c3-4fed-bc0d-b09fe8f97250")
 		(at 164.7466 107.3)
@@ -3196,7 +3196,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:HTSSOP-28_L9.8-W4.5-P0.65-LS6.6-BL-EP"
+	(footprint "drv8313-board:HTSSOP-28_L9.8-W4.5-P0.65-LS6.6-BL-EP"
 		(locked yes)
 		(layer "F.Cu")
 		(uuid "6153d325-9496-4c9d-b604-fe63a0fad862")
@@ -3959,7 +3959,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "simplefocmini:R0603"
+	(footprint "drv8313-board:R0603"
 		(layer "F.Cu")
 		(uuid "8605e391-5a74-4233-ad30-a9c108baee51")
 		(at 161.545 98.7534 90)
@@ -4202,7 +4202,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:R0603"
+	(footprint "drv8313-board:R0603"
 		(layer "F.Cu")
 		(uuid "889f7bc9-00b3-4a3c-b0c6-51d8e08294ee")
 		(at 152 98.7534 -90)
@@ -4644,7 +4644,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:R0603"
+	(footprint "drv8313-board:R0603"
 		(layer "F.Cu")
 		(uuid "9091e139-cc5e-423e-901c-c7cdf319142a")
 		(at 149 98.7534 -90)
@@ -5351,7 +5351,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:R0603"
+	(footprint "drv8313-board:R0603"
 		(layer "F.Cu")
 		(uuid "941265cf-cd0b-4844-b07a-3c4960abbfbb")
 		(at 159.345 98.7534 90)
@@ -5594,7 +5594,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0"
+	(footprint "drv8313-board:CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0"
 		(layer "F.Cu")
 		(uuid "afddbed6-6564-4c8d-9f84-7c7172dc0be3")
 		(at 166.5 123.2)
@@ -5937,7 +5937,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:C0603"
+	(footprint "drv8313-board:C0603"
 		(layer "F.Cu")
 		(uuid "b3eef78b-7ea2-4534-bb73-1ce88446ad4e")
 		(at 151.5 106.7 -90)
@@ -6224,7 +6224,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:R0603"
+	(footprint "drv8313-board:R0603"
 		(layer "F.Cu")
 		(uuid "b610fcff-e68e-4819-88dc-20b08dbd3563")
 		(at 157.045 98.7534 90)
@@ -6467,7 +6467,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:R0603"
+	(footprint "drv8313-board:R0603"
 		(layer "F.Cu")
 		(uuid "bbea186e-49ce-4c82-a962-847de9526a37")
 		(at 166.5 104.2534 90)
@@ -6710,7 +6710,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:C0603"
+	(footprint "drv8313-board:C0603"
 		(layer "F.Cu")
 		(uuid "ced1d751-1456-40ed-8724-f38f762da139")
 		(at 161.3 112.5 180)
@@ -6997,7 +6997,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:R0603"
+	(footprint "drv8313-board:R0603"
 		(layer "F.Cu")
 		(uuid "dcbb473e-2c3d-4e49-b2a3-639c74c00a02")
 		(at 171 104.2534 90)
@@ -7240,7 +7240,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:R0603"
+	(footprint "drv8313-board:R0603"
 		(layer "F.Cu")
 		(uuid "dfc26c8b-c2fc-40c2-8d64-1538cd173616")
 		(at 146.5 98.7466 -90)
@@ -7823,7 +7823,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "simplefocmini:LED0603-R-RD"
+	(footprint "drv8313-board:LED0603-R-RD"
 		(layer "F.Cu")
 		(uuid "e6140989-8840-43b4-a607-88f597c76f5e")
 		(at 165 92)
@@ -8106,7 +8106,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:C0603"
+	(footprint "drv8313-board:C0603"
 		(layer "F.Cu")
 		(uuid "ead8db5f-2d50-4047-a841-60b053525b8b")
 		(at 151.5 110.2 90)
@@ -8393,7 +8393,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:C0603"
+	(footprint "drv8313-board:C0603"
 		(layer "F.Cu")
 		(uuid "ed2e843c-9a56-44af-82cc-74c416a16d22")
 		(at 164 102.7 -90)
@@ -8680,7 +8680,7 @@
 			)
 		)
 	)
-	(footprint "simplefocmini:CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0"
+	(footprint "drv8313-board:CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0"
 		(layer "F.Cu")
 		(uuid "fbab1e2f-dc35-491c-a384-34568e676381")
 		(at 147.3 123.2 180)

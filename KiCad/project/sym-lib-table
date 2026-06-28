@@ -1,4 +1,4 @@
 (sym_lib_table
 	(version 7)
-	(lib (name "simplefocmini")(type "KiCad")(uri "${KIPRJMOD}/simplefocmini.kicad_sym")(options "")(descr "Project-local symbols with no canonical KiCad equivalent: U1 DRV8313PWPR and the EasyEDA LED (Device:LED pin numbering conflicts with the PCB)."))
+	(lib (name "drv8313-board")(type "KiCad")(uri "${KIPRJMOD}/drv8313-board.kicad_sym")(options "")(descr "Project-local symbols with no canonical KiCad equivalent: U1 DRV8313PWPR and the EasyEDA LED (Device:LED pin numbering conflicts with the PCB)."))
 )
