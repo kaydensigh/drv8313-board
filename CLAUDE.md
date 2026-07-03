@@ -172,6 +172,9 @@ Chip facts, verified against the datasheet + netlist:
   footprint silk quirks), 3 `lib_footprint_mismatch` (board footprints carry
   deliberate customizations vs their library copies — an *Update from Library*
   would revert them).
+- Triage principle when cleanups trade warning classes: prefer self-evidently
+  safe warnings (silk) over investigate-required ones (`lib_footprint_mismatch`
+  etc.) — see the `kicad-pcb` skill, design-rules § Warning triage.
 - Parity: 4 `extra_footprint` (MH1–MH4 have no schematic symbol — normal for
   mechanical holes).
 - ERC baseline is **0** — `check_design.py` flags any nonzero ERC as a
