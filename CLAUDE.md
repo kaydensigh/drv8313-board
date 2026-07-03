@@ -1,325 +1,279 @@
 # CLAUDE.md
 
-Guidance for agents working in this repository. Only verified facts are recorded here.
+Guidance for agents working in this repository.
+
+**Documentation policy: this file describes the CURRENT state of the design.**
+The record of what changed lives in git history; the reason for a change goes in
+its commit message. Mention a change's rationale here only when it is needed to
+understand (or to not break) the current state. When you change the design,
+update this file to match — do not append a changelog.
 
 ## What this is
 
-SimpleFOCMini — a DRV8313-based 3-phase BLDC motor driver board, compatible with the SimpleFOC library. This is a hardware/PCB repository (no firmware, no build system). Original source on EasyEDA: https://easyeda.com/the.skuric/simplefocmini
+A DRV8313-based 3-phase BLDC motor driver board, compatible with the SimpleFOC
+library — a from-scratch redesign of the EasyEDA
+[SimpleFOCMini](https://easyeda.com/the.skuric/simplefocmini) for the DRV8313's
+full voltage range. This is a hardware/PCB repository: no firmware, no build
+system.
 
-v1.1 board specification (from README): 8–24V supply, 2.5A per phase max, onboard 3.3V LDO, 26×21 mm.
+**Spec: 8–60 V supply, ~1.5 A continuous per phase (2.5 A peak), 50×50 mm,
+4-layer.** The datasheet's 2.5 A/phase is a peak figure; continuous current is
+limited by DRV8313 junction temperature (RθJA), not copper — ~1.5 A is the
+realistic 1 oz limit at Tj ≤ 125 °C.
 
-## Goal & status
+**Validation state (2026-07-03): DRC 0 error-severity, 0 unconnected; ERC 0;
+`tools/check_design.py` PASS.**
 
-The board was redesigned from the v1.1 SimpleFOCMini (8–24V) for the DRV8313's full voltage range. **Target (achieved): 8–60V, ~1.5A continuous per phase, 50×50 mm (as-built), 4-layer (Top/GND/GND/Bottom, 1 oz).** The redesign is **complete** — schematic + PCB are done, DRC-clean (0 error-severity), and fully routed; the dated session logs below record how it was built. The KiCad project under `KiCad/project/` is the authoritative working design. **The user later re-did the PCB layout by hand (commits "Claude's attempt…" → "Manual layout"); a 2026-06-26 review pass verified + improved it — see _Manual-layout review + power/GND improvements (2026-06-26)_ below. The user then hand-enlarged the board to a full 50×50 mm (2026-06-28) — the earlier 50×45 in the dated logs below is superseded — and the manufacturing outputs + renders were regenerated (render canvas is now square, 1600×1600).**
+> ⚠ **`manufacturing/`, `images/`, and the README BOM table are STALE** — they
+> predate the layout/schematic rework (they still show the removed EN series
+> resistors R4/R6/R7 and C6, and the old layout). Regenerate with
+> `tools/build_manufacturing.py` + `tools/gen_readme_bom.py` before ordering
+> or citing them.
 
-Note: the datasheet's "2.5A per phase" is a *peak* figure (no continuous rating is published). The continuous rating is set by the DRV8313 junction temperature (RθJA), not the copper; ~1.5A is the realistic 1oz/small-board limit at Tj≤125°C, with thermal headroom designed toward ~2A.
+## Division of labor: agent vs human
 
-**VM decoupling (datasheet conformance) — DONE.** The DRV8313 VM pin spec calls for **two 0.1 µF VM→GND ceramics (one per VM pin, pins 4 & 11)** in addition to the bulk caps. Added as **C7 & C8** = 100 nF/100 V 0603 (Samsung `CL10B104KC8NNNC` / LCSC `C15725`), each wired VCC(VM)↔GND. **Now placed on the PCB** (user's manual layout: C7 left of U1 ~4.9 mm from VM4, C8 ~2.65 mm from VM11 — C8 tight, C7 could move closer to pin 4).
+Empirically (and per the user): agents are reliable where a numeric oracle
+exists and unreliable where the feedback is visual.
 
-**Outer GND pours — DONE 2026-06-26** (was "not done"). F.Cu + B.Cu GND pours added, stitched to the inner In1/In2 planes + EP via array with 38 stitching vias (datasheet §10.1 top+bottom ground planes; lowers RθJA, improves return/EMI). A surface GND pad now thermal-spokes into the local pour *and* drops to the inner planes.
+- **Agent work:** netlists and schematic wiring (oracle: netlist export + ERC),
+  netlist→PCB sync, netclass/stackup setup, zone pours + stitching, EP via
+  arrays, DRC-driven cleanup, silk, manufacturing outputs, BOM sourcing, and
+  **design review** of a human layout (return paths, decoupling loops, thermal,
+  current density, clearance-vs-voltage).
+- **Human work: component placement and interactive routing**, and the final
+  judgment on schematic readability. Do not propose a full autorouted re-layout
+  unless asked; act as the layout *reviewer/finisher*, not the author. Before a
+  human layout pass, the agent's job is a floorplan brief (connector edges,
+  current paths, keepouts, thermal constraints); after it, a review + DRC pass.
+- **Schematic readability is agent work with mandatory visual feedback:** after
+  every placement/label edit, run `tools/sch_lint.py` (numeric score) and
+  `tools/render_sch.py` and **Read the PNG**. Netlist-correct is not done;
+  readable is done.
 
 ## Repository layout
 
-- `KiCad/project/` — KiCad 10 project (`.kicad_pro/.kicad_sch/.kicad_pcb`) + the project library (nickname **`drv8313-board`** — `drv8313-board.pretty` footprints + `drv8313-board.kicad_sym` symbols, registered in the project `fp-lib-table`/`sym-lib-table`) and `EASYEDA_MODELS/` 3D models; **the editable, authoritative working design**. (The library was renamed from `simplefocmini` on 2026-06-28; older logs below that say `simplefocmini.pretty`/`simplefocmini:…` now mean `drv8313-board`.)
-- `manufacturing/` — fabrication outputs (gerbers + Excellon drill, BOM CSV, pick-and-place CPL, STEP), regenerated from KiCad via `tools/build_manufacturing.py`.
-- `docs/` — **`datasheets/drv8313.pdf` (the TI DRV8313 datasheet — authoritative part reference)**. Component datasheets live in `docs/datasheets/` (see _Adding a new part_ below).
-- `tools/` — headless helper scripts (see `tools/README.md`).
-- `images/` — schematic / PCB / 3D renders used by the README.
-
-> The original vendor exports — `Altium/`, `EasyEDA/`, `Gerber/`, `3D model/`, `Pick and Place/`, the old BOM CSV and schematic PDF — were **removed** once the KiCad project became authoritative. Historical session logs below still reference those Altium/EasyEDA import sources for context.
-
-## Components (as-built)
-
-25 placed parts + 4 mounting holes (MH1–MH4, PCB-only). **U1** = DRV8313PWPR (HTSSOP-28, EP). Power: **C3, C5** = 47 µF/100 V bulk (Ø10 mm cans, in parallel ≈ 94 µF); charge pump **C1** = 10 nF/100 V (flying, CP1–CP2), **C2** = 100 nF (VCP→VM reservoir); **C4** = 470 nF (V3P3OUT decouple); **C6** = 470 nF (COMPN filter). Logic: **R1/R2/R3** = 10 k pull-ups (nFAULT/nSLEEP/nRESET → 3.3V), **R4/R6/R7** = 10 k series on EN1/EN2/EN3, **R12** = 10 k nCOMPO pull-up, **R5** = 1 k LED series (3.3V), **LED1** = power indicator. Current-limit: **R8** = 50 mΩ shunt (2512), divider **R9** 43 k / **R10** 62 k / **R11** 1 k, jumpers **SJ1/SJ2** (excluded from BOM). Connectors: **H1** = 2×7 control header, **P1** = 5-pos motor/VM terminal block `[GND M1 M2 M3 VM]`, **TB_PWR1** = 2-pos power (VM/GND) terminal block. MPNs/LCSC ids are in `manufacturing/drv8313-board-BOM.csv`. (The v1.1 baseline had only 13 parts — 2×5 H1, 3-pin P1, single 100 µF bulk, ganged EN, no comparator.)
-
-> **C7, C8** = 100 nF/100 V VM→GND decoupling ceramics (`C15725`), added to the schematic 2026-06-18 (datasheet VM-pin requirement). **PCB-side pending:** place at U1 pins 4 & 11 and route — see _Goal & status_.
-
-## DRV8313 pinout (datasheet: `docs/datasheets/drv8313.pdf`)
-
-Verified 2026-06-17 from the schematic netlist. **Note:** `pdftoppm` is unavailable in this environment, so the Read tool **cannot page-render the datasheet PDF** (`pcb export pdf` outputs read fine; the datasheet does not) — extract text or open `docs/datasheets/drv8313.pdf` directly.
-
-Net assignments below are **post-redesign** (the brushed/solenoid + comparator pass, schematic commit `d0eca99`); the pin functions are the chip's.
-
-- **Power row (HTSSOP pins 1–14):** 1 CP1, 2 CP2, 3 VCP (charge pump → C4/C1/C2); **4 & 11 = VM** (net `VCC`); **5/8/9 = OUT1/OUT2/OUT3** phase outputs (nets `M1/M2/M3`); **6/7/10 = PGND** + **12 = COMPP** — all four now on net **`PGND`**, tied together to the **R8 50 mΩ shunt → GND** (low-side current sense; no longer wired straight to GND); **13 = COMPN** on net **`VREF`** (the reference divider); **14 = GND**; EP (29) = GND thermal pad.
-- **Logic row (pins 15–28):** **15 = V3P3OUT** — the chip's *internal* 3.3 V regulator; this **is** the board's "onboard 3.3V LDO" (net `3.3V`). 16/17/18 = nRESET/nSLEEP/nFAULT; **19 = nCOMPO** (comparator open-drain output — now **connected**: R12 10 k pull-up to 3V3 + brought out on H1; was unconnected pre-redesign); 20 = GND; **22/24/26 = EN3/EN2/EN1** (now **three independent nets** `EN3/EN2/EN1`, each via its own series 10 k — R7/R6/R4 — to the H1 header); **23/25/27 = IN3/IN2/IN1**; 21 = NC (correctly unconnected); 28 = a GND pin (see parity note below).
-- **Comparator topology (verified against the datasheet, 2026-06-17):** the schematic follows **Figure 12 in §7.3.4**: **COMPP (pin 12) = the sense node** (tied to PGND/shunt), **COMPN (pin 13) = the reference** (the midpoint of the V3P3→R9/R10→GND divider). ⚠ The §8.2.2.2.1 *prose* (Fig. 15) says the opposite (COMPN←PGND, COMPP←reference) — that's an internal datasheet contradiction; Fig. 12 is authoritative, so **don't "fix" the schematic by swapping COMPP/COMPN.** **Cap-placement note (verified 2026-06-29 by rendering Fig. 12):** the **0.47 µF cap in Fig. 12 sits on V3P3→GND** — that is our **C4** (regulator-output decoupling on the divider's *top rail*), **not** a cap on COMPN. Our **C6** (470 nF, COMPN/`VREF`→GND) is an *extra* reference-node filter we added; it is **not** in Fig. 12 (harmless — the trip threshold is DC, so the added RC pole just cleans noise at COMPN). So don't conflate C6 with the datasheet's cap (= C4). Divider math (R8 = 50 mΩ, R9 = 43 k, R10 = 62 k, R11 = 1 k): both SJ intact → VREF = 3.3·1k/((43k∥62k)+1k) = **0.125 V → 2.5 A**; cut SJ1 → **0.075 V → 1.5 A**; cut SJ2 → VREF floats to ~3.3 V → **limit disabled**.
-- **The EN pins are now split** (EN1/EN2/EN3 independent) for brushed-DC / solenoid / 6-step use — the user ties them at the H1 header to restore ganged 3-PWM/FOC enable. (Originally they were ganged onto one `EN` net via R4; the redesign added R6→EN2, R7→EN3.)
-
-## KiCad project facts
-
-- Created 2026-06-16 by importing the `EasyEDA/*.json` (EasyEDA Standard) files with KiCad 10's importer. The Altium files could **not** be used instead, but the reason is narrower than "KiCad can't read Altium" — verified 2026-06-17 against `kicad-cli` 10.0.3:
-  - `kicad-cli pcb import` **does** exist and **does** support Altium (`--format altium`, also eagle/cadstar/pads/pcad/fabmaster/solidworks). But our `Altium/simplefocmini_2024-04-26.pcbdoc` is the **legacy Protel ASCII** record format (file magic `|RECORD=Board|KIND=Protel_Advanced_PCB…`), not the modern binary `.PcbDoc` (OLE2/CFBF) the importer expects: `--format altium` → `Error during import: Wrong file format`; `--format auto` → `No plugin found for file type 'UNKNOWN (18)'`. No importer plugin handles this old ASCII variant.
-  - There is **no schematic importer at all** — `kicad-cli sch` only has `erc`/`export`/`upgrade` (no `import`), and the GUI has no Altium-schematic path either. So the `.schdoc` could never be brought in regardless.
-  - ⇒ EasyEDA remains the only working import path for *this* project.
-- Import brought across: all 13 components (schematic + PCB), board outline on `Edge.Cuts`, 112 track segments, 70 vias, nets, 77 schematic wires.
-- **At import** the board had **5 board-level copper zones**: GND + VCC on `F.Cu` and `B.Cu` (the ground/power pours). **⚠ No longer true after the routing rework:** `route_planes` cleared those and the *current* board has **exactly 2 board zones — both GND, on the inner layers `In1.Cu`(GND1)/`In2.Cu`(GND2)**; there is **no F.Cu/B.Cu copper pour**. Practical consequence: a surface (F.Cu/B.Cu) **GND pad reaches ground only via a via down to the inner plane** — there's no surface pour to thermal-spoke into (this is why the divider C6/SJ2 GND pads each needed a plane via). Iterate board zones with `range(board.GetAreaCount())` / `board.GetArea(i)`. **⇒ Superseded 2026-06-26: F.Cu + B.Cu GND pours were added** (now 4 GND zones — In1/In2/F.Cu/B.Cu — + 38 stitching vias); surface GND pads now thermal-spoke into a local pour. See _Manual-layout review + power/GND improvements_.
-  - **pcbnew gotcha:** `ZONE.GetLayerName()` **mislabels** these inner-layer zones as `"TopLayer"` (returned "TopLayer" for both, though `z.GetLayer()` correctly gave 4/6 and the layerset showed GND1/GND2). Use **`board.GetLayerName(z.GetLayer())`**, not `z.GetLayerName()`, to identify a zone's layer.
-- The ~120 other `(zone)` blocks in `project.kicad_pcb` are **footprint-internal** cosmetic shapes (component/lead outlines on `User.3`/`User.4`, plus paste/silk), not loose board objects.
-- KiCad 10 writes zone/track/via nets as `(net "NAME")` (name inline), not the older `(net N) (net_name "...")` form.
-- The imported EasyEDA drawing frame came in as an unresolved 291×204 mm placeholder symbol (`lib_id "Unknown_0_-806"`, ref `A1`); it has been removed from the schematic.
-
-## Project setup for redesign (done 2026-06-16)
-
-A project-setup pass configured the project for the 60 V target. **Board files only — no copper has been re-routed yet.**
-
-- **Stackup is now 4 copper layers** (`Board.SetCopperLayerCount(4)` via `pcbnew`). Layer table: `F.Cu` (id 0, "TopLayer"), `In1.Cu` (id 4, named **GND1**), `In2.Cu` (id 6, named **GND2**), `B.Cu` (id 2, "BottomLayer"); thickness still 1.6 mm. Inner layers are renamed to encode the Top/GND/GND/Bottom intent — pour GND zones on them during layout. KiCad copper-layer IDs in v10: F.Cu=0, B.Cu=2, inner copper = even numbers (In1=4, In2=6, …). No explicit `(stackup)` block is written; KiCad applies a default 4-layer stack (set physical dielectric thicknesses in Board Setup → Physical Stackup if a specific stack is needed).
-- **A `Power` net class** was added in `project.kicad_pro`: `track_width` 0.8 mm, `clearance` 0.3 mm (for 60 V), `via_diameter`/`via_drill` 0.8/0.4 mm. Assigned via `netclass_patterns` to nets **VCC** (the VM rail) and **U1_5 / U1_8 / U1_9** (the three phase outputs). `Default` is left at 0.2 mm clearance / 0.2 mm track so fine-pitch HTSSOP escape stays routable; KiCad uses the larger of two classes' clearances for a pair, so VM↔GND already resolves to 0.3 mm. **If the phase/VM nets are renamed during re-layout, update these patterns.**
-- Editing the PCB via `pcbnew` (`LoadBoard`/`SaveBoard`) **rewrites the entire `.kicad_pcb` in canonical format** — expect a large diff even for a small logical change. Content round-trips intact (verified after the layer change: 4 copper layers, 5 board zones with correct nets, thickness 1.6 mm, loads clean).
-- Run `pcbnew` scripts via **PowerShell** with the call operator and `-u` (unbuffered): `& "C:\Program Files\KiCad\10.0\bin\python.exe" -u script.py`. The Bash tool failed to exec the space-containing exe path (exit 127) and block-buffers stdout, so prints never appeared.
-
-### Schematic / BOM facts (for the redesign)
-
-- The schematic stores each part's voltage rating **only implicitly, via the chosen `Manufacturer Part` / `Supplier Part` (LCSC) fields** — there is no separate voltage field, and `Footprint` fields are all empty (footprints live only in the PCB). So a "raise to 100 V" change means **re-selecting the part**, not editing a field.
-- Component **MPN strings are shared across symbols** in the import (e.g. C1 and C2 both carry `CL10B104KB8NNNC`; `VT1V101M-CRE77`/`CL10B104KB8NNNC` appear 5×/10× across lib-cache + instances). **Do not blank/replace MPNs by global string match** — it corrupts sibling parts. Edit per-symbol in the schematic editor.
-- Each part appears twice in `project.kicad_sch`: once in the `(lib_symbols)` cache (deeper indent) and once as a placed `(symbol)` instance. The **placed instance** property is authoritative for the netlist/BOM.
-- Applied so far (schematic): C3 `Value` → `47uF 100V`, C1 `Value` → `10nF 100V`; **per-symbol MPNs set** (C1→`C84709`, C3→`C87862`, C4→`C1623`, R5→`C21190`/1 kΩ) via an anchored Python script (`(reference "Cx")` → back to `\n\t(symbol\n` → paren-match the block → regex-replace fields inside it — safe against the shared-string trap); **C5 added** as a parallel 47 µF/100 V cap with its own VCC/GND power symbols (netlist-verified `C5.1`=VCC, `C5.2`=GND); **LED1 re-sited to 3.3 V** by swapping power symbol `#PWR01` from `VCC` to `3.3V` (netlist-verified). R5 kept at 1 kΩ. ERC 92 (was 87; the +5 are import-category artifacts for the 3 added symbols — `lib_symbol_issues` empty-lib + `pin_to_pin` Unspecified). Remaining = PCB work (add C5 footprint, P1 footprint, EP vias, re-layout), tracked in the dated PCB-redesign logs below.
-- Adding a symbol by hand: clone an existing instance block, `fresh_uuids` (symbol + each pin uuid), shift every `(at x y)` by the placement delta, rename the reference (in both the `Reference` property and the `(instances … (reference …))`). Place pins **on the 1.27 mm grid** (cap pin offset is 5.08 mm; pick symbol Y as a multiple of 1.27 or you get `endpoint_off_grid` warnings). Power-symbol pins sit at the symbol origin, so a `VCC`/`GND` symbol whose `(at)` equals a target pin coordinate connects to it.
-
-## PCB redesign progress (pcbnew)
-
-- **U1's EP thermal vias already exist in the footprint** — an 8-pad PTH array (4×2, 0.3 mm drill, 1 mm pitch, centered under the EP at ~(143.5,104.0)) — but the import left them `<no net>` (floating). They are now **netted to GND** (`pad.SetNet(FindNet("GND"))` for U1 pads with `GetDrillSize().x>0`, `PAD_ATTRIB_PTH`, `GetNetCode()==0`). Do **not** add free vias on top of them — that creates `shorting_items` (GND vs `<no net>`).
-- **Inner GND planes** on `In1.Cu`/`In2.Cu` were created by duplicating the `B.Cu` GND zone (`src.Duplicate().Cast()`, `SetLayer(In1_Cu/In2_Cu)`, `board.Add`), then `ZONE_FILLER(b).Fill(b.Zones())`. Each fills ~365 mm².
-- Current PCB DRC (no parity): **202 violations, 0 unconnected, 0 shorting_items.** Remaining = import artifacts: ~159 silk/text, 18 clearance (the 60 V `Power` net-class 0.3 mm flagged on the old 0.2 mm traces — fixed by widening/re-layout), 14 padstack (U1 footprint), few minor.
-- **C5 footprint added** (clone of C3 via `c3.Duplicate(False).Cast()` — note FOOTPRINT.Duplicate needs the `addToParentGroup` bool arg, unlike ZONE.Duplicate()), netted VCC/GND, parked off-board at (152.95,124) pending placement (shows 2 ratsnest). **VM/VCC trace widened** 0.254→0.8 mm (Power-class); no shorts.
-- **What does NOT fit the current 26 mm layout (attempted by script, reverted):** widening the *phase* traces to 0.8 mm shorts `U1_8`↔`U1_9` at the 0.65 mm HTSSOP escape; swapping P1 to the 5 mm terminal block (`TerminalBlock_MaiXu_MX126-5.0-03P_1x03_P5.00mm`) shorts/overlaps (9 shorting_items). These plus the Ø10 mm cap resize need component re-placement on a larger board. **⇒ Done headless (2026-06-17), NOT interactively:** the 40 mm re-place + full route was scripted end-to-end. The `U1_8`↔`U1_9` short was sidestepped by routing the phases at **0.6 mm + neck-down** (all 3 phases routed, commit `f3557cf`) instead of the un-escapable 0.8 mm — 0.6 mm ≈ 2 A in 1 oz, fine for the 1.5 A target. **Still deferred** (not yet done): the Ø10 mm cap resize and the P1→terminal-block swap — this pass kept the BD6.3 cans and the 3-pin P1 header. Footprint swap recipe: `pcbnew.FootprintLoad(libdir, name)`, copy ref/value/pos/orientation, map pad nets by number, `board.Remove(old)`/`board.Add(new)`. Std footprint libs: `C:\Program Files\KiCad\10.0\share\kicad\footprints\*.pretty`.
-- **Re-layout plan — enlarge first, then iterate.** None of the blocked items are fundamentally impossible; they only conflicted because they were squeezed into the original 26×21 mm outline. The plan allows ≤50×50 mm, so the approach is: **(1)** redraw the `Edge.Cuts` outline larger (~40×40 mm) — **DONE 2026-06-17**; **(2)** spread the parts out — pull the Ø10 mm caps and the 5 mm terminal block to board edges with room around them; **(3)** then make the changes that previously shorted/overlapped (resize C3/C5 cans, swap P1 → terminal block, place C5, widen+neck the phase traces at the HTSSOP escape); **(4)** re-pour the GND zones to the new outline and re-run DRC. Each step is small and DRC-checkable, so the layout improves incrementally instead of needing one big re-route. Do steps 2–4 in the **GUI** (interactive placement/routing) — `pcbnew` scripting did the outline, but moving the *already-routed* parts by script strands their tracks/vias (the fix is to drag them in the GUI so the ratsnest follows), and hand-routing the fine-pitch escape is faster interactively. **⇒ Superseded — ALL of steps 2–4 were done headless (2026-06-17, see _Tool-driven re-layout + routing_ below). The thing we'd assumed needed the GUI did not: the unlock is ORDER — clear ALL routing FIRST, after which parts move freely by `pcbnew` with no tracks to strand; the autorouter then routed the bulk, and the fine-pitch VM-pin escape (the canonical "GUI-only" hard spot) was hand-routed by `pcbnew` via-jogs, `kicad-cli drc`-verified each step (0 shorts, 0 clearance). No GUI was used at any point.**
-- **Board outline enlarged to 40×40 mm (2026-06-17, step 1 of the re-layout).** New `Edge.Cuts` = rectangle x[134,174] y[90,130] with **3 mm rounded corners** (4 straight segments + 4 fillet arcs; bbox 40.1×40.1 incl. 0.1 mm line width); replaced the 12 old rounded-corner segments. Parts/routing untouched — the cluster sits in the upper-left; the new right/bottom area is empty canvas to spread into. Zones were re-poured, **but the zone *boundary* polygons still cover only the original ~26 mm area** (GND boundary ≈ x[131,162] y[91,115]) — the new expansion is bare copper-wise until the boundaries are redrawn to the new outline during placement (step 4). Copper layer count 4 (F=0, In1=4, In2=6, B=2). Note: any corner/edge change leaves the *stored* zone fills stale relative to the new edge (shows as `copper_edge_clearance` "Arc/Segment on BoardOutLine" vs Zone GND) — always re-pour (`ZONE_FILLER`) after editing `Edge.Cuts`.
-- **M3 mounting holes + TB_PWR1 footprint added (2026-06-17).** **(a)** 4× `MountingHole_3.2mm_M3` (plain NPTH M3, refs **MH1–MH4**) at the new corners, inset 4 mm → a symmetric 32×32 mm pattern at (138,94)/(170,94)/(170,126)/(138,126). They carry no net; switch to `MountingHole_3.2mm_M3_Pad` + GND in the GUI if chassis-grounding is wanted (the original corner holes were GND). **MH1 (top-left) currently overlaps H1 and the old corner pad** — expected transient (12 DRC violations: hole/courtyard); clears when H1 is moved and the old pad removed during placement. **(b)** **TB_PWR1 was in the schematic but had no PCB footprint** (the import never created it; the redesign BOM worklist wrongly assumed it was already laid out). Added `TerminalBlock_MaiXu_MX126-5.0-02P_1x02_P5.00mm` (the 2-pos sibling of the P1 block), value `TB002-500-02BE`, **pad 1→GND, pad 2→VCC** (per netlist), parked off-board at (148,137) pending placement.
-- **The 7 `Pad_gge*` orphan footprints are import free-pads (no schematic symbol).** Identified 2026-06-17: **4× Ø2 mm GND through-holes** at the *old* 26 mm corners ((135.56,93.68)/(158.16,93.81)/(135.56,111.34)/(158.16,111.21)) = the original mounting holes, now mid-board and **superseded by MH1–MH4**; **3× small VCC/GND wire-solder pads** near the right edge ((156.26,102.70)=VCC, (156.26,97.75)=GND, (151.56,93.94)=GND) = the original power-input pads, **superseded by TB_PWR1**. All are candidates for deletion in the GUI during placement (left in place for now — they carry GND/VCC tracks, so deleting by script would strand routing). **⇒ Deleted by script (commit `79c6220`): clearing all routing FIRST removed the stranding risk, so all 7 were removed headless — no GUI needed.**
-- PCB DRC after corners+holes+TB_PWR1 (re-poured): **228 violations, 0 shorting_items, 4 unconnected (C5 ×2 + TB_PWR1 ×2).** Breakdown: ~172 silk/text + 21 clearance (old narrow traces) + 14 padstack + 4 annular (`Pad_gge`) + 5 mask-bridge = pre-existing import artifacts; the remaining 12 (pth/npth/hole/courtyard) are the MH1-vs-H1 transient above.
-- To re-site a rail connection in this schematic: rail nets are made by **power symbols** (`#PWR` instances whose `lib_id`/`Value` = `VCC`/`3.3V`/`GND`), not net-label text. Change the specific instance's `lib_id` + `Value`, anchored on its unique `(at x y)` coords (the `lib_id "VCC"` / `Value "VCC"` strings recur across all VCC symbols). Verify with `kicad-cli sch export netlist`.
-
-## Validation results (initial import, pre-setup-pass; from kicad-cli runs)
-
-- DRC with `--schematic-parity`: 469 violations, **0 unconnected items**, 65 schematic-parity issues. Top categories: 173 clearance, 78 silk_overlap, 61 solder_mask_bridge, 48 hole_clearance, 30 net_conflict.
-- ERC: 87 violations (was 88 before the frame symbol removal). Dominated by import artifacts: pin_to_pin (40), lib_symbol_issues (29), pin_not_driven, plus empty library associations.
-
-## Tool-driven re-layout + routing (2026-06-17, branch `kicad-import`)
-
-A full clear → re-place → route pass using **KiCadRoutingTools** (see Tooling). The fine-pitch HTSSOP escape is the one hard spot — exactly as predicted from the start.
-
-- **Cleared** (commit `79c6220`): removed all 112 tracks + 42 vias, the 7 `Pad_gge` import orphans (old corner mounting holes + old power-input pads, superseded by MH1–4 / TB_PWR1), all stale zones, and the `Dwgs.User` import graphics. Kept all real parts + MH1–4 + the 40×40 Edge.Cuts.
-- **Macro placement** (commit `d9c2c45`, hand-placed via `pcbnew`; `place_optimize` polish in `eb4ef99`): power-in TB_PWR1 **left edge**, motor-out P1 **right edge** (opposite edges, per user), control header H1 **top** (faces U1 logic row), U1 central, bulk VM cans in the open bottom area, CP/bypass caps under the power row, logic pulls between H1 and U1, LED by the 3.3 V pin. Polish: airwire 195→180 mm, crossings 39→19. **place_optimize keeps connectors/U1/holes locked but can slide unlocked caps into mounting-hole courtyards — re-check + nudge after.**
-- **Routing** (commit `f3557cf`): `route.py` on F.Cu/B.Cu only (inner layers are GND planes), **0.6 mm** power nets (VCC + the 3 phases) with neck-down. **All signals + all 3 phase outputs routed.** Key trick: **route VCC first** so it claims its escape corridor before the phases. `route_planes` → solid GND planes on In1/In2 (24/24 GND pads stitched, 0.96 mΩ / 13 A). **DRC: 0 shorts, 0 clearance.**
-- **Both VM pins (4 & 11) hand-routed** (commit `d96fe0e`) with B.Cu via-jogs threaded clear of the phase escapes — pin 4 drops *above* U1_3's y114.3 kink (U1_3 = VCP→C2.2 hugs pin 4's only exit). VCC fully connected; **0 shorts, 0 clearance.** Silk also bumped 8-35V→8-60V / v1.1→v2.0. The autoroute alone was **zero-sum** at that row (6 non-GND escapes — VM×2, OUT×3, VCP — competing; VCC-first connects the VM pins but starves a phase), which is why the VM pins needed the hand-route. Used 0.6 mm power width (≈2 A in 1 oz, fine for 1.5 A) since the netclass's 0.8 mm can't escape the 0.65 mm pitch even with neck-down. **Only remaining DRC item: 1 EN ratsnest near-miss** (`check_connected` reports EN fully connected; KiCad flags a hairline gap from the aggressive autoroute) — trivial GUI snap.
-- **Schematic↔PCB parity** (full connectivity diff, all 66 pads): only **two** real mismatches. (1) **R5.1 was stale on `VCC`** but the schematic has the LED on `3.3V` (V3P3OUT, pin 15) — the LED-resiting edit was never synced to the PCB; **fixed** R5.1→3.3V in `f3557cf`. The PCB nets are import-era, so do a GUI "Update PCB from Schematic" if more schematic edits land. (2) **U1 pin 28 (a GND pin)**: PCB tied it to GND but the schematic floated it — **fixed** (commit `7895b14`): added a `#PWR018` GND symbol on pin 28's endpoint (netlist-verified U1.28=GND; ERC delta is only the same import pin-type artifact every U1 GND pin shows).
-
-## Brushed/solenoid PCB rework (2026-06-17, branch `kicad-import`)
-
-The above pass routed the **pre-redesign** board (ganged EN, 3-pin P1, 2×5 H1, no comparator). After the schematic redesign (comparator current-limit + P1 5-pos + H1 2×7 EN-breakout, committed `d0eca99`), the PCB was reworked to match. **Status: electrically clean — fully routed (all 92 connections, 0 unconnected), 0 shorting_items, 0 clearance, 0 courtyard, 0 error-severity DRC. Remaining DRC items were then cosmetic warnings (silk overlap/over-copper, text height, HTSSOP padstack — import artifacts).** The divider shorts, U1 fine-pitch clearances, and the C3/R4 overlap were all cleared 2026-06-18 (see _Divider + fine-pitch + C3/R4 cleanup_ below), and the silk/text was cleaned up the same day (**249 → 6 cosmetic warnings**, see _Silk/text cleanup_ below).
-
-- **Footprint sync + full re-net** (commit `4f38a5c`): drove the PCB directly from the verified schematic netlist (schematic footprint fields are empty, so a netlist-driven "Update PCB" can't place new footprints). Cleared all 304 tracks/vias; swapped H1→`PinSocket_2x07_P2.54mm_Vertical`, P1→`TerminalBlock_MaiXu_MX126-5.0-05P` (note: MaiXu footprints live in `TerminalBlock.pretty`, **not** `TerminalBlock_MaiXu.pretty`); added the 10 new parts (R6/R7/R9/R10/R11/R12 cloned from R1 = R0603, C6 cloned from C1 = C0603, R8 = `Resistor_SMD:R_2512_6332Metric`, SJ1/SJ2 = `Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm` — Bridged = closed by default, user cuts); re-netted every pad from the netlist. **Verified 92 board pads = 92 schematic nodes, 0 mismatch.**
-  - **pcbnew gotchas (critical):** delete tracks/footprints with **`board.RemoveNative(item)`**, NOT `board.Remove(item)` — `Remove()` transfers SWIG ownership and corrupts the board so any later `GetFootprints()` access **segfaults** (0xC0000005). `FOOTPRINT.Duplicate(False).Cast()` sets the board pointer but does **NOT** insert into the footprint list, so always `board.Add(c)` after (a `if c.GetBoard() is None` guard wrongly skips it). `board.Zones()` returns raw `SwigPyObject` (no `.thisown`/`.Cast()`) → iterate zones for removal via `board.GetArea(i)` / `range(board.GetAreaCount())` instead. SWIG "memory leak" spam prints to **stdout** (fd 1), not stderr.
-- **Enlarged to 40×45 mm** (commit `9e87a1c`): the 5-pos terminal block (26.6 mm courtyard) doesn't fit the 40×40 right edge between the corner M3 holes (~25 mm clear) — **user chose to enlarge** (plan allows ≤50×50). New `Edge.Cuts` = rounded rect x[134,174] y[88,133], 3 mm corners; MH1–4 moved to new corners (4 mm inset, pads set no-net via `pad.SetNetCode(0)`). **Connector footprints have their origin at pin 1, not center** — reposition by computing the pad-bbox-center offset, else they sit off-position (P1 poked off the top edge). Placement by `place_optimize` (clear-band floorplan: H1 top, P1 right, TB_PWR1 left, U1 center, shunt R8 south of the PGND pins, divider bottom-right, EN/pull R's between H1 and U1) — **0 courtyard overlaps**.
-- **Routing** (commits `4333ff6` bulk, `2f0a3e7` complete): `route.py` F.Cu/B.Cu only. **The 0.65 mm HTSSOP pins (0.343 mm wide, 0.307 mm gap) are "boxed in" at the default grid 0.1 / clearance 0.25** — the router itself recommends **`--grid-step 0.05 --clearance 0.2 --track-width 0.2`** (0.1 mm grid rasterization inflated the pad obstacles). Key wins: **co-route VCC+PGND together** (`--nets VCC PGND --rip-existing-nets VCC PGND`) so the router separates the *interleaved* VM(4,11)/PGND(6,7,10,12) power-row escapes onto different layers in one solve — routing them separately makes whichever is second short the other. `*` does **NOT** exclude GND (route explicit net lists, never GND — it's planed). `route_planes --nets GND GND --plane-layers In1.Cu In2.Cu` (22/22 GND pads stitched). The last interleaved VM pin (U1.11) was **hand-routed** (F.Cu stub → 0.4 mm via → B.Cu jog under the M1/M2 escapes → via onto the VCC bus at y117.45). Relaxed `project.kicad_pro` via rules to **min via 0.4 / drill 0.25 / annular 0.075** (JLC-advanced, deliberate fine-pitch choice for the escape vias). **`route.py`/`route_planes` outputs don't compute the zone fill — re-pour with `pcbnew.ZONE_FILLER(b).Fill(b.Zones())` after adopting, or kicad-cli reports the GND-plane pads as unconnected.**
-  - **The `Power` net class is GONE** from `project.kicad_pro` (lost in tool round-trips; only `Default` 0.2 mm remains). DRC uses uniform 0.2 mm. Adequate for 60 V (the package itself forces 0.307 mm pin gaps). **⇒ Re-added 2026-06-26** (track 0.6 mm / clearance 0.2 mm; VCC/M1/M2/M3/PGND) — see _Manual-layout review + power/GND improvements_.
-- **DONE — divider shorts, fine-pitch clearances, C3/R4 (2026-06-18):** all the "REMAINING" items below were cleared this pass; see _Divider + fine-pitch + C3/R4 cleanup_. Then the silk/text (249→6) and the **footprint back-annotation / library re-link** (29 `footprint_symbol_mismatch` → 0) passes followed — see those sections below. Still open (cosmetic / order-time, not blocking): ~248 silk/text/HTSSOP-padstack import warnings; the 24 `footprint_symbol_field_mismatch` (no `Manufacturer Part` field on the PCB footprints — BOM is schematic-driven, so this is cosmetic); 20 benign `lib_footprint_mismatch` (customized board footprints vs stock library — intended); 8 `net_conflict` on U1's EP thermal-via pads; 4 `extra_footprint` (MH1–4, no schematic symbol).
-
-## Divider + fine-pitch + C3/R4 cleanup (2026-06-18, branch `kicad-import`)
-
-Took the board from "3 divider shorts + ~13 clearance + 1 courtyard" to **0 error-severity DRC** (only cosmetic silk/text/padstack warnings left). All headless `pcbnew`; net parity unchanged at every step (97 pads, 0 diff vs prior), `check_connected` = all nets fully connected throughout.
-
-- **Divider 3 shorts → 0** (commit `dd6d438`). Root cause: VREF/XN/YN tracks grazed the *vertically stacked* SolderJumper pads in a cramped cluster. The single-horizontal-row idea cleared the shorts but the SolderJumper courtyard is **3.39×2.59 mm** (much wider than the 1.49×1.49 R0603) and the M3 mounting-hole **MH3 courtyard is 7 mm** (reaches x166.51), so the row didn't fit. Fix that worked: a compact **3-col × 2-row grid of vertical (rot90) parts**, both fat SolderJumpers kept in the **middle column** (clear of the R8 shunt on the left and MH3's corner on the right); then hand-routed — **VREF on an F.Cu spine in the row-gap (y≈128)**, the **R9↔R10 3.3V tie on B.Cu** (the one layer change, to dodge R10's stacked pads), **GND pads dropped straight to the In1/In2 plane via plane-vias** (no surface GND), XN/YN as short F.Cu dog-legs. **Flip R9/R10 to rot270** so their 3.3V pads face the incoming feed (else the feed/VREF-tail/R9.VREF collide in the top-left corner). The autorouter failed here (couldn't reach R9.2 and disturbed the far 3.3V net) — deterministic hand-routing on the spread grid is what worked.
-  - **Rip-region bug to avoid:** a too-broad rip (`min(sx,ex)≥158.7`, no y-bound) also deleted a 3.3V segment up at y≈101 near R5/U1.15, orphaning a stub → 2 unconnected. Always y-bound divider rips (`… and max(sy,ey)≥122`).
-- **U1 HTSSOP fine-pitch clearance 6 → 0** (commit `b5df451`), by surgical re-routing — **no rule relaxation, no net changes**: (1) the 0.6 mm PGND bus ran *directly under* pin 11, squeezing the VCC(VM/60 V) via to 0.10–0.15 mm → **narrowed that one under-pin11 bus segment to 0.3 mm** (≈0.30 mm clearance; note the package itself fixes VM↔PGND at 0.307 mm pad pitch, so the escape now matches the chip's own spacing). (2) PGND pad-entry stubs at pins 10/12 were **0.6 mm wide** and overhung pins 9/11 (0.178 mm) → narrowed to 0.2 mm (0.03 mm-long stubs; the through-via carries the current). (3) the M2 under-row run sat at y114.05 (0.32 mm below the pads, grazing pins 9/14 at 0.199 mm) → **dropped to y114.25** (≈0.5 mm to pads, 0.25 mm to M1).
-- **C3/R4 overlap → 0** (commit `455a958`). C3 (bulk cap, 9.4 mm courtyard / 3.5 mm-wide GND pad) is **boxed** — IN1 routing below-left, board edge left, R4 right; and the EN row is packed at 2 mm pitch against R12, so neither could shift toward the other (moving C3 left/down just hits the IN1 track). Fix: **moved R4 up 1.6 mm** (146,100→146,98.4) out of C3's Y-band, then re-routed its two simple 2-point nets EN1 (U1.26↔R4.2) and EN1H (H1.4↔R4.1) with `route.py`.
-  - **route.py `.kicad_pro` DRC trap:** `kicad-cli pcb drc` on a *scratch* `.kicad_pcb` with no sibling `.kicad_pro` falls back to **default** via rules and falsely flags the 0.4/0.25 fine-pitch escape vias (18× annular_width/drill/via_diameter). DRC the real `KiCad/project/project.kicad_pcb` (which has `project.kicad_pro` with min via 0.4 / drill 0.25 / annular 0.075), or copy the `.kicad_pro` next to the scratch board. route.py preserved all existing via geometry (verified: 58 vias both boards, only the 2 EN1 vias swapped 0.5→0.4).
-
-## Silk/text cleanup (2026-06-18, branch `kicad-import`, commit `ecc24e4`)
-
-Took the board from **249 → 6 cosmetic DRC warnings** (0 error-severity, 0 unconnected). All headless `pcbnew`; **electrical content untouched** (verified: 97 pads, 0 net-name mismatch vs the prior commit). Iterated in passes with `kicad-cli pcb drc --format json` as the oracle (the `report` format states the rule/clearance — e.g. it revealed "Silkscreen clipped by solder **mask**", not over copper).
-
-- **The EasyEDA-imported connector pin-labels were stale.** They were standalone board-level `PCB_TEXT` placed for the original 26 mm / 2×5-header layout; after the 40×45 re-layout (H1→2×7, P1→5-pos, TB_PWR1 added) they floated over the *wrong* parts and would mislabel the connectors. Deleted 37 of them and **regenerated correct labels from the netlist** (dump each connector's `pad.GetName()`/`GetNetname()`/`GetCenter()`, place text by the pads): H1 `GND/3V3/IN1/EN1/IN2/EN2/IN3/EN3/RST/SLP/FLT/CMP/PGND/VREF`, P1 `VM/M3/M2/M1/GND`, TB_PWR1 `+`/`-`. The top H1 region is cramped (board edge above, R-cluster below) → labels are **0.5 mm**; **relaxed `min_text_height` 0.8→0.5 mm** in `project.kicad_pro` `board.design_settings.rules` to keep them (matches the original board's 0.56 mm silk; fab-producible).
-- **REAL DEFECT fixed (not cosmetic):** every R0603 (R1–R7, R9–R12) had `pad.GetLocalSolderPasteMargin() == -100 mm` (EasyEDA garbage, propagated to all clones) → a paste aperture 100 mm *smaller* than the pad → **no stencil opening generated → reflow can't paste those pads.** Fix: `SetLocalSolderPasteMargin(0)` on any pad with margin `< -1` (cleared 22 `padstack` "negative paste margin" warnings). *(Pads also carry a `0.051 mm` local solder-**mask** margin — that one is **normal** (2-mil expansion); leave it.)*
-- **Other moves:** hid all silk *value* fields (kept refs; no room for both at the 2 mm R-cluster pitch) and the 4 mounting-hole refs (2 clipped the edge); repositioned overlapping refs (SJ refs **vertical/rot90** to fit the R9/R10↔SJ gap; divider refs outside the cluster); deleted **24 stray board-level silk `PCB_SHAPE`s** (`GetDrawings()`, not footprint graphics — fragments over H1's pins + a redundant bottom logo over TB_PWR1's pad; the board keeps full *text* branding); removed C4 (non-polarized 0603) + H1 outlines that grazed their own pads (H1's 14 labels make the body outline redundant) and added `+` polarity marks for the polarized C3/C5 (BD6.3).
-- **Imported text justification gotcha:** the EasyEDA branding `PCB_TEXT`s are **end-justified** (and some **rotated 90°**), so `SetPosition` anchors one end — on the **bottom** layer (mirrored) a left-anchored text extends the *other* way and ran off the board edge. Force `SetHorizJustify(GR_TEXT_H_ALIGN_CENTER)` + `SetTextAngle(0)` to make positions behave like centers. (Self-`add`ed `PCB_TEXT` is centered by default — fine.)
-- **The 6 residual warnings are pre-existing & not silk-addressable** (present on the original import): **4 `silk_over_copper` "silkscreen clipped by solder mask"** entries on pads (H1.2, C4.1, C3.2×2) that the report gives **no silk-item position** — verified geometrically that *no* silk overlaps their mask rect, and they **persist after removing 100% of H1's silk** and are unaffected by the pad layer-set or mask-margin value; plus **2 item-less `silk_overlap` phantoms**. A KiCad-10 quirk of these imported footprints, not fixable by editing silk.
-
-### pcbnew SWIG fragility (cost real time — read before scripting footprint edits)
-
-The Python SWIG bindings leak heap-allocated return objects, and that **corrupts later iteration of SWIG containers**. Symptom: a loop over `b.GetFootprints()` suddenly throws `TypeError: 'SwigPyObject' object is not iterable` on `f.Pads()`, or `'SwigPyObject' has no attribute 'GetReference'`, on a *later* footprint. Confirmed triggers and the rules that worked:
-- **`f.Remove(g)` (footprint graphic removal) mid-loop corrupts the *next* footprint's `f.Pads()`.** → **Defer removals:** collect `(f,g)` pairs during the loop, then `for f,g in pairs: f.Remove(g)` *after* it. (Same spirit as the board-level `board.RemoveNative()` rule already documented — and `RemoveNative` on board drawings likewise corrupts a subsequent `GetFootprints()` loop, so do board-shape deletions **last**, after all footprint edits.)
-- **`pad.GetBoundingBox()` (and any `BOX2`/`VECTOR2I`-returning accessor) called in a loop can corrupt the *next* `f.Pads()`.** For pad/graphic geometry, prefer primitives and compute by hand: `pad.GetCenter()`+`GetSize()` for an axis-aligned pad rect; `shape.GetStart()/GetEnd()/GetArcMid()` for graphics; point-to-rect distance instead of bbox-overlap. Materialize `list(f.Pads())` before iterating.
-- **Split risky operations across separate `LoadBoard`/`SaveBoard` scripts** when in doubt — each fresh load resets the SWIG state. This pass used `p4a` (cap-silk trim, isolated) then `p4b` (refs + branding + deletions) precisely because mixing pad-iteration with removals in one load kept corrupting.
-- The "swig/python detected a memory leak of type …" spam on **stdout** is the tell that leaked objects are accumulating; it precedes the corruption.
-
-## Footprint back-annotation + library re-link (2026-06-18, branch `kicad-import`)
-
-Cleared all **29 `footprint_symbol_mismatch`** parity items (the schematic Footprint fields were empty; footprints lived only in the PCB). Headless: `pcbnew` for the PCB, `kicad-skip` for the schematic. **Electrically untouched** throughout — 0 unconnected, 0 error-severity DRC, 97 pads stable.
-
-- **The 29 decomposed into 3 sub-types:** 25× empty Footprint field; 2× stale PCB value text (C1, C3); 2× SJ1/SJ2 BOM-attribute. Fixes by source-of-truth direction: **PCB→schematic** for footprints (PCB is authoritative for layout); **schematic→PCB** for value (the redesign set C1=`10nF 100V`, C3=`47uF 100V`; PCB still read the v1.1 `100nF`/`100uF` — updated the PCB value text via `f.SetValue`); **schematic** edited to **exclude SJ1/SJ2 from BOM** (`s.in_bom.value=False` in kicad-skip → `(in_bom no)`) to match the SolderJumper footprint's `FP_EXCLUDE_FROM_BOM` attr (a solder jumper isn't a purchased part). The 26 `#PWR` power symbols correctly keep an empty Footprint (not on the PCB).
-- **⚠ Naive back-annotation just relocates the problem.** The PCB's footprints are **embedded EasyEDA footprints with no library nickname** (bare FPIDs: `C0603`, `R0603`, `HTSSOP-28_…`). Matching the schematic Footprint to the bare name satisfies *parity* but a bare name resolves to no library → **ERC gains 25 `footprint_link_issues`** ("does not include the footprint library ''"). HEAD ERC was 141 (all import artifacts); bare-name back-annotation pushed it to 166. **The fix is to give the footprints a real library home and reference `lib:name` on both sides.**
-- **Re-link strategy (user-chosen): canonical std libs where they exist, project-local lib otherwise.** Of the 11 unique footprints, **6 came from KiCad's std libs during the rework** (geometry already matches) → just **rename the FPID nickname** to the canonical lib: H1→`Connector_PinSocket_2.54mm` (⚠ **no plain `Connector_PinSocket`** — PinSocket libs are pitch-specific), P1/TB_PWR1→`TerminalBlock` (the MaiXu blocks live in `TerminalBlock.pretty`), R8→`Resistor_SMD`, SJ1/SJ2→`Jumper`, MH1–4→`MountingHole`. These resolve via the **global→template nested** fp-lib-table (`%APPDATA%/kicad/10.0/fp-lib-table` just points at `…/share/kicad/template/fp-lib-table`, which is where the std nicknames + `${KICAD10_FOOTPRINT_DIR}` URIs actually live).
-- **The 5 EasyEDA-imported footprints have NO clean canonical match** — geometry-compared each against its KiCad-standard cousin (`pad.GetFPRelativePosition()` + rotation-normalized sizes; **`PAD.GetPos0()` does NOT exist** in this binding): C0603/R0603/LED0603 differ from `C_/R_/LED_0603_1608Metric` in pad pitch (±0.07 mm), size, and shape (rect vs roundrect); CAP-SMD_BD6.3 ≠ `CP_Elec_6.3x5.4` (pad width 1.2 vs 1.6 mm); U1's HTSSOP-28 differs on **all 30 pads** (board pads are narrower/longer + the custom EP thermal-via array). Swapping would perturb the verified layout (fatal for U1's fine-pitch escape). So these 5 go to a **project-local library** with their exact geometry.
-- **Mechanics:** export one clean representative of each EasyEDA footprint with `pcbnew.PCB_IO_MGR.FindPlugin(pcbnew.PCB_IO_MGR.KICAD_SEXP).FootprintSave(libdir, fp)` (⚠ **not** the module-level `pcbnew.FootprintSave`/`FootprintLoad` — those use a default plugin that's `None` → `AttributeError`; and **not** `PluginFind` — the method is `FindPlugin`). Wrote them to `KiCad/project/drv8313-board.pretty/` and registered the lib in a new **project `KiCad/project/fp-lib-table`** (`(lib (name "drv8313-board")(type "KiCad")(uri "${KIPRJMOD}/drv8313-board.pretty")…)`, version 7) — KiCad finds it via `KIPRJMOD` = the project dir. Then `f.SetFPID(pcbnew.LIB_ID(nick, name))` on the PCB and `s.property.Footprint.value = "nick:name"` in the schematic. **Result: `footprint_symbol_mismatch` 29→0 AND ERC back to the 141 baseline (footprint_link 25→0).**
-- **Re-linking surfaces 20 benign `lib_footprint_mismatch` parity warnings** — once footprints resolve to a library, KiCad compares board-vs-library geometry. The 20 are exactly the **customized** ones (the 19 project-local instances, whose silk/refs were edited in the cleanup so they differ from the single exported copy, + H1 whose stock silk outline was removed). The **unmodified** canonical footprints (R8, SJ1/2, P1, TB_PWR1, MH1–4) do **not** flag — they match their libs exactly. It's the well-known finicky "board footprint differs from its library" FYI (fires even on the exact source instance), means only "a future *Update from Library* would revert your silk edits," and is **not** a defect. Left as-is.
-- **Remaining parity (all warnings, none blocking):** 24 `footprint_symbol_field_mismatch` (PCB footprints lack the `Manufacturer Part` field the symbols carry — the BOM is generated from the **schematic**, so this is cosmetic); 20 `lib_footprint_mismatch` (above); 8 `net_conflict` (U1 EP thermal-via pads = GND, no matching schematic pin — the classic thermal-pad quirk); 4 `extra_footprint` (MH1–4 have no schematic symbol — standard for mechanical holes).
-- **kicad-cli auto-edits `project.kicad_pro` on load** — registers the root sheet under `top_level_sheets` (+ adds a trailing newline). Benign normalization, not a design change.
-
-## Adding a new part (JLCPCB/LCSC) — process
-
-**JLCPCB parts are the LCSC catalog** (LCSC is JLC's component arm), and this board's schematic already stores each part's LCSC id in the `Supplier Part` field (e.g. U1=`C92482`, C3=`C87862`). A part has **two separable things**: the *footprint* (copper land pattern, defined by package) and the *LCSC id* (BOM/assembly metadata — which physical component JLC solders). You match them by package + a datasheet check.
-
-**1. Fetch footprint + symbol + 3D with `easyeda2kicad`** (installed — see Tooling). It pulls the exact EasyEDA/LCSC library model for an LCSC id and converts to KiCad:
-```sh
-& "C:\Program Files\KiCad\10.0\bin\python.exe" -m easyeda2kicad --full --overwrite --lcsc_id C92482 --output <dir>/lib.kicad_sym
-# writes <dir>/lib.kicad_sym, <dir>/lib.pretty/<name>.kicad_mod, <dir>/lib.3dshapes/<name>.{step,wrl}
-```
-This is the canonical way for **vendor-specific / non-standard** parts (odd connectors, specific IC packages). For **generic passives** prefer the canonical KiCad std footprint (`Resistor_SMD:R_0603_1608Metric`, etc.) — IPC-compliant, already resolvable via the global fp-lib-table — and just record the LCSC id in a field.
-
-**2. Fetch the datasheet to verify the land pattern.** Save the manufacturer/TI or the LCSC datasheet (`https://www.lcsc.com/datasheet/…_<LCSCID>.pdf`) into **`docs/datasheets/`**. Compare the footprint's pad pitch/size/courtyard against the datasheet's recommended land pattern **before trusting it** — especially thermal-pad ICs (this is exactly why U1's HTSSOP lives in the project lib with its verified EP via array, not a generic footprint). `pdftoppm` is unavailable so the Read tool can't page-render PDFs — extract text or open the PDF directly.
-
-**3. Place it.** Standard footprint → reference `StdLib:Name` (resolves globally). Vendor footprint with no canonical match → copy the `.kicad_mod` into **`KiCad/project/drv8313-board.pretty/`**, ensure `drv8313-board` is in `KiCad/project/fp-lib-table`, then set the schematic symbol's `Footprint` = `drv8313-board:Name` (kicad-skip) and the PCB FPID to match (`pcbnew` `f.SetFPID(LIB_ID(nick,name))`), or do a GUI *Update PCB from Schematic*. Verify with `kicad-cli pcb drc --schematic-parity` (0 `footprint_symbol_mismatch`) + `sch erc` (0 `footprint_link_issues`).
-
-**Verified 2026-06-18 against our 5 project-lib parts** (could we have *downloaded* instead of exporting from the board?): **yes — they're the same models.** easyeda2kicad fetches of `C0603`/`R0603`/`HTSSOP-28` reproduced our board footprints to sub-micron rounding (same names, same pads, **same EP via array on U1**) — they came from these LCSC parts via the original EasyEDA import. Our board copies additionally carry the silk cleanup + the `SetLocalSolderPasteMargin(0)` fix; notably the **pristine download has paste-margin unset (`None`), i.e. it does *not* carry the −100 mm bug** — that defect was introduced by the original EasyEDA→KiCad *import*, not by the part. Two real discrepancies the fetch surfaced: (a) the LED (`C72038`) returns `LED0603-RD-YELLOW`, a near-identical 0603 land (~0.05 mm pitch diff, different name) — a different LED part than the board's `LED0603-R-RD`; (b) **C3/C5's BOM part `C87862` (RVT2A470M1010) is a Ø10 mm can (`CAP-SMD_BD10.0…`), but the board footprint was Ø6.3 mm (`CAP-SMD_BD6.3…`)** — the part did **not** fit the footprint. This was the deferred "Ø10 mm cap resize" — **FIXED 2026-06-18, see _Ø10 mm bulk-cap re-placement_ below.** easyeda2kicad also yields STEP+WRL **3D models**, which the imported board currently lacks — available if 3D enrichment is wanted.
-
-## Ø10 mm bulk-cap re-placement (2026-06-18, branch `kicad-import`)
-
-Fixed the C3/C5 footprint↔part mismatch surfaced by easyeda2kicad (the BOM part `C87862`/RVT2A470M1010 is a Ø10 mm can; the board had the Ø6.3 mm footprint). All headless. **Result: 0 error-severity DRC, 0 unconnected, all 92 nets connected; schematic C3/C5 footprint synced to BD10.0.**
-
-- **Board enlarged 40×45 → 50×45** (x[134,184] y[88,133], within the ≤50×50 budget — user chose 50×45 over a fuller 45×45 re-layout). **⇒ Superseded: the user later hand-enlarged the board to a full 50×50 mm (2026-06-28).** Edge.Cuts right side shifted +10 mm (shift the rounded-rect items with x>150); **MH2/MH3 + P1 relocated to the new right edge** (P1 origin +10 mm in x — connector origin is at pin 1, so a pure delta preserves placement). Only P1 + the 2 corner holes moved; U1's escape, the divider, R-row, TB_PWR1 and their routing stayed put.
-- **BD10.0 footprint** (`CAP-SMD_BD10.0-L10.3-W10.3-FD-LS11.0`, ~13 mm pad-span × 10.4 mm body) copied into `drv8313-board.pretty` from the easyeda2kicad download. Swap recipe (SWIG-safe): read old pad nets by name, `FootprintLoad` the new one, set ref/value/pos/rot, **set pad nets by `SetNet(FindNet(name))` — `SetNetCode` alone does NOT survive `board.Add` (KiCad resolves pads by net *name*)**, `board.Add(new)`, then `board.RemoveNative(old)`.
-- **Placement:** caps rot90 (pads vertical, 10.4 mm wide) stacked on the right between U1 and P1: **C3 (168.6, 98), C5 (168.6, 114.5)**. Spread apart (not adjacent) so they clear the divider's R11 courtyard (C5 bottom) *and* leave the P1 M1-fan lane between their pads. Connector footprints sit between U1 and P1, so the two big cans inevitably **block the F.Cu fan** — routed the phase/VM nets **under the SMD cans on B.Cu** (electrolytic pads are F.Cu-only, so B.Cu under the body is free; keep F.Cu clear under a can).
-- **Routing the congested right side** (2 big caps + P1 5-pin fan + the comparator VREF track all competing): `route.py` was **unstable here** — each run failed a different net ("no rippable blockers"), so the last mile was **deterministic hand-routing**. Ripped M1/M2/M3/VCC right of the U1 escapes (kept the fine-pitch escapes); hand-routed M1 & M2 on B.Cu under the cans (via just past the **VREF B.Cu track at x161.6** to avoid a crossing), tapped the U1 VM-pin via into the VCC bus, added GND stitch vias for the two SMD cap GND pads (P1.GND PTH grounds via the plane). Re-poured the In1/In2 GND planes to the new outline — **zone outline must be inset ~1.5 mm so its corners sit inside the 3 mm rounded board corners** (a full-bbox zone gives `copper_edge_clearance` at the new corner).
-- **✅ RESOLVED / re-verified 2026-06-18 — the `.kicad_pro` is now canonical; kicad-cli no longer rewrites it.** *(Historical note, kept for context:)* a `pcb drc` run was once seen to reset the custom min-via rules (min_via 0.4→0.5, drill 0.25→0.3, annular 0.075→0.1, text 0.5→0.8) → 54 false `via_diameter`/`drill_out_of_range`/`annular_width` violations + stale-zone-fill errors. **This no longer reproduces.** Empirically (kicad-cli 10.0.3, `tools/check_design.py` work): `sch erc`, `pcb drc`, `pcb export gerbers`, `pcb export step` **all leave `project.kicad_pro` byte-identical**; `pcb drc --severity-all` finds only the 22 documented cosmetic items (20 `lib_footprint_mismatch` + 2 `track_dangling`), **zero** via/annular/drill false-positives; the file carries the correct rules (min_via 0.4 / annular 0.075 / drill 0.25 / text 0.5) and a trailing newline. **Root cause of the original gotcha = the project file had drifted from kicad-cli's canonical output** (e.g. a KiCadRoutingTools round-trip dropping fields); once the canonical form was committed it became a no-op — i.e. the repo already "unified on what kicad-cli writes." So **no snapshot/restore is actually needed today**; `tools/build_manufacturing.py` and `tools/check_design.py` keep a *defensive* snapshot that only fires (with a warning) if a future KiCad version re-normalises the file. **The one real remaining trap is the SCRATCH-board case** (next bullet): DRC'ing a `.kicad_pcb` with **no sibling `.kicad_pro`** falls back to default via rules and *does* falsely flag the 0.4/0.25 escape vias — so always DRC the real project (or copy the `.kicad_pro` next to a scratch board). The KiCadRoutingTools **`check_drc.py` / `check_connected.py` never touch `.kicad_pro`** and remain good cross-checks.
-- **Cap re-placement cascades:** moving a placed+routed part strands/conflicts its routing — re-rip+route the affected nets (don't nudge then patch; a 1 mm C5 nudge pushed its GND pad into the M1 hop). Stripped the BD10.0 silk outlines (over the under-cap traces) and moved P1's stale silk labels to the new pad column, same as the earlier silk pass.
-- **Remaining (all warnings, none blocking):** 20 `lib_footprint_mismatch` (customized footprints vs library — benign/intended), 24 `footprint_symbol_field_mismatch` + 8 `net_conflict` (U1 EP) + 4 `extra_footprint` (MH) (pre-existing/standard), and 2 trivial `track_dangling` dead-copper stubs.
-
-## BOM finalization + 3D enrichment (2026-06-18, branch `kicad-import`)
-
-Filled every BOM gap (JLCPCB **Basic-preferred**) and made all components render in 3D. Headless; **0 error-severity DRC, all 27 nets connected, ERC at the 141 baseline** throughout — the changes are non-geometric (part fields, silk *value* text, 3D model paths).
-
-- **As-built BOM (all MPN+LCSC set):** 10 k 0603 = UniOhm `0603WAF1002T5E`/**C25804** (Basic; R1–R4,R6,R7,R12); 1 k = `0603WAF1001T5E`/**C21190** (Basic; R5,R11); 43 k = `0603WAF4302T5E`/**C23172** and 62 k = `0603WAF6202T5E`/**C23221** (both **Preferred** = fee-free — *this section originally mislabeled them Extended*; the 2026-06-18 cost pass below corrected it); shunt R8 = `HoJLR2512-3W-50mR-1%`/**C2903475** (Extended, 3 W); C6 = the same 470 nF part as C4 (`CL10B474KA8NNNC`/**C1623** — 0.47 µF *is* 470 nF, so they group); H1 2×7 socket = BOOMELE `2.54-2*7P Female`/**C38844**; P1/TB_PWR1 = Degson **DB126V-5.0-5P-GN-P/C2835160** and **-2P-GN-P/C395849**.
-- **Two real BOM bugs fixed (not just blanks):** (1) **R1–R4 carried `C23162` (a 4.7 kΩ part)** despite their 10 kΩ value — an import leftover (same family the original R5 had) → corrected to C25804. (2) **P1's `C146243` was actually a 3-pin 2.54 mm *header*** (`2.54-1*3P Female`, the v1.1 part), not a terminal block → corrected to the DB126V 5-pos block. The intended Same-Sky `TB002-500-0xBE` parts are **out of stock** at JLC (both 0), so the footprint-compatible Degson DB126V-5.0 family was substituted (the KiCad `MaiXu MX126-5.0` footprint is pad-compatible — same 5.0 mm "126-style" land).
-- **Values normalized so identical parts group** (10kΩ×7, 1kΩ×2, 470nF×2, 47uF×2) and **synced to the PCB** via `f.SetValue` (`SetValue` *does* persist across `SaveBoard`). Regenerated `manufacturing/drv8313-board-BOM.csv` with `kicad-cli sch export bom --fields 'Reference,Value,Footprint,QUANTITY,Manufacturer Part,Supplier Part' --group-by 'Value,Footprint,Manufacturer Part,Supplier Part'` (note: the ref-list field is **`Reference`**, not `${REFS}`; `QUANTITY` works). SJ1/SJ2 stay out of the BOM (`in_bom no`).
-- **Part-selection method (no GUI):** query the **JLCPCB component API** directly — `POST https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList` with `{"keyword","currentPage":1,"pageSize"}`; each hit has `componentLibraryType` (**`base`=Basic, `expand`=Extended**), `stockCount`, and `lcscGoodsUrl` (parse the `_C\d+\.html` for the LCSC id). LCSC product pages are JS-rendered (WebFetch can't read them); the EasyEDA `api/products/search` endpoint 404s. Search by value (`"43kohm 0603 1%"`) or by exact MPN/C-number.
-- **3D models — root cause:** the project-local footprints referenced models in dirs **that were never committed** (`${KIPRJMOD}/EASYEDA_MODELS/…`) or a deleted scratch dir (`_scratch_ee/…`), so U1 + every 0603 + the LED + both cans dropped out of the render (the std-lib parts rendered because KiCad ships their 3D). Fetched the exact models with `easyeda2kicad --full` (U1=C92482, C0603=C1591, R0603=C25804, LED=C72038, BD10.0=C87862), committed both `.step`+`.wrl` to **`KiCad/project/EASYEDA_MODELS/`**, and repointed every board `(model)` to the actual `.wrl` basename (colored render; STEP export finds the `.step` sibling via `--subst-models`).
-- **Terminal blocks needed their own 3D:** KiCad's `TerminalBlock.3dshapes` is **not installed** here (105 other `.3dshapes` libs are), so P1/TB_PWR1 had no body. Fetched the Degson models (C2835160/C395849) and attached them to the **pin-1-origin** MaiXu footprints with an **X-offset to the pad-row centre** (5P → +10 mm, 2P → +2.5 mm; the easyeda models are **centre-origin**) + `rotate 0 0 180`. Verified by render.
-- **⚠ pcbnew `fp.Models()` editing does NOT persist** across `SaveBoard` (it returns a temporary copy — the loop reported "fixed 19" but the saved file was unchanged). **Edit 3D `(model)` paths by text** (paren-matched block rewrite), not via the SWIG model list. (`SetValue`/`SetNet` *do* persist — it's specifically the `Models()` container.)
-- Regenerated `images/board-3d-{top,bottom}.png` (`pcb render --quality high --perspective --floor`), `images/schematic.svg` (reflects the new values; `sch export svg` writes `project.svg` → rename), and `manufacturing/drv8313-board.step` (`--subst-models`). Gerbers/CPL unchanged (no geometry moved).
-
-## Project tool scripts + BOM cost pass (2026-06-18, branch `main`)
-
-Added a committed **`tools/`** dir of headless helper scripts (see `tools/README.md`), and used the first one to re-source the BOM for cost/availability. All non-geometric: **0 error-severity DRC, 27/27 nets connected, ERC at the 141 baseline.**
-
-- **`tools/jlc_search.py`** — live JLCPCB part finder. The API (`selectSmtComponentList`) returns, per hit: `componentLibraryType` (`base`/`expand`), **`preferredComponentFlag`**, `componentPrices` (tiered), `stockCount`, `componentCode`(LCSC), `componentModelEn`(MPN). **Fee model the user confirmed:** JLCPCB charges a per-part setup fee only for plain **Extended**; **Basic AND Preferred are both fee-free.** So the tool ranks **fee-free first, then cheapest unit price, in stock**. ⚠ **Plain keyword search buries Basic/Preferred parts** behind cheap Extended ones — the API accepts **server-side library filters** (probed): body `{"componentLibraryType":"base"}` → Basic only, `{"preferredComponentFlag":1}` → Preferred only. The tool's `--fee-free`/`--basic`/`--preferred` use these (the reliable way to find no-fee parts); `--basic` returns the whole UNI-ROYAL family at *all* values, so still verify the value in the `describe`. Stdlib-only.
-- **BOM cost pass result (2 real upgrades, applied):** **C2** 100 nF `C1591`(Extended)→**`C14663`** (YAGEO, Basic, 50 V X7R — like-for-like; nets confirmed C2 spans VCP↔VM ≈ 11 V, so 50 V is correct, no downgrade); **LED1** `C72038`(yellow, **stock 0**)→**`C89811`** (NationStar NCD0603Y2, yellow, Preferred, in stock — kept the original yellow colour). Edited per-symbol via kicad-skip (⚠ property names are **sanitized to underscores** — `Manufacturer_Part`/`Supplier_Part`; keying by the space form wrongly hits the clone/ADD path and creates duplicate properties — match the underscore name and set `.value`). LED1 value synced to PCB (`SetValue`). **Confirmed fee-free, no in-stock fee-free alt exists, so kept:** C1 (10 nF/100 V flying cap CP1↔CP2 — needs 100 V), C3/C5 (47 µF/100 V electrolytic), R8 (50 mΩ sense), H1/P1/TB_PWR1 (connectors are never Basic), U1. **10 kΩ `C25804`** is Basic but **read stock 0** at pass time — it's the canonical UNI-ROYAL Basic 10 k and the *only* in-stock fee-free 0603 10 k brand was out; kept it + flagged "verify at order."
-- **`tools/build_manufacturing.py`** — one command regenerates the whole fab package (gerbers w/ Protel ext + Excellon drill, `…-gerbers.zip`, CPL `pos --format csv --units mm`, BOM, STEP `--subst-models`) + images (3D renders, schematic.svg, 2D pcb svgs). Keeps a **defensive `project.kicad_pro` snapshot** — a no-op on the canonical file (see the resolved gotcha below), warns+restores only if a future KiCad re-normalises it. Gerber/drill layer set + filenames verified to reproduce the committed set exactly. ⚠ **Regen of geometry-unchanged outputs is pure noise** (gerbers differ only in the `TF.CreationDate`; STEP/PNG re-serialize/raytrace-jitter) — for a BOM-only change, commit just BOM.csv/CPL.csv and revert gerbers/STEP/renders. The `…-gerbers.zip` is git-ignored (regenerable).
-- **CPL `Val` is PCB-driven, not schematic-driven** — `pcb export pos` reads each footprint's *board* value, and a few were never synced to the schematic's normalized values (e.g. CPL shows R6/R7 `10k` while the BOM/schematic say `10kΩ`; P1 `TB002-500-05BE`). **Cosmetic only** — JLCPCB matches parts by Designator + the **BOM's** LCSC id, not the CPL `Val`; the BOM (schematic-driven) is authoritative and correct. Not a bug; don't chase it. (To make them identical, `f.SetValue(...)` the board footprints to the schematic values and re-run the tool.)
-- **`tools/set_silk_version.py`** — bumps the silk version stamp. Targets `PCB_TEXT` on F./B.SilkS: rewrites the `vN.M` token (keeping a `Board ` prefix) + the `MM/YY` date. `--show` lists current (`v1.0` / `Board v1.0` / `06/26`). `SetText` persists across `SaveBoard`. Version left at **v1.0** (tool provided, not bumped).
-- **`tools/check_design.py`** — one-shot design verification, **CI exit codes** (nonzero on hard-check failure). **DRC (`kicad-cli pcb drc --severity-error --refill-zones` → 0) is the only hard gate** — it is *authoritative* for connectivity (unconnected pads), clearance, and shorts. The two KiCadRoutingTools checks (`check_connected.py`, `check_drc.py`) were **demoted to ADVISORY 2026-06-26**: their endpoint-graph model false-positives on manual routing (off-anchor pad entries, through-pad junctions, same-net micro-stub overlaps) where kicad-cli's ratsnest correctly sees connection — so they print but never fail the build. ERC (`sch erc`) is a **tripwire** vs the documented **0** baseline (**fully clean** as of 2026-06-28). Because it's 0, the tripwire now catches *any* new ERC item. Cleared by the 2026-06-28 symbol cleanup (see _Simple-passive symbol swap_ below); history: 8 after the power-lib relink + U1 typing, 53 after the Device-symbol swap alone, 98=10err/88warn before that, 101 before the manual-layout schematic edits, 91 before C7/C8, 141 before the schematic redo. Snapshots/restores `project.kicad_pro`. **Re-verified empirically (2026-06-18): on the *real* project `kicad-cli pcb drc` reads the correct min-via rules and leaves `project.kicad_pro` UNCHANGED** — the earlier "`pcb drc` resets the rules" gotcha is specific to DRC'ing a **scratch** `.kicad_pcb` with no sibling `.kicad_pro` (it then falls back to default rules); the restore guard is kept as defence anyway. `--refill-zones` avoids stale-fill false errors. Degrades gracefully if KiCadRoutingTools (`$KRT_DIR`, default `../KiCadRoutingTools`) is absent (skips conn/clear, still gates DRC).
-- **`tools/check_bom.py`** — looks up every BOM LCSC id on JLCPCB live (reuses `jlc_search`), reports stock + lib (fee status) + price, **flags out-of-stock/discontinued and exits nonzero** if any part is 0-stock (or `< --min-stock`). Tallies unique Extended parts (= setup fees). Catches exactly the LED1-went-OOS / 10k-reads-0 failures. *Currently exits 1* because the Basic 10k `C25804` reads stock 0 — transient, re-run before ordering.
-
-## TB_PWR1 orientation flip + voltage-silk fix (2026-06-18, branch `main`)
-
-Fixed two things the 3D render surfaced: the power terminal `TB_PWR1` faced **inward** (wire openings toward U1, not the left board edge), and a **redundant `8-60V`** floated alone on `B.SilkS` (153.8,97.6) duplicating the front title block. All headless `pcbnew`; **0 error-severity DRC, all nets connected, ERC at the 141 baseline.**
-
-- **Flip:** `fp.Rotate(VECTOR2I(139.5,110.0), EDA_ANGLE(180,DEGREES_T))` — rotate **180° about the pad centroid** (not the pin-1 origin) so the footprint stays in the same bbox and the openings turn to face board −x (the edge). Orientation went 90→−90. **A 180° flip necessarily SWAPS the two pads** (GND pad1 ↔ VCC pad2): the schematic fixes pin1=GND/pin2=VCC, so the physical holes trade nets. Consequences handled: (1) GND pad now at the upper hole (139.5,107.5) — still self-grounds through the In1/In2 GND planes (THT pad in zone, **no GND trace exists or is needed**); (2) VCC pad now at the lower hole (139.5,112.5) — needs its trace re-run; (3) the `+`/`-` silk markers (board-level `gr_text` at x145.5) were **swapped in y** so `+`→VCC row (112.5), `-`→GND row (107.5). Re-lock the connector after (`SetLocked(True)`; it was locked).
-- **VCC re-route:** the old VCC stub ran horizontally into the *old* VCC pad at y107.5 — after the swap that's a GND pad, so it had to be ripped (else VCC track on a GND pad = short). Kept the VCC feed up to its node at (147.3,107.5); ripped the two stub segs into 107.5; re-routed **west, L-shaped: (147.3,107.5)→(142,107.5)→(142,112.5)→(139.5,112.5)** on F.Cu, w 0.5. **First attempt routed the drop at x147.3 and shorted the 3.3V diagonal** that comes down to (147,113.15) — that corridor (x147–149.35) plus the CP1/CP2 cluster (x≥148.3) is occupied, so the VCC drop must stay at **x≤142** (west of both). Re-pour zones (`ZONE_FILLER`) after.
-- **Silk:** deleted the redundant `B.SilkS` `8-60V`; added a front `F.SilkS` `8-60V` (size 0.8) at **(140,118.6)**, just below the connector body (body bbox after flip y[103.97,115.53], MH4 at 129 — clear). The front **title-block** `8-60V` (157,118.7) is conventional branding and was left in place (only the stray back duplicate was the "redundant" one).
-- **Manufacturing regen caveat (this change):** the flip is a real geometry change, so `build_manufacturing.py` outputs mostly changed for real — **but** the **drill is byte-identical** (both 1.3 mm holes stayed at the same two coordinates; only pad *identity* swapped, and there are no vias), and **board-outline + both paste layers are timestamp-only** (Edge.Cuts untouched; TB_PWR1 is THT so it has **no paste apertures**). Reverted those + `schematic.svg` (schematic untouched; its regen is a ~29k-line non-deterministic churn). Kept the real ones: `TopLayer`/silk/`GND1`/`GND2`, the **mask + B.Cu** layers (pad1 roundrect ↔ pad2 circle swapped position → real aperture change), CPL (origin→(139.5,−107.5), rot −90), STEP, 3D + 2D images. **CPL `PosX/PosY` for a connector = the pin-1 footprint origin** — it moved because pin 1 (GND) moved to the upper hole; the value correctly tells assembly the new orientation.
-
-## P1 motor-output labels + render restyle (2026-06-18, branch `main`)
-
-Two render-driven presentation fixes; **no copper/net change** (0 error-severity DRC, all nets connected, ERC 141 baseline).
-
-- **P1 labels moved out from under the terminal block.** The `VM/M3/M2/M1/GND` silk labels sat at x181.5 — **inside P1's courtyard** (x[174.46,183.35]), so hidden once the block is assembled. The board is **congested on both sides** of P1: the block's front face reaches to ~0.7 mm of the right board edge (x184.05), and the inward side is blocked by the two Ø10 mm bulk caps C3/C5 (courtyards x[163.41,173.79], covering the VM/M1/GND rows) leaving only a 0.67 mm gap. So the only "closer to the edge" spot is the ~1.1 mm strip at the wire openings → labels were re-placed at **x183.45, rotated 90° (vertical), 0.7 mm** (board already uses 0.5 mm silk, so legible; ~0.25 mm silk-to-edge). They now read as a column at the openings in the top-down render. *If larger labels are ever wanted, the real fix is relocating C3/C5 to open the inward side — a layout change, not done.*
-- **Renders restyled in `build_manufacturing.py`** (per user): **3D now straight top-down / bottom-up** — `pcb render` defaults to **orthogonal** projection, so dropping `--perspective` **and** `--floor` (and using `--background opaque`, 1600×1600 for the now-square 50×50 board — was 1600×1440 when the board was 50×45) gives a flat square-on view of the whole board. **2D plots now legible on a dark background** — root cause: **`kicad-cli pcb export svg` never paints a background (always transparent)**, so on GitHub's white page the white silk vanished (the "red/blue layer + invisible silk on white" the user saw). Fix: export colored (drop `--black-and-white`), layers `F.Cu,F.SilkS,Edge.Cuts` / `B.Cu,B.SilkS,Edge.Cuts` (mask dropped to de-clutter), then **inject a full-canvas `<rect fill="#14161b">`** right after the `<svg …>` tag (parse the `viewBox` for the mm dims) → red/blue copper + white/salmon silk + yellow outline all pop. `--theme` was a dead end (needs a *named* theme; the colors dir is empty and SVG export still wouldn't emit a bg). ImageMagick (`magick`) **is** installed here — handy to rasterize an SVG to PNG to eyeball it (`magick -density 700 in.svg out.png`).
-- **`pcb render --pan 'X,Y,Z'` sign/units are unintuitive** (small +X showed the *left* edge; −11 panned the board fully out of frame) — for a quick zoomed crop it's faster to render full-res top-down and crop the PNG than to fight `--pan`/`--zoom`. **ImageMagick (`magick`) is installed** — use it to rasterize SVGs (`magick -density 700 in.svg out.png`), crop regions (`-crop WxH+X+Y`), and build labeled montages/overlays for visual diffing.
-
-## Connector label orientation + front-view bottom plot + README BOM (2026-06-18, branch `main`)
-
-Per user: orient each connector's silk labels to **face its board edge** (so someone inserting wires reads them upright), make the 2D bottom plot a **front/look-through view**, and add a **priced BOM table** to the README. Silk + docs only — **0 error-severity DRC, all nets connected, ERC 141 baseline**.
-
-- **"Face the edge" rule (board-level `gr_text`):** a label reads upright to a viewer who has that edge nearest them when its **letter-tops point INTO the board** (away from the edge). By edge: **top→180°, bottom→0°, right→90°, left→270°** (KiCad text angle). Applied: **H1** (top) 14 pin labels rotated 0→**180**; **P1** (right) already **90** (the prior edge-move set it right — confirmed by render: VM/M3/M2/M1/GND read upright from the right); **TB_PWR1** (left) → **270**. Verified by cropping a 3000-px top-down render per connector (`magick -crop`) and reading the glyphs.
-- **TB_PWR1 `+`/`-` → `GND`/`VM`, moved to the edge/openings side.** New text on the existing two `gr_text`s: `-`(GND pad, upper hole y107.5)→**"GND"**, `+`(VM/VCC pad, lower hole y112.5)→**"VM"**; both moved from the inward x145.5 to **x134.55** (the ~1.2 mm gap between the body's left face at x135.15 and the board edge at x133.95 — same tight strip P1 uses), angle 270, 0.7 mm. They sit right at the wire openings (which face the left edge after the flip).
-- **2D bottom plot: dropped `--mirror`** in `build_manufacturing.py` so B.Cu plots in **board coordinates (look-through / "from the front")** and lines up feature-for-feature with the top plot. **Proof:** overlaying top (red) + bottom (blue) — with **no** `--mirror` the THT pads / H1 grid / outline coincide; **with** `--mirror` they're offset. Trade-off (inherent to look-through): **back silk reads mirrored**. KiCad's default (no `--mirror`) for a single bottom layer is already this look-through view; `--mirror` is the "flip the board over" view (correct text, mirrored layout).
-- **README BOM table** added (`## Bill of materials`) — columns `Designator | Value | Qty | MPN | Unit price | Library`, MPN linked to the LCSC page, **Library** = Basic/Preferred/Extended (fee status). **≈ $2.26/board** at JLCPCB's 100-piece tier (U1 alone ~$1.47), 7 Extended parts. Generated by new **`tools/gen_readme_bom.py`** (reuses `jlc_search`; live prices → dated snapshot, re-run to refresh). ⚠ **Escape `*` in MPN link text** (`2.54-2\*7P` — a bare `*` starts markdown emphasis). LCSC product URL comes from the API's `lcscGoodsUrl` (full slug); fall back to `https://www.lcsc.com/product-detail/{code}.html`.
-- **Realistic small-batch (10-board) cost model** (added to `gen_readme_bom.py`, `--batch`/`--extended-fee`): the JLCPCB API record carries the assembly-cost fields — **`leastPatchNumber`** (per-part assembly *minimum*: 20 for 0603 R/C, 0 for U1, 2 for the terminal blocks), **`lossNumber`** (attrition added: 10 for 0603 R/C, 0 for U1), and **`componentPrices`** (assembly price tiers; *not* `buyComponentPrices`, which is for loose reels and has a 5000-pc `minPurchaseNum`). Model: **purchased = max(used + lossNumber, leastPatchNumber)**, priced at the tier for `purchased`. The **Extended setup fee is NOT in the API** — assumed **$3/unique Extended part** (verify at checkout). Result: 10 boards ≈ **$49** (~$28 components + **7 × $3 = $21 Extended fees**) ≈ $4.93/board; the $21 fixed fee dominates at low volume and amortises with quantity (vs the ~$2.26/board volume figure). U1 at qty-10 is $1.77 (the 10–29 tier) vs $1.47 at 100.
-
-## Manual-layout review + power/GND improvements (2026-06-26, branch `main`)
-
-Reviewed the user's hand-redone layout (uncommitted on top of "Manual layout") and implemented the agreed improvements. **Result: 0 error-severity DRC, 0 unconnected (kicad-cli `GetUnconnectedCount()==0`), `tools/check_design.py` PASS.** All headless `pcbnew`.
-
-- **Schematic = electrically unchanged.** The 266-line working-tree `.kicad_sch` diff was **graphical only** — netlist exported from working vs HEAD was **byte-identical** (R8 50 mΩ shunt relocated/rotated, PGND label moved, a redundant `#PWR0102` GND symbol added, a junction removed). ERC 101→**98** (−3, cleaner); re-baselined (see [[erc-baseline-stale-after-schematic-redo]]).
-- **EP-via GND regression (again) + durable fix.** The user's Update-PCB-from-Schematic had re-stripped GND off U1's 8 EP thermal-via pads (`<no net>`) → 48 DRC errors (clearance/hole/mask-bridge vs EP pad 29 + the GND planes). **Permanent fix:** renamed those 8 via-pads from `""` to **`"29"`** (the EP pad number) so KiCad re-nets them to pin 29 = GND on **every** sync — they no longer need manual re-grounding. (MH1–4 survived this sync; if a future sync deletes them, uncheck "delete footprints with no symbol" in the update dialog.) This is the standing answer to [[update-pcb-from-schematic-reverts-fixes]] for the EP vias.
-- **#1 Power-net widening.** Manual route was **0.2 mm everywhere** except the TB_PWR1→C3 stub (only ~0.5 A @10 °C on 1 oz vs the 1.5 A target). Re-added a **`Power` net class** to `project.kicad_pro` — **track 0.6 mm, clearance 0.2 mm (NOT 0.3 — keeping it at Default avoids re-flagging the 0.31 mm HTSSOP escape; mask makes 0.2 mm fine at 60 V), via 0.6/0.3** — with `netclass_patterns` for **VCC, M1, M2, M3, PGND** (current net names; the old log's `U1_5/8/9` are stale). Net-class `track_width` makes *new* interactive routing default to 0.6 mm but does **not** reject narrower necks (so neck-down at the escape is allowed — no hard min-width rule). Then widened the 19 existing current-carrying runs to 0.6 mm, keeping escape stubs (within 1.3 mm of a power-row pin) narrow; one VCC seg necked to 0.3 mm to clear C2's VCP pad.
-- **#2 Outer GND pours** (see Goal & status): cloned an inner GND zone onto F.Cu + B.Cu (`src.Duplicate().Cast()`, `SetLayer`), filled (island-removal ON → no floating copper), + **38 GND stitching vias** auto-placed on a 6 mm grid in verified-open spots (≥0.9 mm to tracks, ≥0.7 mm+½pad to pads, ≥4.5 mm to MH). Refill after.
-- **#5 `tools/check_design.py` hardened + light cleanup.** kicad-cli error-DRC is the **authoritative** connectivity/clearance/short gate; the two KiCadRoutingTools checks were **demoted to ADVISORY** — KRT's endpoint-graph model false-positives on this board's manual routing (track endpoints landing *inside* a pad but 0.1–1.0 mm off the anchor, and tracks meeting *through* R8's big 2512 pad read as "disconnected"; same-net pad-entry micro-stub overlaps read as "crossings"), while kicad-cli's ratsnest correctly sees them connected. Removed the 2 redundant same-net micro-stubs (VCC near VM4, IN3 near U1.23) → KRT clearance now clean too. `check_design.py` now PASSes (connectivity shows `ADVISORY`, not FAIL).
-- **Follow-up (same pass): decoupling + thermal vias.** **EP thermal vias 8→12** — extended the 4×2 array to a clean **6×2 @ 1 mm pitch** across the EP's full 6.2 mm width (free GND through-vias). The EP is only **2.75 mm tall**, so a standard-pitch array caps at 2 rows; a finer 3-row replacement (~18–21) is possible but diminishing returns now that all 4 layers are GND. **Decoupling GND-return vias added at C7 and C8** (their GND pads were 2.5–3.3 mm from the nearest via → long return loop; now a GND via sits ~0.85 mm from each pad). **C7 NOT relocated:** VM4's mirror slot is occupied by C2 (VCP reservoir) + the CP-cap cluster, so moving C7 tight to VM4 would mean reworking that cluster; its VM4 assignment is already optimal (closest of the two pins) and the GND-return via is the higher-impact fix. With GND planes on all 4 layers the decoupling loop is [VM pin → cap → local GND via → plane], so the per-cap GND via matters more than absolute cap-to-pin distance.
-- **Routing/stackup Q (answered, no change):** keep signals on F.Cu/B.Cu and the **inner layers solid GND** — routing on In1/In2 would slot the reference planes and defeat their return-path + thermal purpose. Stay **4-layer**: 2-layer is electrically routable but raises RθJA (fewer copper layers for the EP to spread into — directly hurts the thermally-limited continuous-current target) and fragments the GND reference under the switching phase nodes; the 4-layer cost delta is small at prototype qty.
-- **Still open / not done:** manufacturing outputs (gerbers/BOM/CPL/STEP/renders under `manufacturing/` + `images/`) are **stale** vs the widened traces + pours + vias — regenerate with `tools/build_manufacturing.py` before ordering. All changes are **uncommitted**.
-
-## Simple-passive symbol swap to KiCad Device library + ERC error cleanup (2026-06-28, branch `main`)
-
-Per user ("for simple components, default KiCad symbols are better; only use the LCSC symbol if we don't have one or it's better"), swapped the simple passives off the EasyEDA-imported symbols onto **KiCad `Device:`/`Jumper:` library symbols**, cleared all 10 ERC errors, and then (follow-ups, same day) relinked the power symbols, typed U1's pins, project-libbed U1/LED1, and swapped TB_PWR1 to a stock connector — taking ERC to **fully clean**. **Result: ERC 98 (10 err/88 warn) → 0; netlist node-set parity preserved exactly (28/28); BOM unchanged; PCB untouched (no manufacturing regen — only `images/schematic.svg`).** `tools/check_design.py` PASS; **ERC_BASELINE re-baselined 98→0.** See [[erc-baseline-stale-after-schematic-redo]].
-
-**Follow-up — power relink + U1 pin typing (53→8):** relinked **GND/VCC/3.3V** power symbols to the KiCad **`power`** lib (`power:GND`/`power:VCC`/`power:+3.3V`), removing 15 `lib_symbol_issues`. ⚠ **A power symbol's net name = its instance `Value` field**, NOT the pin name (KiCad power pins have empty names) nor the lib-symbol name — so relinking 3.3V to `power:+3.3V` while **keeping the instance `Value` = "3.3V"** keeps the net "3.3V" (verified by netlist; no PCB net rename). Typed **U1's pins**: `power_in` (VM 4/11, GND 14/20/28, EP 29), `power_out` (V3P3OUT 15 — and **removed the now-redundant 3.3V PWR_FLAG `#FLG3`** since the on-chip regulator drives the net), `output` (OUT1-3 5/8/9), `open_collector` (nFAULT 18, nCOMPO 19), `passive` (everything else incl. CP1/CP2/VCP, PGND, COMPP/COMPN), NC (21) left unspecified under its no-connect marker. ⚠ **Do NOT type U1's IN/EN/nRESET/nSLEEP/COMPP/COMPN as `input`** — their drivers are passive (the H1 connector + pull-up resistors + the shunt), so `input` would re-introduce `pin_not_driven` *errors*; `passive` is the safe type there. Also typed TB_PWR1's 2 pins `passive` (cleared its 2 `pin_to_pin`). This pass left 8 warnings; a **third follow-up (8→0) cleared them entirely:**
-  - **U1 + LED1 → project symbol library.** Created **`KiCad/project/drv8313-board.kicad_sym`** (the DRV8313PWPR + the EasyEDA LED symbols, extracted from the cache) and a project **`KiCad/project/sym-lib-table`** (`(lib (name "drv8313-board")(type "KiCad")(uri "${KIPRJMOD}/drv8313-board.kicad_sym")…)`), then renamed the **cache** top-symbol names to the full lib_id (`drv8313-board:DRV8313PWPR`, `drv8313-board:19-213/…`) and set the instance `lib_id`s to match. **kicad-cli `sch erc` DOES read the project `sym-lib-table` (KIPRJMOD)** — these resolved → 2 `lib_symbol_issues` cleared. (Cache convention: the resolved symbol is keyed by full `lib:name`, but its **sub-symbols keep the bare `name_0_0` form**; the `.kicad_sym` lib file stores the **bare** top name.)
-  - **TB_PWR1 → `Connector_Generic:Conn_01x02`** (the KiCad-standard 2-pin connector — consistent with P1=`Conn_01x05`/H1=`Conn_02x07`; **no custom symbol needed**). This also fixed all **5 `endpoint_off_grid`** items, which were degenerate off-grid wires in the TB_PWR1 cluster (TB_PWR1 + the VCC/GND power symbols sat at off-grid coords from the earlier TB_PWR1 flip). Rebuilt the cluster on-grid: Conn_01x02 at (33.02,71.12,0), **GND/VCC power symbols placed coincident with pin1/pin2 (no wires at all → no off-grid endpoints possible)**. pin1→GND, pin2→VCC preserved (netlist-verified, matches PCB pad1/pad2).
-  - **Result: ERC = 0 (fully clean), down from 98.** Netlist 28/28, BOM data identical, PCB untouched. `ERC_BASELINE` re-baselined 8→0. Scripts: `_scratch_sym/retype.py`, `retype2.py`, `mklib.py`, `tbswap.py`.
-
-- **Swapped (22 instances):** R1–R12 → `Device:R`; ceramics C1/C2/C4/C6/C7/C8 → `Device:C`; electrolytics C3/C5 → `Device:C_Polarized` (pin1=+ matches old pin1 on VCC ✓); SJ1/SJ2 → `Jumper:SolderJumper_2_Bridged` (they'd been drawn with the *resistor* symbol). **Removed the 9 now-unused old EasyEDA passive lib_symbols** from the cache. **Kept on their existing symbols:** U1 (DRV8313, no KiCad equivalent), H1/P1 (already `Connector_Generic`), TB_PWR1 (custom 2-pin block).
-- **LED1 NOT swapped — deliberate (the LCSC symbol is "better" here).** `Device:LED` numbers pin1=K/pin2=A, but the EasyEDA LED and the PCB use pin1=A/pin2=C. The LED footprint silk bevel marks **pad2=cathode, pad1=anode**, and the board correctly drives anode(pad1)→R5→3.3V, cathode(pad2)→GND. Using `Device:LED` while preserving pin-number→net (required for PCB consistency) would draw the diode reversed; fixing the graphic instead would require renumbering the PCB pad/nets. So LED1 keeps its symbol; its 2 pins were just retyped `input`→`passive` (kills its `pin_not_driven`).
-- **Why not re-download from LCSC?** Tested: `easyeda2kicad` for C25804 (10 k 0603) returns the resistor with pins still typed **`input`**, not `passive` — the EasyEDA→KiCad converter defaults passive pins to `input`. So re-downloading does **not** fix `pin_not_driven`; the `Device:` symbols (correct `passive` pins **+** a real library link) are the actual fix, and also clear most `lib_symbol_issues`.
-- **Errors fixed:** 6 `pin_not_driven` (resistor/LED pins were typed `input` → now `passive`); 3 `power_pin_not_driven` on VCC/GND/3.3V → **PWR_FLAG** added on each; 1 `pin_not_connected` on U1.21 (the NC pin) → **`(no_connect)`** marker. Remaining 53 warnings = `lib_symbol_issues` (18, on the kept empty-lib U1/LED/TB_PWR1 + the GND/VCC/3.3V power symbols), `pin_to_pin` (30, U1's `unspecified` pins meeting `power_in`), `endpoint_off_grid` (5) — all import artifacts. *(Further reducible by relinking the GND/VCC/3.3V power symbols to the `power` lib and typing U1's pins — not done; bigger scope.)*
-- **Net-preserving swap method (the hard part — durable gotchas):**
-  - **Connectivity is by coordinate.** Old passive terminals span **10.16 mm**; `Device:R`/`C` span **7.62 mm** → each new pin gets a **1.27 mm colinear stub** to the old terminal coordinate (reads as a slightly longer lead). `Jumper:SolderJumper_2_Bridged` span = 10.16 mm → exact match, **no stub**.
-  - **⚠ kicad-skip's `pin.location` MIS-ORDERS pin1/pin2 for some rotations** (and the imported instances carry `(mirror x)` on ~9 of them). So you **cannot trust kicad-skip for absolute pin *numbering* of rotated/mirrored symbols.** The robust recipe used: (1) brute-force each instance's rotation by writing all 4 angles and measuring pin positions with skip, pick the one putting pin1→T1/pin2→T2; (2) **use `kicad-cli sch export netlist` as the oracle** — diff per-pin net *names* (stable across this swap) vs the baseline to detect which parts came out pin-swapped; (3) for flagged parts, swap the stub target (and add 180° so the corrected stub stays short). Converged to **28/28 node-set parity**.
-  - **The KiCad symbol→schematic transform** (validated, for reference): `abs_pin = origin + Rot_ccw(angle)·(rel_x, −rel_y)` **then apply `(mirror x)` = negate the result's contribution** — but because skip's own numbering is unreliable here, the netlist-oracle approach above is what actually nailed it.
-  - **PWR_FLAG instance must be `(unit 0)(body_style 0)`** — its pin lives in sub-symbol `PWR_FLAG_0_0` (unit 0), like the GND/VCC power symbols; `(unit 1)` → no pin resolves → it silently doesn't connect. (Contrast: `Device:R` pin is in `R_1_1`, so those instances are `(unit 1)`.)
-  - **PWR_FLAG and `(no_connect)` do NOT appear in `sch export netlist`** (pseudo-elements) — don't "verify" their connection by grepping the netlist (they're absent either way). Verify via **ERC**: `power_pin_not_driven`/`pin_not_connected` dropping to 0 proves they took.
-  - Scripts lived in `_scratch_sym/` (git-ignored `_scratch_*`): `doswap.py` (swap + brute-force rotation + oracle flip-correction), `detect.py` (netlist flip oracle), `addflags.py` (PWR_FLAG/no_connect/unused-symbol removal).
-
-## Tooling (Windows)
-
-- `kicad-cli`: `C:\Program Files\KiCad\10.0\bin\kicad-cli.exe` (version 10.0.3). **CLI reference:** https://docs.kicad.org/10.0/en/cli/cli.html (full command list).
-- **What `kicad-cli` can/can't do** (verified against the docs, 2026-06-17). Top-level commands: `fp`, `sym`, `sch`, `pcb`, `jobset`, `version`. The CLI is **read-only with respect to design content** — it never edits nets/tracks/parts/placement:
-  - **Validate:** `pcb drc`, `sch erc` (text/JSON; `--exit-code-violations` for CI).
-  - **Export:** `pcb export {gerbers,drill,pos,pdf,svg,dxf,ps,step,glb,vrml,gencad,ipc2581,ipcd356,odb,stats,…}`, `sch export {netlist,bom,pdf,svg,dxf,ps,python-bom}`, `fp/sym export svg`, `pcb render` (raytraced PNG/JPEG).
-  - **Convert formats:** `pcb import` (Altium/Eagle/CADSTAR/PADS/PCAD/Fabmaster/SolidWorks → `.kicad_pcb`; see import caveat above — there is **no `sch import`**); `fp/sym/sch/pcb upgrade` (bump an existing KiCad file to the current format version). `jobset run` batches predefined export jobs.
-  - **No content editing.** There is no CLI command to move parts, route, change the board size, edit a netclass, or add a footprint. Those go through the `pcbnew` Python API (PCB) or s-expression text edits (schematic) — the CLI only validates/exports the result.
-- The PCB (`.kicad_pcb`) can be edited programmatically via the `pcbnew` Python module. The schematic (`.kicad_sch`) has no KiCad-*native* Python API and no CLI editor, **but `kicad-skip` is a capable programmatic editor for it (below) — full surgery (add parts, wires, labels, re-net), not just property tweaks.** Hand-editing s-expression text is the fallback, not the default; **don't conclude the schematic "can't be scripted."**
-- **`kicad-skip` is installed** (v0.2.5; pure-Python s-expr editor, dep `sexpdata`; **no running KiCad needed**). Lives in the bundled Python's *user* site-packages (Program Files is read-only): `%USERPROFILE%\Documents\KiCad\10.0\3rdparty\Python311\site-packages\skip` (the KiCad 3rd-party dir; if Documents is redirected to OneDrive it's under `…\OneDrive\Documents\…`), so it imports from `& "C:\Program Files\KiCad\10.0\bin\python.exe"` as `import skip`. **It does full schematic surgery** (clone components, wires, labels, re-net), verified 2026-06-17 against this project — the source is the API reference (read `skip/eeschema/*.py`). Key calls:
-  - **Load/save:** `sch = skip.Schematic(path)`; then `sch.overwrite()` (or `sch.write(path)`). Editing rewrites the file; verify with `kicad-cli sch export netlist` + `sch erc`.
-  - **Add a component:** `new = existing.clone()` — deep-copies the symbol and **auto-regenerates every UUID**; then `new.setAllReferences("R6")` (sets *both* the `Reference` property and the `instances` path reference), `new.at.value=[x,y,rot]`, `new.property.Value.value="…"`, etc. Clone an existing part of the same type so it inherits the lib_symbol/footprint linkage. (This replaces the old "clone the s-expr block + fresh_uuids by hand" recipe.)
-  - **Pin coordinates:** `pin.location` → absolute `(x,y,rot)` `AtValue` (`.x`/`.y`), correctly accounting for the symbol `at`/rotation/mirror — this is how you drop wires/labels exactly on a pin. Iterate `sym.pin` (each has `.number`, `.name`, `.location`).
-  - **Wires:** `w = sch.wire.new(); w.start_at(coords); w.end_at(coords)` (coords = `[x,y]` or anything with `.location`/`.at`).
-  - **Global labels = the net-naming mechanism in this schematic** (it uses wires + global labels + power symbols, **no local labels**). `gl = sch.global_label.new(); gl.value="EN1"; gl.at.value=[x,y,rot]`. Same-named global labels are one net sheet-wide; place one at a pin's `location` (or on a stub wire off it) to attach that pin. **Renaming a net = change the label's `.value`** (how the EN-tie gets split into EN1/EN2/EN3). Power symbols (`#PWR` instances with `lib_id`/`Value` = GND/VCC/3.3V) name power nets — see the re-site-a-rail note above. `sch.label`/`junction`/`text` collections also have `.new()`.
-  - **Introspect connectivity:** `sym.attached_global_labels`, `pin.attached_wires/attached_labels`, `wire.list_connected_symbols()`.
-  - **⚠ `(unit 0)` import quirk:** the EasyEDA-imported symbols carry `(unit 0)` (KiCad normally uses 1), so kicad-skip's *named* access `sch.symbol.U1` raises `AttributeError: Unknown element U1` (it keys them `U1_N/A`). **Workaround: iterate `sch.symbol` and match `.property.Reference.value`** rather than `sch.symbol.<REF>`.
-  - Use `pcbnew` for PCB work (kicad-skip reads `.kicad_pcb` only partially).
-- **KiCadRoutingTools** (Rust-accelerated A* autorouter, https://github.com/drandyhaas/KiCadRoutingTools) is cloned at **`../KiCadRoutingTools`** (sibling of this repo; v0.15.12). **Not** pip-installable. Setup (2026-06-17): isolated venv at **`../KiCadRoutingTools/.venv`** (Python 3.11 + `numpy`/`scipy`/`shapely`) plus the prebuilt Windows Rust binary (`build_router.py` → `rust_router/grid_router.pyd`). Run as `& "..\KiCadRoutingTools\.venv\Scripts\python.exe" -X utf8 <tool>.py <board> [out] ...`. It uses its **own** `.kicad_pcb` parser (no `pcbnew`) and round-trips our 4-layer board intact (GND1/GND2 inner-layer names preserved — verified). Tools: `place_optimize.py` (routability *polish* of an existing placement — **not** a from-scratch placer; the authors found hand placement beats auto ~500×, so place by hand first), `route.py` (signals + power nets with neck-down), `route_planes.py` (plane zones + GND via stitching; pass the net once per `--plane-layers` entry, e.g. `--nets GND GND --plane-layers In1.Cu In2.Cu`), `check_connected.py`/`check_drc.py`. `place_route_loop.py` crashes on our board (`unhashable type: 'dict'`).
-- **`easyeda2kicad` is installed** (v1.0.1; pip, into the bundled Python's user site at `…\KiCad\10.0\3rdparty\Python311` — the `easyeda2kicad.exe` script is on the un-PATH'd `…\Scripts`, so run it as `& "C:\Program Files\KiCad\10.0\bin\python.exe" -m easyeda2kicad …`). Fetches symbol/footprint/3D for any LCSC id over the network (internet works in this env). Flags: `--full`/`--footprint`/`--symbol`/`--3d`, `--lcsc_id ID [ID …]` (multiple ok), `--output file.kicad_sym` (creates sibling `.pretty`/`.3dshapes`), `--overwrite`, `--use-cache`. See _Adding a new part_ for the workflow.
-- **KiCad must be closed before editing the project files.** While open it holds `KiCad/project/~project.kicad_pro.lck` and will overwrite external edits on save. Check with `Get-Process kicad` and the `.lck` file.
-- **All text is on the default font** (commit `a9c4908`). The EasyEDA import hard-coded font faces — `Arial`/`Times New Roman` in the schematic and an **uninstalled `NotoSerifCJKsc-Medium`** on the PCB; the missing CJK face popped a modal font-substitution dialog that **stalled headless `kicad-cli`/`pcbnew` runs**. All `(face …)` overrides were stripped. Don't re-introduce named faces; if a headless run hangs, suspect a missing-font dialog.
-- `pcbnew`/`kicad-cli` first-load is slow on Windows (~30–60 s) and `pcbnew` block-buffers stdout — use `-u`. Backgrounded runs are normal; wait for them.
-- **Bash heredocs strip backslashes here** (`<<'PY'` mangled `'\\'` in Python). Write scripts to a file with the Write tool and run them, rather than piping via heredoc.
-
-### Useful commands
-
-```sh
-KCLI="C:/Program Files/KiCad/10.0/bin/kicad-cli.exe"
-PY="C:/Program Files/KiCad/10.0/bin/python.exe"
-
-# Design rule check (with schematic parity)
-"$KCLI" pcb drc --schematic-parity --format report --output drc.txt KiCad/project/project.kicad_pcb
-# Electrical rule check
-"$KCLI" sch erc --format report --output erc.txt KiCad/project/project.kicad_sch
-# Plot a copper layer to PDF (visual inspection; PDFs are readable)
-"$KCLI" pcb export pdf --layers "F.Cu,Edge.Cuts" --mode-single --output top.pdf KiCad/project/project.kicad_pcb
-# Run a pcbnew script
-"$PY" my_pcb_script.py
-
-# Project helper scripts (see tools/README.md) -- run with the bundled "$PY":
-"$PY" tools/check_design.py                            # DRC + connectivity + ERC, CI exit codes
-"$PY" tools/check_bom.py                               # verify every BOM LCSC part's live stock + fee status
-"$PY" tools/jlc_search.py "10kohm 0603 1%" --fee-free  # pick fee-free (Basic/Preferred) JLCPCB parts
-"$PY" tools/build_manufacturing.py                     # regenerate gerbers/drill/zip/CPL/BOM/STEP + images
-"$PY" tools/set_silk_version.py --show                 # show (or bump) the silk version/date stamp
-```
+- `KiCad/project/` — the authoritative KiCad 10 design
+  (`project.kicad_pro/.kicad_sch/.kicad_pcb`), the project library
+  (`drv8313-board.pretty` footprints + `drv8313-board.kicad_sym` symbols,
+  registered in the project `fp-lib-table`/`sym-lib-table` via `${KIPRJMOD}`),
+  and `EASYEDA_MODELS/` 3D models (`.step` + `.wrl`).
+- `manufacturing/` — fab outputs (gerbers, drill, BOM CSV, CPL, STEP),
+  regenerated by `tools/build_manufacturing.py`. **Currently stale — see above.**
+- `docs/datasheets/` — component datasheets; `drv8313.pdf` is the authoritative
+  part reference. Read them as **images** via `tools/render_datasheet.py`.
+- `tools/` — headless helper scripts; see `tools/README.md`.
+- `images/` — schematic/PCB/3D renders used by the README. **Currently stale.**
+
+For generic KiCad-headless technique (kicad-cli / pcbnew / kicad-skip usage,
+SWIG pitfalls, EasyEDA-import fixes, JLCPCB sourcing, Windows gotchas), use the
+**`kicad-pcb` skill** — it was extracted from this project and is the reference
+for *how*; this file records only *what is true of this board*.
+
+## Schematic (as-built)
+
+24 components. Netlist verified 2026-07-03 (`kicad-cli sch export netlist`).
+
+**Power:** VM rail is net `VCC` (8–60 V). Bulk: **C3, C5** = 47 µF/100 V
+(Ø10 mm cans, `C87862`). VM-pin decoupling per datasheet: **C7, C8** =
+100 nF/100 V (`C15725`), one per VM pin (4 and 11), VCC→GND. Charge pump:
+**C1** = 10 nF/100 V flying cap CP1↔CP2 (`C84709`); **C2** = 100 nF/16 V
+VCP↔VM reservoir (`C14663` — 16 V is fine: it spans the VCP–VM differential
+≈ 10 V, not VM to GND). **C4** = 470 nF V3P3OUT→GND (`C1623`) — this is the
+cap in datasheet Fig. 12.
+
+**Logic:** the chip's internal V3P3OUT regulator drives net `3.3V` (the board's
+"onboard 3.3 V"). Pull-ups to 3.3 V, all 10 k (`C25804`): **R1**→`nFlt`,
+**R2**→`nSlp`, **R3**→`nRes`, **R12**→`nCOMPO`. **R5** = 1 k (`C21190`) feeds
+**LED1** (yellow, `C89811`) from 3.3 V — power indicator. **IN1-3 and EN1-3
+wire directly** between H1 and U1 (no series resistors).
+
+**Current-limit comparator:** **R8** = 50 mΩ 2512 3 W shunt (`C2903475`)
+carries the combined low-side return: U1's PGND pins (6/7/10) *and* COMPP
+(pin 12) sit on net `PGND`, which reaches GND only through R8. COMPN (pin 13)
+is net `VREF`, set by a three-branch divider — each branch has its own solder
+jumper (bridged by default, cut to reconfigure):
+
+| Branch | From | Trip point (VREF / R8) |
+| --- | --- | --- |
+| R9 43 k (`C23172`) + SJ1 | 3.3 V → VREF | all bridged: **0.125 V → 2.5 A** |
+| R10 62 k (`C23221`) + SJ2 | 3.3 V → VREF | cut SJ1: 0.052 V → **1.05 A** |
+| R11 1 k (`C21190`) + SJ3 | VREF → GND | cut SJ2: 0.075 V → **1.5 A** |
+| | | cut SJ3: VREF → 3.3 V → **disabled** |
+
+The comparator only drives the open-drain `nCOMPO` flag (pulled up by R12,
+brought out on H1); it does not shut the bridge down by itself. SJ1–SJ3 are
+excluded from the BOM (`in_bom no` — not purchased parts).
+
+**Connectors:**
+
+- **H1** 2×7 socket (`C38844`), odd pins row 1: 1 IN1, 2 EN1, 3 IN2, 4 EN2,
+  5 IN3, 6 EN3, 7 nFlt, 8 nCOMPO, 9 nRes, 10 nSlp, 11 VREF, 12 PGND, 13 GND,
+  14 3.3V.
+- **P1** 5-pos 5.0 mm terminal block (`C2835160`): 1 VM, 2 M1, 3 M2, 4 M3,
+  5 GND (motor + supply monitoring).
+- **TB_PWR1** 2-pos 5.0 mm terminal block (`C395849`): 1 GND, 2 VM.
+
+**Symbol conventions:** simple passives use KiCad `Device:`/`Jumper:` symbols;
+U1 and LED1 live in the project library `drv8313-board.kicad_sym`. **LED1
+deliberately keeps its EasyEDA symbol** — its pin numbering (1=A, 2=C) matches
+the PCB footprint (silk bevel marks pad 2 = cathode); `Device:LED` numbers the
+pins the other way, so swapping it would draw the diode reversed or force a pad
+renumber. Nets are named by global labels + power symbols (no local labels); a
+power symbol's net name is its instance `Value` field. PWR_FLAGs sit on VCC and
+GND; 3.3 V needs none (U1 pin 15 is `power_out`). U1 pin 21 (NC) carries a
+no-connect marker. IN/EN/nRESET/nSLEEP/COMPP/COMPN pins are typed `passive`
+(their drivers are connectors/pull-ups/shunt — typing them `input` would
+re-introduce ERC `pin_not_driven` errors).
+
+## DRV8313 pinout (reference: `docs/datasheets/drv8313.pdf`)
+
+Chip facts, verified against the datasheet + netlist:
+
+- **Power row (1–14):** 1 CP1, 2 CP2, 3 VCP; **4, 11 = VM** (net `VCC`);
+  **5/8/9 = OUT1/2/3** (nets `M1/M2/M3`); **6/7/10 = PGND** and **12 = COMPP**
+  (all on net `PGND` → R8 shunt → GND); **13 = COMPN** (net `VREF`);
+  14 = GND; EP (pad 29) = GND thermal pad.
+- **Logic row (15–28):** **15 = V3P3OUT** (net `3.3V`, `power_out`);
+  16 nRESET, 17 nSLEEP, 18 nFAULT (open-drain), **19 = nCOMPO** (open-drain
+  comparator flag); 20 GND; 21 NC; **22/24/26 = EN3/EN2/EN1**;
+  **23/25/27 = IN3/IN2/IN1**; 28 GND.
+- **⚠ Datasheet contradiction — do not "fix" the schematic:** Fig. 12 (§7.3.4,
+  PDF p.12) shows **COMPP = the shunt/sense node, COMPN = the reference
+  divider**, which is what this board does. The §8.2.2.2.1 prose says the
+  opposite. Fig. 12 is authoritative; swapping COMPP/COMPN to match the prose
+  wires the comparator backwards. Fig. 12's 0.47 µF cap is on V3P3→GND (our
+  C4); there is no cap on COMPN — matching Fig. 12, this board has none either.
+
+## PCB (as-built)
+
+- **50×50 mm, 4-layer** Top / In1.Cu ("GND1") / In2.Cu ("GND2") / Bottom,
+  1.6 mm, 1 oz. M3 mounting holes MH1–MH4 (plain NPTH, no net).
+- **Power is distributed by copper pours, not traces** (9 zones): F.Cu carries
+  **VCC**, **PGND**, and GND pours; B.Cu carries **M1**, **M2**, **M3**, and
+  GND pours; In1/In2 are solid GND planes. Signal routing is 0.2 mm
+  (149 track segments, 43 vias). After any outline/placement/zone edit,
+  **re-pour** (`pcbnew.ZONE_FILLER(b).Fill(b.Zones())`) before DRC.
+- **U1 exposed pad = pad 29** with an 8-via PTH thermal array **whose pads are
+  also named "29"** — so *Update PCB from Schematic* re-nets them to GND
+  automatically. Do not add free vias on top of them. **U1 pad 4 (VM) has a
+  solid (no-thermal-relief) local zone connection** — at the 0.65 mm pitch the
+  VCC pour can only reach it from one side, so a thermal relief starves
+  (`starved_thermal` DRC error); solid is also electrically better for VM.
+- **Net classes** (`project.kicad_pro`): `Default` 0.2 mm track / 0.2 mm
+  clearance; `Power` (patterns VCC, M1, M2, M3, PGND) 0.34 mm track, 0.2 mm
+  clearance, 0.6/0.3 via. Board minimums: via Ø0.45 / drill 0.25 / annular
+  0.15, text 0.5 mm. Update the patterns if power nets are renamed.
+- 0.2 mm clearance is adequate at 60 V here because the package itself fixes
+  0.307 mm pin gaps; solder mask covers the rest (IPC-2221B B4).
+
+### Residual warnings (accepted, not defects)
+
+- DRC warning-severity: 8 `silk_over_copper` + 2 `silk_overlap` (import-era
+  footprint silk quirks), 3 `lib_footprint_mismatch` (board footprints carry
+  deliberate customizations vs their library copies — an *Update from Library*
+  would revert them).
+- Parity: 4 `extra_footprint` (MH1–MH4 have no schematic symbol — normal for
+  mechanical holes).
+- ERC baseline is **0** — `check_design.py` flags any nonzero ERC as a
+  regression. Re-baseline consciously if symbols are added/removed.
+
+## Working practices
+
+### Reading datasheets — wire from the figure, never from prose alone
+
+1. `tools/render_datasheet.py <pdf> --toc` to find the pin table and the
+   "Application and Implementation" section; render those pages
+   (`... <pdf> 12 --dpi 200`) and **Read the PNGs**. Text extraction loses
+   figures, and the reference schematic *is* a figure.
+2. Wire from the rendered figure; cross-check against the pin-function table.
+3. **Pin-conformance check after wiring:** export the netlist and verify every
+   IC pin against the datasheet table (pin #, function, expected net, actual
+   net). The COMPP/COMPN contradiction above was caught exactly this way.
+4. When prose and figure disagree, treat it as a datasheet contradiction:
+   resolve deliberately (figures usually win), and record the resolution in
+   this file so nobody "fixes" it backwards later.
+5. For a new IC, transcribe the verified pin table into this file (as done for
+   the DRV8313 above) — future sessions then work from the transcription.
+
+### Editing the schematic
+
+- Edit headlessly with **kicad-skip**; verify electrical changes with
+  `kicad-cli sch export netlist` (diff the per-pin nets) + `sch erc`.
+- Then verify *readability*: `tools/sch_lint.py` (drive the score down;
+  don't introduce new findings) and `tools/render_sch.py` + Read the PNG.
+- Layout conventions: signal flow left→right; rails up, GND down; one
+  functional block per region; prefer global labels over long wires; keep
+  value/ref text clear of symbol bodies and wires (kicad-skip can set property
+  positions); power symbols directly on pins are legal but make connectors
+  look unwired — prefer a short stub wire on connector pins.
+- The BOM is schematic-driven: every part carries `Manufacturer Part` +
+  `Supplier Part` (LCSC id) fields. kicad-skip sanitizes property names to
+  underscores (`Supplier_Part`). Never blank/edit MPNs by global string match —
+  edit per-symbol.
+
+### Editing the PCB
+
+- Edit headlessly with **pcbnew** (see the `kicad-pcb` skill for the SWIG
+  survival rules). Gate every step on `tools/check_design.py` — kicad-cli
+  error-severity DRC is the authoritative connectivity/clearance/short check.
+- The two KiCadRoutingTools checks in `check_design.py` are **advisory**: their
+  endpoint-graph model false-positives on manual routing (off-anchor pad
+  entries, connections through pours/pads). Trust kicad-cli's ratsnest.
+- **Update PCB from Schematic** re-nets the EP via array automatically (pads
+  named "29") but **deletes MH1–MH4** if "delete footprints with no symbol" is
+  checked — uncheck it, or re-add the holes after.
+- DRC a **scratch** board only with its `.kicad_pro` sibling copied next to it;
+  otherwise default via rules false-flag the board's via sizes.
+
+### Adding a new part (JLCPCB/LCSC)
+
+1. Pick the part with `tools/jlc_search.py` (fee-free first: Basic/Preferred
+   carry no setup fee; only plain Extended does).
+2. Save its datasheet to `docs/datasheets/`, render the land-pattern page, and
+   verify the footprint against it before trusting it.
+3. Generic passives → canonical KiCad footprints (`Resistor_SMD:R_0603_...`);
+   vendor-specific packages → fetch with `easyeda2kicad --full --lcsc_id <id>`
+   and copy into `KiCad/project/drv8313-board.pretty/` (+ 3D into
+   `EASYEDA_MODELS/`; repoint `(model)` paths by text edit — `fp.Models()`
+   edits do not persist).
+4. Set `Footprint` = `lib:name` on both schematic symbol and PCB footprint;
+   verify with `kicad-cli pcb drc --schematic-parity` and `sch erc`.
+5. Gate the whole BOM with `tools/check_bom.py` before ordering (parts go out
+   of stock; the check exits nonzero on any 0-stock line).
+
+### Regenerating outputs
+
+- `tools/build_manufacturing.py` rebuilds gerbers/drill/zip/CPL/BOM/STEP +
+  README images. For a change that doesn't move geometry, commit only the
+  outputs that really changed (gerbers differ in timestamp only; STEP/PNG
+  re-serialize with noise) — don't commit pure-noise regenerations.
+- CPL `Val` comes from board-side footprint values and may lag the schematic;
+  cosmetic only — JLCPCB matches parts by designator + the BOM's LCSC id.
+- `tools/set_silk_version.py` bumps the silk version/date stamp before a fab
+  order; regenerate images afterwards.
+
+## Tooling notes (project-specific)
+
+- Run design-touching scripts with **KiCad 10's bundled Python**:
+  `& "C:\Program Files\KiCad\10.0\bin\python.exe" -u script.py` (PowerShell
+  call operator; `-u` because pcbnew block-buffers stdout). kicad-skip,
+  easyeda2kicad, and **PyMuPDF (`fitz`)** are installed in its user site.
+- **Close KiCad before editing project files** (it holds a `.lck` and
+  overwrites external edits on save).
+- All text uses the default font — do not re-introduce `(face …)` overrides;
+  a missing font pops a modal that hangs headless runs.
+- KiCadRoutingTools is cloned at `../KiCadRoutingTools` (own venv at
+  `.venv`); used by `check_design.py` as advisory checks and available for
+  autoroute experiments (`route.py`, `route_planes.py`) — remember the
+  division of labor before reaching for it.
+- Everything else (kicad-cli command surface, pcbnew/kicad-skip API gotchas,
+  EasyEDA-import defect fixes, JLC API details): **`kicad-pcb` skill**.
 
 ## Git
 
-- **All work is now on `main`** (tracks `origin/main`). The original import/cleanup branch `kicad-import` was merged in and is a **stale pointer to an older commit** — don't branch off it; work on `main`.
-- `KiCad/project/.gitignore` excludes `*.kicad_prl`, `*.lck`, `.history/`, and backups; the **root `.gitignore`** excludes `_scratch_*`, `__pycache__/`/`*.pyc`, and the regenerable `drv8313-board-gerbers.zip` — do not commit those.
+- Work on `main` (tracks `origin/main`). The old `kicad-import` branch is a
+  stale pointer — don't branch from it.
+- Ignored (don't commit): `_scratch_*`, `__pycache__/`, `*.kicad_prl`, `*.lck`,
+  `.history/`, backups, `drv8313-board-gerbers.zip`.
+- History and change rationale live in git log / commit messages — keep this
+  file describing the present.

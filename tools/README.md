@@ -79,6 +79,61 @@ After bumping, regenerate the board images with `build_manufacturing.py`.
 
 ---
 
+## `render_datasheet.py` — render datasheet PDF pages to images
+
+Text extraction loses a datasheet's **figures** — and the reference schematic
+you wire from *is* a figure. Render the page, look at the image, and wire from
+what the figure shows; never wire from prose text-extraction alone. (The
+DRV8313 datasheet's §8.2.2.2.1 prose contradicts its own Figure 12 on the
+comparator pins — following the text wires COMPP/COMPN backwards.)
+
+```powershell
+& $PY tools\render_datasheet.py docs\datasheets\drv8313.pdf --toc   # find the right pages
+& $PY tools\render_datasheet.py docs\datasheets\drv8313.pdf 12      # §7.3.4 comparator figure
+& $PY tools\render_datasheet.py some.pdf 13-15,23 --dpi 200 --out-dir _scratch_ds
+```
+
+Uses PyMuPDF (`fitz`), installed in KiCad's bundled Python. PNGs land in
+`%TEMP%\datasheet-render\<stem>\` by default; paths are printed. Page numbers
+are 1-based PDF pages. `--toc` prints the bookmark tree so you can jump
+straight to "Application and Implementation" or a pin-function table.
+
+## `render_sch.py` — render the schematic for visual inspection
+
+ERC and the netlist prove the schematic is *correct*; only looking at a render
+proves it is *readable*. Render + inspect after every placement/label edit —
+the visual analogue of running DRC after every copper edit.
+
+```powershell
+& $PY tools\render_sch.py                          # whole sheet -> %TEMP%\kicad-render\
+& $PY tools\render_sch.py --density 300            # zoom to read labels
+& $PY tools\render_sch.py --crop 800x600+200+150   # pixel crop of one region
+```
+
+Needs `kicad-cli` + ImageMagick `magick` (both installed); any Python 3 works.
+
+## `sch_lint.py` — schematic readability lint (numeric oracle)
+
+Scores the visual defects blind editing introduces: overlapping value/ref
+text, text through symbol bodies or across wires, wire crossings, stacked
+symbols, off-grid endpoints. Iterate edits against this score the way copper
+edits iterate against DRC, then confirm with `render_sch.py`. Geometry is
+heuristic (text boxes estimated from character counts, bodies from pin
+extents) — findings are pointers to check in a render, and the total is a
+score to drive down, not ground truth.
+
+```powershell
+& $PY tools\sch_lint.py                    # report + total
+& $PY tools\sch_lint.py --verbose --json   # every finding, machine-readable
+& $PY tools\sch_lint.py --fail-over 10     # CI gate on the issue count
+```
+
+Needs kicad-skip, so run with KiCad's bundled Python. Informational findings
+(e.g. a power symbol placed directly on a component pin — electrically fine
+but the part looks unwired) are reported but not counted.
+
+---
+
 ## `check_design.py` — verify DRC / connectivity / ERC
 
 Runs the checks the board is validated against and prints a PASS/FAIL summary;
