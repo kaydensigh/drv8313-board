@@ -168,10 +168,14 @@ Chip facts, verified against the datasheet + netlist:
 
 ### Residual warnings (accepted, not defects)
 
-- DRC warning-severity: 8 `silk_over_copper` + 2 `silk_overlap` (import-era
-  footprint silk quirks), 3 `lib_footprint_mismatch` (board footprints carry
-  deliberate customizations vs their library copies — an *Update from Library*
-  would revert them).
+- DRC warning-severity: 8 `silk_over_copper` (import-era footprint silk
+  quirks), 1 `lib_footprint_mismatch` (U1 — the EP vias named "29" and the
+  solid pad-4 zone connection are deliberate; an *Update from Library* would
+  revert them).
+- P1 carries a local 3D-model override (project Degson DB126V `.wrl`; KiCad
+  ships no MaiXu model, and the sourced part is the Degson). The mismatch
+  check ignores 3D models, so P1 doesn't warn — but an *Update from Library*
+  on P1 would still silently revert the model.
 - Triage principle when cleanups trade warning classes: prefer self-evidently
   safe warnings (silk) over investigate-required ones (`lib_footprint_mismatch`
   etc.) — see the `kicad-pcb` skill, design-rules § Warning triage.
