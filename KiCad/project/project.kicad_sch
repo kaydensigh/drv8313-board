@@ -1575,6 +1575,184 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Jumper:SolderJumper_2_Open"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "JP"
+				(at 0 2.032 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "SolderJumper_2_Open"
+				(at 0 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 -7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Solder Jumper, 2-pole, open"
+				(at 0 -5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "solder jumper SPST"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "SolderJumper*Open*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "SolderJumper_2_Open_0_1"
+				(polyline
+					(pts
+						(xy -0.254 1.016) (xy -0.254 -1.016)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start -0.254 -1.016)
+					(mid -1.2656 0)
+					(end -0.254 1.016)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(arc
+					(start 0.254 1.016)
+					(mid 1.2656 0)
+					(end 0.254 -1.016)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.254 1.016) (xy 0.254 -1.016)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "SolderJumper_2_Open_1_1"
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 3.81)
+					(name "B"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "drv8313-board:19-213/Y2C-CQ2R2L/3T(CY)"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -2954,6 +3132,16 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "V3P3OUT max 10mA, do not feed voltage"
+		(exclude_from_sim no)
+		(at 186.436 108.204 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "0a2e97ba-253b-43d4-8d2f-32bf46c44f43")
+	)
 	(junction
 		(at 172.72 55.88)
 		(diameter 0)
@@ -4242,6 +4430,204 @@
 		)
 		(uuid "fdaff731-936d-4ba5-9542-40a729e4ec4d")
 	)
+	(table
+		(column_count 2)
+		(border
+			(external yes)
+			(header yes)
+			(stroke
+				(width 0)
+				(type solid)
+			)
+		)
+		(separators
+			(rows yes)
+			(cols yes)
+			(stroke
+				(width 0)
+				(type solid)
+			)
+		)
+		(column_widths 13.97 10.16)
+		(row_heights 2.54 2.54 2.54 2.54 2.54)
+		(uuid "0058ba7b-2803-40ee-8082-1466612c4929")
+		(cells
+			(table_cell "Trip Current\n"
+				(exclude_from_sim no)
+				(at 105.41 133.985 0)
+				(size 13.97 2.54)
+				(margins 0.9525 0.9525 0.9525 0.9525)
+				(span 1 1)
+				(fill
+					(type none)
+				)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(thickness 0.254)
+						(bold yes)
+					)
+					(justify top)
+				)
+				(uuid "5729ce1e-e5c7-4122-b777-b6781204f5e4")
+			)
+			(table_cell "Cut"
+				(exclude_from_sim no)
+				(at 119.38 133.985 0)
+				(size 10.16 2.54)
+				(margins 0.9525 0.9525 0.9525 0.9525)
+				(span 1 1)
+				(fill
+					(type none)
+				)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(thickness 0.254)
+						(bold yes)
+					)
+					(justify top)
+				)
+				(uuid "590f21b9-e3e1-451b-a426-9c3d3a995a7b")
+			)
+			(table_cell "2.5 A"
+				(exclude_from_sim no)
+				(at 105.41 136.525 0)
+				(size 13.97 2.54)
+				(margins 0.9525 0.9525 0.9525 0.9525)
+				(span 1 1)
+				(fill
+					(type none)
+				)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify top)
+				)
+				(uuid "af479017-1e0b-428b-9fdc-7c499ca02011")
+			)
+			(table_cell "nothing\n"
+				(exclude_from_sim no)
+				(at 119.38 136.525 0)
+				(size 10.16 2.54)
+				(margins 0.9525 0.9525 0.9525 0.9525)
+				(span 1 1)
+				(fill
+					(type none)
+				)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify top)
+				)
+				(uuid "e81228b7-3b44-4b4d-a22e-29a141989860")
+			)
+			(table_cell "1.5 A"
+				(exclude_from_sim no)
+				(at 105.41 139.065 0)
+				(size 13.97 2.54)
+				(margins 0.9525 0.9525 0.9525 0.9525)
+				(span 1 1)
+				(fill
+					(type none)
+				)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify top)
+				)
+				(uuid "8d0cc332-71f4-4027-aa5a-2cca90c7ccf5")
+			)
+			(table_cell "SJ2\n"
+				(exclude_from_sim no)
+				(at 119.38 139.065 0)
+				(size 10.16 2.54)
+				(margins 0.9525 0.9525 0.9525 0.9525)
+				(span 1 1)
+				(fill
+					(type none)
+				)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify top)
+				)
+				(uuid "9b39732c-4855-4373-b90c-e1b7bae185ad")
+			)
+			(table_cell "1 A"
+				(exclude_from_sim no)
+				(at 105.41 141.605 0)
+				(size 13.97 2.54)
+				(margins 0.9525 0.9525 0.9525 0.9525)
+				(span 1 1)
+				(fill
+					(type none)
+				)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify top)
+				)
+				(uuid "c73dcba9-c6f4-4a3c-afc2-78e88d7a860f")
+			)
+			(table_cell "SJ1"
+				(exclude_from_sim no)
+				(at 119.38 141.605 0)
+				(size 10.16 2.54)
+				(margins 0.9525 0.9525 0.9525 0.9525)
+				(span 1 1)
+				(fill
+					(type none)
+				)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify top)
+				)
+				(uuid "4505f493-39db-4b59-b07b-4a8fdddb769f")
+			)
+			(table_cell "Disabled"
+				(exclude_from_sim no)
+				(at 105.41 144.145 0)
+				(size 13.97 2.54)
+				(margins 0.9525 0.9525 0.9525 0.9525)
+				(span 1 1)
+				(fill
+					(type none)
+				)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify top)
+				)
+				(uuid "d1e447ca-5aa1-4f9a-b079-fa488aad526d")
+			)
+			(table_cell "SJ3"
+				(exclude_from_sim no)
+				(at 119.38 144.145 0)
+				(size 10.16 2.54)
+				(margins 0.9525 0.9525 0.9525 0.9525)
+				(span 1 1)
+				(fill
+					(type none)
+				)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify top)
+				)
+				(uuid "2d1a93fd-3643-4474-8282-60b7a3a3d344")
+			)
+		)
+	)
 	(global_label "EN3"
 		(shape input)
 		(at 172.72 73.66 0)
@@ -4429,6 +4815,50 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+			)
+		)
+	)
+	(global_label "EN2"
+		(shape input)
+		(at 215.9 130.81 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "51640007-98d4-45e7-8380-a0f4db0548cd")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 215.9 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "EN3"
+		(shape input)
+		(at 215.9 140.97 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "541ae386-12bf-4616-8158-1cc3109589e9")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 215.9 140.97 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
 		)
 	)
@@ -4641,6 +5071,28 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
+			)
+		)
+	)
+	(global_label "EN1"
+		(shape input)
+		(at 215.9 120.65 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a1e863e1-a9a2-4e39-866e-1434cb87c425")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 215.9 120.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
 		)
 	)
@@ -5301,8 +5753,8 @@
 	(symbol
 		(lib_id "power:GND")
 		(at 162.56 135.89 0)
-		(unit 0)
-		(body_style 0)
+		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -5322,7 +5774,6 @@
 		)
 		(property "Value" "GND"
 			(at 159.258 142.7734 0)
-			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5372,7 +5823,7 @@
 			(project "project"
 				(path "/03adca04-2da2-4337-bf85-1694768d6810"
 					(reference "#PWR06")
-					(unit 0)
+					(unit 1)
 				)
 			)
 		)
@@ -6039,10 +6490,91 @@
 		)
 	)
 	(symbol
+		(lib_id "Jumper:SolderJumper_2_Open")
+		(at 215.9 135.89 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "3e7e0a27-eece-4fc2-992d-4eede1feb2c5")
+		(property "Reference" "EN2_EN3"
+			(at 218.694 134.366 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "SolderJumper_2_Open"
+			(at 218.694 136.906 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm"
+			(at 215.9 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 208.28 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Solder Jumper, 2-pole, open"
+			(at 210.82 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "01bdb87e-4731-4134-aa23-0a123f736e35")
+		)
+		(pin "2"
+			(uuid "f990aa1b-9135-4169-97c1-66322c287dac")
+		)
+		(instances
+			(project "project"
+				(path "/03adca04-2da2-4337-bf85-1694768d6810"
+					(reference "EN2_EN3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 71.12 81.28 0)
-		(unit 0)
-		(body_style 0)
+		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -6062,7 +6594,6 @@
 		)
 		(property "Value" "GND"
 			(at 67.818 88.9 0)
-			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6112,7 +6643,7 @@
 			(project "project"
 				(path "/03adca04-2da2-4337-bf85-1694768d6810"
 					(reference "#PWR09")
-					(unit 0)
+					(unit 1)
 				)
 			)
 		)
@@ -6709,7 +7240,7 @@
 			)
 		)
 		(property "Value" "VCC"
-			(at 26.67 77.724 0)
+			(at 17.78 73.66 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6893,8 +7424,8 @@
 	(symbol
 		(lib_id "power:GND")
 		(at 39.37 91.44 180)
-		(unit 0)
-		(body_style 0)
+		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -6914,7 +7445,6 @@
 		)
 		(property "Value" "GND"
 			(at 41.016 84.644 0)
-			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6964,7 +7494,7 @@
 			(project "project"
 				(path "/03adca04-2da2-4337-bf85-1694768d6810"
 					(reference "#PWR201")
-					(unit 0)
+					(unit 1)
 				)
 			)
 		)
@@ -7688,8 +8218,8 @@
 	(symbol
 		(lib_id "power:GND")
 		(at 176.53 55.88 90)
-		(unit 0)
-		(body_style 0)
+		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -7708,8 +8238,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 180.848 56.8706 -90)
-			(hide yes)
+			(at 175.768 53.086 -90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7759,7 +8288,7 @@
 			(project "project"
 				(path "/03adca04-2da2-4337-bf85-1694768d6810"
 					(reference "#PWR012")
-					(unit 0)
+					(unit 1)
 				)
 			)
 		)
@@ -8164,7 +8693,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 85.852 95.758 0)
+			(at 85.344 93.472 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8473,8 +9002,8 @@
 		(lib_id "power:GND")
 		(at 213.36 69.85 0)
 		(mirror y)
-		(unit 0)
-		(body_style 0)
+		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -8493,8 +9022,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 216.916 77.216 0)
-			(hide yes)
+			(at 216.916 75.946 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8544,7 +9072,7 @@
 			(project "project"
 				(path "/03adca04-2da2-4337-bf85-1694768d6810"
 					(reference "#PWR301")
-					(unit 0)
+					(unit 1)
 				)
 			)
 		)
@@ -8686,7 +9214,7 @@
 		(dnp no)
 		(uuid "d8b56127-6e10-4a82-8d6a-4e8856ba84ac")
 		(property "Reference" "TB_PWR1"
-			(at 19.05 63.754 0)
+			(at 19.558 62.738 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8697,7 +9225,7 @@
 			)
 		)
 		(property "Value" "TerminalBlock 2P 5.0mm"
-			(at 18.288 59.944 0)
+			(at 18.796 58.928 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8789,6 +9317,87 @@
 		)
 	)
 	(symbol
+		(lib_id "Jumper:SolderJumper_2_Open")
+		(at 215.9 125.73 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "d9e31cf1-ae29-4ee3-9469-33ea0236cec4")
+		(property "Reference" "EN1_EN2"
+			(at 218.694 124.206 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "SolderJumper_2_Open"
+			(at 218.694 126.746 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm"
+			(at 215.9 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 208.28 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Solder Jumper, 2-pole, open"
+			(at 210.82 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "50e3c631-2914-498b-a28f-d3133a5e2dab")
+		)
+		(pin "2"
+			(uuid "d73623bb-397c-4c3b-a056-4806a46f9104")
+		)
+		(instances
+			(project "project"
+				(path "/03adca04-2da2-4337-bf85-1694768d6810"
+					(reference "EN1_EN2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3.3V")
 		(at 157.48 102.87 0)
 		(unit 0)
@@ -8869,8 +9478,8 @@
 	(symbol
 		(lib_id "power:GND")
 		(at 27.94 71.12 180)
-		(unit 0)
-		(body_style 0)
+		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -8889,8 +9498,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 22.352 81.8134 0)
-			(hide yes)
+			(at 24.13 69.088 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8940,7 +9548,7 @@
 			(project "project"
 				(path "/03adca04-2da2-4337-bf85-1694768d6810"
 					(reference "#PWR03")
-					(unit 0)
+					(unit 1)
 				)
 			)
 		)
@@ -8968,7 +9576,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 88.392 141.478 0)
+			(at 87.376 139.446 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
