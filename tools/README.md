@@ -67,15 +67,19 @@ does not run DRC/ERC. Override the toolchain with `$env:KICAD_CLI`.
 ## `set_silk_version.py` — bump the silkscreen version stamp
 
 ```powershell
-& $PY tools\set_silk_version.py --show        # current: v1.0 / Board v1.0 / 06/26
-& $PY tools\set_silk_version.py 2.1           # -> v2.1 (front), Board v2.1 (back)
-& $PY tools\set_silk_version.py 2.1 --date auto   # also stamp this month as MM/YY
+& $PY tools\set_silk_version.py --show        # current: Breakout v1.0 / 2026-07-16
+& $PY tools\set_silk_version.py 2.1           # -> Breakout v2.1
+& $PY tools\set_silk_version.py 2.1 --date 2026-09-01   # also stamp a date
+& $PY tools\set_silk_version.py 2.1 --date auto         # ... or today
 ```
 
 Rewrites the `vN.M` token wherever it appears on a silk layer (preserving a
-surrounding label like `Board `) plus the `MM/YY` date stamp. Silk **text only**
-— copper/geometry untouched; does not edit README/docs version references.
-After bumping, regenerate the board images with `build_manufacturing.py`.
+surrounding label like `Breakout `) plus the **ISO `YYYY-MM-DD`** date stamp —
+the format this board's silk uses. `--date` takes an ISO date or `auto`
+(today), and rejects anything that isn't a real calendar date. Silk **text
+only** — copper/geometry untouched; does not edit README/docs version
+references. After bumping, regenerate the board images with
+`build_manufacturing.py`.
 
 ---
 

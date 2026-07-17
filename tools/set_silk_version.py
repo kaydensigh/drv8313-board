@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
 """Bump the board version (and optionally the date) printed in the PCB silkscreen.
 
-The board carries its version as silk text -- e.g. "v1.0" on the front and
-"Board v1.0" on the back -- plus an "MM/YY" date stamp. This rewrites the
-`vN.M` token wherever it appears on a silk layer (front or back), preserving
-any surrounding label like "Board ". Edits are by `SetText`, which persists
-across SaveBoard; copper/geometry are untouched.
+The board carries its version as silk text -- currently "Breakout v1.0" on the
+front -- plus a separate ISO "YYYY-MM-DD" date stamp. This rewrites the `vN.M`
+token wherever it appears on a silk layer (front or back), preserving any
+surrounding label like "Breakout ", and likewise the date token. Edits are by
+`SetText`, which persists across SaveBoard; copper/geometry are untouched.
 
 Usage:
     python tools/set_silk_version.py --show          # list current silk version/date
     python tools/set_silk_version.py 2.1             # set version -> v2.1
-    python tools/set_silk_version.py 2.1 --date 09/26
-    python tools/set_silk_version.py 2.1 --date auto # use this month (MM/YY)
+    python tools/set_silk_version.py 2.1 --date 2026-09-01
+    python tools/set_silk_version.py 2.1 --date auto # use today (YYYY-MM-DD)
 
 Only edits silk *text*; does not touch README/docs version references.
 Run with KiCad's bundled Python:
     & "C:\\Program Files\\KiCad\\10.0\\bin\\python.exe" tools/set_silk_version.py 2.1
 """
 import argparse
+import datetime
 import re
 import sys
 from pathlib import Path
@@ -28,7 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PCB = ROOT / "KiCad" / "project" / "project.kicad_pcb"
 
 VER_RE = re.compile(r"v\d+\.\d+", re.IGNORECASE)      # the version token
-DATE_RE = re.compile(r"\b\d{1,2}/\d{2}\b")            # an MM/YY date token
+DATE_RE = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")        # an ISO YYYY-MM-DD date token
 
 
 def silk_texts(board):
@@ -45,13 +46,28 @@ def layer_name(board, item):
     return board.GetLayerName(item.GetLayer())
 
 
+def _valid_iso_date(s):
+    """True for a real calendar date written exactly as YYYY-MM-DD.
+
+    DATE_RE alone would pass 2026-13-45; date.fromisoformat alone would pass
+    forms (e.g. '20260716') that the silk token regex would never match back.
+    """
+    if not DATE_RE.fullmatch(s):
+        return False
+    try:
+        datetime.date.fromisoformat(s)
+    except ValueError:
+        return False
+    return True
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("version", nargs="?",
                     help="new version, e.g. 2.1 (a leading 'v' is optional)")
     ap.add_argument("--date", default=None,
-                    help="new MM/YY date stamp, or 'auto' for the current month")
+                    help="new YYYY-MM-DD date stamp, or 'auto' for today")
     ap.add_argument("--show", action="store_true",
                     help="just print the current silk version/date text")
     args = ap.parse_args()
@@ -80,10 +96,9 @@ def main():
 
     new_date = args.date
     if new_date == "auto":
-        import datetime
-        new_date = datetime.date.today().strftime("%m/%y")
-    if new_date and not DATE_RE.fullmatch(new_date):
-        sys.exit(f"--date must look like MM/YY (got {args.date!r})")
+        new_date = datetime.date.today().isoformat()
+    if new_date and not _valid_iso_date(new_date):
+        sys.exit(f"--date must be a real ISO date like YYYY-MM-DD (got {args.date!r})")
 
     changed = 0
     for t in texts:
