@@ -21,7 +21,7 @@ system.
 limited by DRV8313 junction temperature (RθJA), not copper — ~1.5 A is the
 realistic 1 oz limit at Tj ≤ 125 °C.
 
-**Validation state (2026-07-03): DRC 0 error-severity, 0 unconnected; ERC 0;
+**Validation state (2026-07-17): DRC 0 error-severity, 0 unconnected; ERC 0;
 `tools/check_design.py` PASS. `manufacturing/`, `images/`, and the README BOM
 table regenerated from this state.**
 
@@ -66,7 +66,8 @@ for *how*; this file records only *what is true of this board*.
 
 ## Schematic (as-built)
 
-24 components. Netlist verified 2026-07-03 (`kicad-cli sch export netlist`).
+26 components (21 purchased — the 5 solder jumpers are `in_bom no`). Netlist
+verified 2026-07-17 (`kicad-cli sch export netlist`).
 
 **Power:** VM rail is net `VCC` (8–60 V). Bulk: **C3, C5** = 47 µF/100 V
 (Ø10 mm cans, `C87862`). VM-pin decoupling per datasheet: **C7, C8** =
@@ -81,6 +82,17 @@ cap in datasheet Fig. 12.
 **R2**→`nSlp`, **R3**→`nRes`, **R12**→`nCOMPO`. **R5** = 1 k (`C21190`) feeds
 **LED1** (yellow, `C89811`) from 3.3 V — power indicator. **IN1-3 and EN1-3
 wire directly** between H1 and U1 (no series resistors).
+
+`3.3V` is an *output* of U1's regulator, good for **10 mA** of external load
+(datasheet §Pin Functions, V3P3) — never feed it from a host supply. The sheet
+carries that as a note (`V3P3OUT max 10mA, do not feed voltage`); the silk
+repeats it near the header.
+
+**EN-gang jumpers:** **EN1_EN2** (EN1↔EN2) and **EN2_EN3** (EN2↔EN3) are
+`SolderJumper_2_Open` — **open by default**, so the three enables stay
+independent (brushed-DC / solenoid / 6-step use). Bridge both to gang EN1-3
+into the single ganged enable a 3-PWM/FOC host expects, without a wire at the
+header. They are `in_bom no` (not purchased parts) — like SJ1–SJ3.
 
 **Current-limit comparator:** **R8** = 50 mΩ 2512 3 W shunt (`C2903475`)
 carries the combined low-side return: U1's PGND pins (6/7/10) *and* COMPP
@@ -99,6 +111,12 @@ The comparator only drives the open-drain `nCOMPO` flag (pulled up by R12,
 brought out on H1); it does not shut the bridge down by itself. SJ1–SJ3 are
 excluded from the BOM (`in_bom no` — not purchased parts).
 
+This table is repeated **on the board itself**: as a text table on the
+schematic sheet, and as an `F.SilkS` table on the PCB (`Trip Current` / `Cut`:
+2.5 A→nothing, 1.5 A→SJ2, 1 A→SJ1, Disabled→SJ3). Keep all three in step —
+if the divider changes, the sheet table and the silk table are part of the
+edit, not documentation of it.
+
 **Connectors:**
 
 - **H1** 2×7 socket (`C38844`), odd pins row 1: 1 IN1, 2 EN1, 3 IN2, 4 EN2,
@@ -115,8 +133,10 @@ the PCB footprint (silk bevel marks pad 2 = cathode); `Device:LED` numbers the
 pins the other way, so swapping it would draw the diode reversed or force a pad
 renumber. Nets are named by global labels + power symbols (no local labels); a
 power symbol's net name is its instance `Value` field. PWR_FLAGs sit on VCC and
-GND; 3.3 V needs none (U1 pin 15 is `power_out`). U1 pin 21 (NC) carries a
-no-connect marker. IN/EN/nRESET/nSLEEP/COMPP/COMPN pins are typed `passive`
+GND; 3.3 V needs none (U1 pin 15 is `power_out`) — the GND PWR_FLAG sits on the
+pin 20/21 node. U1 pin 21 (NC) is **tied to GND** alongside pin 20 (see the
+pinout note below), not left on a no-connect marker.
+IN/EN/nRESET/nSLEEP/COMPP/COMPN pins are typed `passive`
 (their drivers are connectors/pull-ups/shunt — typing them `input` would
 re-introduce ERC `pin_not_driven` errors).
 
@@ -130,8 +150,14 @@ Chip facts, verified against the datasheet + netlist:
   14 = GND; EP (pad 29) = GND thermal pad.
 - **Logic row (15–28):** **15 = V3P3OUT** (net `3.3V`, `power_out`);
   16 nRESET, 17 nSLEEP, 18 nFAULT (open-drain), **19 = nCOMPO** (open-drain
-  comparator flag); 20 GND; 21 NC; **22/24/26 = EN3/EN2/EN1**;
-  **23/25/27 = IN3/IN2/IN1**; 28 GND.
+  comparator flag); 20 GND; **21 = NC, tied to GND here**; **22/24/26 =
+  EN3/EN2/EN1**; **23/25/27 = IN3/IN2/IN1**; 28 GND.
+- **Pin 21 is grounded on purpose — do not "restore" a no-connect marker.** In
+  the PWP (HTSSOP-28) package pin 21 is *"NC — No internal connection"* (§5 pin
+  table + the pinout figure's own footnote): the pin is not bonded to the die,
+  so tying it to GND is electrically inert and buys a little copper/thermal
+  continuity. Do not confuse it with the RHH package's pin 18 **RSVD**
+  (*"Reserved. Leave this pin disconnected."*) — RSVD does not exist on PWP.
 - **⚠ Datasheet contradiction — do not "fix" the schematic:** Fig. 12 (§7.3.4,
   PDF p.12) shows **COMPP = the shunt/sense node, COMPN = the reference
   divider**, which is what this board does. The §8.2.2.2.1 prose says the
@@ -142,12 +168,28 @@ Chip facts, verified against the datasheet + netlist:
 ## PCB (as-built)
 
 - **50×50 mm, 4-layer** Top / In1.Cu ("GND1") / In2.Cu ("GND2") / Bottom,
-  1.6 mm, 1 oz. M3 mounting holes MH1–MH4 (plain NPTH, no net).
-- **Power is distributed by copper pours, not traces** (9 zones): F.Cu carries
-  **VCC**, **PGND**, and GND pours; B.Cu carries **M1**, **M2**, **M3**, and
-  GND pours; In1/In2 are solid GND planes. Signal routing is 0.2 mm
-  (149 track segments, 43 vias). After any outline/placement/zone edit,
+  1.6 mm, 1 oz. M3 mounting holes MH1–MH4 (plain NPTH, no net), `locked`.
+- **Mounting-hole copper keep-out is a footprint-local `(clearance 2)`**, not a
+  rule area — each MH1–MH4 footprint sets 2 mm, so pours and tracks stand off
+  2 mm from the 3.2 mm hole (copper-free Ø ≈ 7.2 mm, clearing an M3 screw head
+  and washer at 60 V). There are **no keepout/rule-area zones on this board**;
+  grep for `(clearance 2)` if you're looking for the keep-out. An *Update
+  Footprint from Library* on a mounting hole would drop the clearance and let
+  copper back under the screw head.
+- **Power is distributed by copper pours, not traces** (9 zones, none of them
+  rule areas): F.Cu carries **VCC**, **PGND**, and GND pours; B.Cu carries
+  **M1**, **M2**, **M3**, and GND pours; In1/In2 are solid GND planes. Signal
+  routing is 0.2 mm, power 0.34 mm (186 track segments — 169 × 0.2 mm,
+  17 × 0.34 mm — and 51 vias). After any outline/placement/zone edit,
   **re-pour** (`pcbnew.ZONE_FILLER(b).Fill(b.Zones())`) before DRC.
+- **Back legend = QR + URL, both on `B.SilkS`** (the whole of the bottom silk):
+  a KiCad 10 `(barcode …)` object — type `qr`, ECC level `L`, 9×9 mm at
+  (143.2, 122.6), encoding `https://github.com/kaydensigh/drv8313-board` with
+  its caption `(hide yes)` — plus a `PCB_TEXT` repeating the URL. Both are
+  **mirrored**, which is correct for a back layer: they read the right way
+  round when the board is viewed from the bottom. They are silk, not copper —
+  they plot to `project-BottomSilkLayer.gbo`, take no copper clearance, and do
+  not interrupt the B.Cu GND pour.
 - **U1 exposed pad = pad 29** with an 8-via PTH thermal array **whose pads are
   also named "29"** — so *Update PCB from Schematic* re-nets them to GND
   automatically. Do not add free vias on top of them. **U1 pad 4 (VM) has a
@@ -175,7 +217,13 @@ Chip facts, verified against the datasheet + netlist:
   safe warnings (silk) over investigate-required ones (`lib_footprint_mismatch`
   etc.) — see the `kicad-pcb` skill, design-rules § Warning triage.
 - Parity: 4 `extra_footprint` (MH1–MH4 have no schematic symbol — normal for
-  mechanical holes).
+  mechanical holes) + 1 `footprint_symbol_field_mismatch` (C8: the *footprint*
+  lacks the `Manufacturer Part` field its symbol carries). **The BOM is
+  unaffected** — it is exported from the schematic (`sch export bom`), where C8
+  has both `CL10B104KC8NNNC` and `C15725`; only the board-side copy of the
+  field is missing, the same class of cosmetic board-side lag as the CPL `Val`
+  column. An *Update PCB from Schematic* would re-copy the field (and delete
+  MH1–MH4 unless you uncheck the delete option).
 - ERC baseline is **0** — `check_design.py` flags any nonzero ERC as a
   regression. Re-baseline consciously if symbols are added/removed.
 
@@ -252,7 +300,10 @@ Chip facts, verified against the datasheet + netlist:
 - CPL `Val` comes from board-side footprint values and may lag the schematic;
   cosmetic only — JLCPCB matches parts by designator + the BOM's LCSC id.
 - `tools/set_silk_version.py` bumps the silk version/date stamp before a fab
-  order; regenerate images afterwards.
+  order; regenerate images afterwards. Current silk: **`Breakout v1.0`** + a
+  separate **`2026-07-16`** date item, both `F.SilkS`. Dates are **ISO
+  `YYYY-MM-DD`** (`--date 2026-09-01` or `--date auto`); the tool rejects
+  non-dates. Keep any new date silk in ISO or `DATE_RE` will not find it.
 
 ## Tooling notes (project-specific)
 
